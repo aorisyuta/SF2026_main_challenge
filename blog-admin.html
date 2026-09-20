@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ブログ管理 — “BE SEIKO” 大阪星光学院 SF 2026</title>
+  <meta name="description" content="運営チーム用。blog/blog-data.json に追加する記事データを作成します。">
+  <meta name="author" content="Aoristos">
+  <meta name="theme-color" content="#3a5129">
+  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="assets/style.css">
+  <meta name="robots" content="noindex">
+  <style>
+    .admin-form { max-width: 820px; margin: 0 auto; }
+    .form-group { margin-bottom: 1.2rem; }
+    .form-group label { display: block; margin-bottom: 0.35rem; font-weight: 700; }
+    .form-group input,
+    .form-group textarea {
+      width: 100%; padding: 0.6rem; border: 1px solid var(--line); border-radius: 8px;
+      font-family: inherit; font-size: 1rem; color: var(--text); background: var(--surface);
+    }
+    .form-group textarea { min-height: 200px; resize: vertical; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    .json-output {
+      background: var(--surface-2); padding: 1rem; border-radius: 8px; border: 1px solid var(--line);
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.85rem;
+      white-space: pre-wrap; word-break: break-all; margin-top: 1rem; max-height: 320px; overflow-y: auto;
+    }
+    .preview { border: 1px solid var(--line); border-radius: 8px; padding: 1rem; margin-top: 1rem; background: var(--surface-2); }
+    .button-group { display: flex; gap: 0.6rem; margin-top: 1rem; flex-wrap: wrap; }
+  </style>
+  <script>
+    window.pageConfig = {
+      title: 'ブログ管理 — “BE SEIKO” 大阪星光学院 SF 2026',
+      pageTitle: 'ブログ管理',
+      pageSubtitle: '運営チーム専用ページ',
+      currentPage: '',
+      basePath: '',
+      showMapLink: false
+    };
+  </script>
+  <script src="assets/header.js" defer></script>
+  <script src="assets/script.js" defer></script>
+</head>
+<body>
+
+<main id="main">
+  <section class="card admin-form">
+    <h2>新しいブログ記事を追加</h2>
+    <p class="muted">入力内容から JSON を生成します。生成結果を <code>blog/blog-data.json</code> の配列に追加してください。</p>
+
+    <form id="blogForm">
+      <div class="form-group">
+        <label for="postId">記事ID（英数字とハイフン）</label>
+        <input type="text" id="postId" name="postId" placeholder="sf2026-open" pattern="[a-z0-9-]+" required>
+      </div>
+      <div class="form-group">
+        <label for="title">記事タイトル</label>
+        <input type="text" id="title" name="title" required>
+      </div>
+      <div class="form-group">
+        <label for="date">日付</label>
+        <input type="date" id="date" name="date" required>
+      </div>
+      <div class="form-group">
+        <label for="author">著者</label>
+        <input type="text" id="author" name="author" value="運営" required>
+      </div>
+      <div class="form-group">
+        <label for="summary">要約</label>
+        <input type="text" id="summary" name="summary" required>
+      </div>
+      <div class="form-group">
+        <label for="content">本文（HTML形式）</label>
+        <textarea id="content" name="content" required placeholder="&lt;p&gt;ここに本文を書きます。&lt;/p&gt;&lt;h2&gt;見出し&lt;/h2&gt;"></textarea>
+      </div>
+      <div class="form-group">
+        <label for="tags">タグ（カンマ区切り）</label>
+        <input type="text" id="tags" name="tags" placeholder="お知らせ, 重要">
+      </div>
+
+      <div class="button-group">
+        <button type="button" class="button" id="generateBtn">JSONを生成</button>
+        <button type="button" class="button button-secondary" id="previewBtn">プレビュー</button>
+        <button type="button" class="button button-secondary" id="copyBtn" hidden>JSONをコピー</button>
+        <button type="reset" class="button button-secondary">リセット</button>
+      </div>
+    </form>
+
+    <pre id="jsonOutput" class="json-output" hidden></pre>
+
+    <div id="preview" class="preview" hidden>
+      <h3>プレビュー</h3>
+      <div id="previewContent" class="post-article"></div>
+    </div>
+  </section>
+
+  <section class="card admin-form">
+    <h2>使い方</h2>
+    <ol class="muted">
+      <li>記事IDを決めます（URL は <code>blog/post.html?id=記事ID</code> になります）。</li>
+      <li>フォームに内容を入力し「JSONを生成」を押します。</li>
+      <li>「JSONをコピー」で内容をコピーし、<code>blog/blog-data.json</code> の配列に追加します。</li>
+      <li><code>blog.html</code> を開いて、記事が一覧に出ることを確認します。</li>
+    </ol>
+    <p class="muted"><strong>注意:</strong> 記事IDは重複しないようにしてください。本文はそのまま HTML として表示されるため、信頼できる内容だけを入力してください。</p>
+  </section>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <p>© <span id="currentYear">2026</span> Aoristos</p>
+    <nav class="footer-nav" aria-label="フッターナビゲーション">
+      <a href="projects.html">企画紹介</a>
+      <a href="timetable.html">タイムテーブル</a>
+      <a href="info.html">インフォ</a>
+      <a href="blog.html">ブログ</a>
+    </nav>
+    <p class="site-credit">Produced by <a href="https://www.instagram.com/your_account" target="_blank" rel="noopener noreferrer">Aoristos</a></p>
+    <div class="footer-social">
+      <a href="https://www.instagram.com/your_account" target="_blank" rel="noopener noreferrer" class="social-link" title="Instagram" aria-label="Instagram（別タブで開きます）">
+        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="#fff"/>
+          <circle cx="17.5" cy="6.5" r="1" fill="#fff"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+</footer>
+
+<script>
+(function () {
+  'use strict';
+
+  var form = document.getElementById('blogForm');
+  var jsonOutput = document.getElementById('jsonOutput');
+  var copyBtn = document.getElementById('copyBtn');
+
+  document.getElementById('date').valueAsDate = new Date();
+
+  function collect() {
+    var data = new FormData(form);
+    var tags = (data.get('tags') || '').split(',')
+      .map(function (t) { return t.trim(); })
+      .filter(Boolean);
+
+    return {
+      id: (data.get('postId') || '').trim(),
+      title: data.get('title') || '',
+      date: data.get('date') || '',
+      author: data.get('author') || '運営',
+      summary: data.get('summary') || '',
+      content: data.get('content') || '',
+      tags: tags
+    };
+  }
+
+  document.getElementById('generateBtn').addEventListener('click', function () {
+    jsonOutput.textContent = JSON.stringify(collect(), null, 2);
+    jsonOutput.hidden = false;
+    copyBtn.hidden = false;
+  });
+
+  copyBtn.addEventListener('click', function () {
+    navigator.clipboard.writeText(jsonOutput.textContent).then(function () {
+      copyBtn.textContent = 'コピーしました';
+      setTimeout(function () { copyBtn.textContent = 'JSONをコピー'; }, 2000);
+    });
+  });
+
+  document.getElementById('previewBtn').addEventListener('click', function () {
+    var post = collect();
+    var target = document.getElementById('previewContent');
+
+    target.textContent = '';
+    var h1 = document.createElement('h1');
+    h1.textContent = post.title;
+    var meta = document.createElement('p');
+    meta.className = 'post-meta';
+    meta.textContent = post.date + ' ・ ' + post.author;
+    var body = document.createElement('div');
+    body.innerHTML = post.content;
+
+    target.appendChild(h1);
+    target.appendChild(meta);
+    target.appendChild(body);
+
+    if (post.tags.length) {
+      var tagWrap = document.createElement('div');
+      tagWrap.className = 'post-tags';
+      post.tags.forEach(function (t) {
+        var span = document.createElement('span');
+        span.className = 'tag';
+        span.textContent = t;
+        tagWrap.appendChild(span);
+      });
+      target.appendChild(tagWrap);
+    }
+
+    document.getElementById('preview').hidden = false;
+  });
+})();
+</script>
+</body>
+</html>
