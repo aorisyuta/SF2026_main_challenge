@@ -25,6 +25,11 @@
     return { phase: 'between', day: 0 };
   }
 
+  function calendarDaysUntil(dateStr) {
+    var todayJst = new Date(Date.now() + 9 * 3600000).toISOString().slice(0, 10);
+    return Math.round((Date.parse(dateStr) - Date.parse(todayJst)) / 86400000);
+  }
+
   var timer = null;
   function renderCountdown() {
     var els = document.querySelectorAll('[data-countdown]');
@@ -33,16 +38,15 @@
     if (!st) return false;
     var text, more = false;
     if (st.phase === 'before') {
-      var d = Math.floor(st.diff / 86400000);
-      var h = Math.floor(st.diff / 3600000) % 24;
-      var m = Math.floor(st.diff / 60000) % 60;
-      text = d > 0 ? '開幕まで あと ' + d + '日 ' + h + '時間' : '開幕まで あと ' + h + '時間 ' + m + '分';
+      // 1日目は開始時刻が「午後」なので、日数（日本時間の暦日）で数える
+      var days = calendarDaysUntil(CFG.days[0].date);
+      text = days > 1 ? '開幕まで あと ' + days + '日' : days === 1 ? 'いよいよ明日、開幕' : '本日 午後から開催';
       more = true;
     } else if (st.phase === 'open') {
       text = (st.day + 1) + '日目 開催中';
       more = true;
     } else if (st.phase === 'between') {
-      text = '明日 9:00 から 2日目';
+      text = '2日目は ' + ((CFG.days[1] && CFG.days[1].open) || '') + ' から';
       more = true;
     } else {
       text = 'ご来場ありがとうございました';

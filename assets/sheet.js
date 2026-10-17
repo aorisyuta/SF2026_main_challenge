@@ -211,6 +211,7 @@
       if (!truthy(r.visible, true)) return;                     // visible = FALSE は非表示
 
       var date = parseDate(r.date);
+      var art = artKey(r.image);
       var item = {
         id: r.id ? slugify(r.id, i) : '',
         title: r.title || '',
@@ -218,7 +219,8 @@
         body: r.body || '',
         url: safeUrl(r.url),
         linkLabel: r.link_label || '',
-        image: imageUrl(r.image),
+        image: art ? '' : imageUrl(r.image),
+        art: art,
         tags: String(r.tags || '').split(/[,、，]/).map(function (t) { return t.trim(); }).filter(Boolean),
         author: r.author || '',
         style: String(r.style || '').trim().toLowerCase(),
@@ -243,9 +245,29 @@
       if (a.pin !== b.pin) return a.pin ? -1 : 1;
       return (b.date ? b.date.getTime() : 0) - (a.date ? a.date.getTime() : 0) || a.order - b.order;
     });
-    // news はシートの並び順（上の行ほど先に表示）
+    // news はシートの並び順（上の行ほど先に表示）。1件もなければ config.js の初期値
+    if (!data.news.length) data.news = defaultNews();
     if (!data.links.length && CFG.fallbackLinks) data.links = CFG.fallbackLinks.slice();
     return data;
+  }
+
+  /** image 列に pdf / tshirt と書くと内蔵イラストを使う */
+  function artKey(v) {
+    var s = String(v || '').trim().toLowerCase();
+    if (/^(pdf|部誌|book|booklet)$/.test(s)) return 'pdf';
+    if (/^(tshirt|t-shirt|tシャツ|ｔシャツ|shirt)$/.test(s)) return 'tshirt';
+    return '';
+  }
+
+  function defaultNews() {
+    return (CFG.defaultNews || []).map(function (n, i) {
+      return {
+        id: '', title: n.title || '', text: n.text || '', body: '',
+        url: safeUrl(n.url), linkLabel: n.linkLabel || '', image: n.image ? imageUrl(n.image) : '',
+        art: n.art || '', tags: [], author: '', style: n.style || '', pin: !!n.pin,
+        date: null, dateLabel: '', order: i
+      };
+    });
   }
 
   var promise = null;
@@ -263,6 +285,10 @@
       return text;
     })).then(function (text) {
       return build(parseCSV(text));
+    }, function (err) {
+      // シートが読めなくても、トップの販売タイルと SNS の初期値は出す
+      console.warn(err);
+      return { posts: [], news: defaultNews(), links: (CFG.fallbackLinks || []).slice(), error: err };
     });
     return promise;
   }

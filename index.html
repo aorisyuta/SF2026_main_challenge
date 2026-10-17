@@ -3,19 +3,19 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>“融合” 大阪星光学院 SF 2026 公式サイト</title>
-  <meta name="description" content="大阪星光学院スクールフェア（SF）2026「融合」の公式サイト。2026年11月7日（土）・8日（日）開催。企画紹介、タイムテーブル、来場案内、ブログ。">
+  <title>Aoristos — 大阪星光学院 SF 2026「融合」出展企画</title>
+  <meta name="description" content="Aoristos の大阪星光学院 SF 2026（11月7日・8日）出展企画のご案内。AorXC、部誌（冊子版・PDF 版）、Tシャツ、展示、制作体験など。">
   <meta name="author" content="Aoristos">
-  <meta name="theme-color" content="#000000">
+  <meta name="theme-color" content="#ffffff">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="“融合” 大阪星光学院 SF 2026">
-  <meta property="og:description" content="2026年11月7日（土）・8日（日）開催。大阪星光学院スクールフェアの公式サイトです。">
+  <meta property="og:title" content="Aoristos — SF 2026「融合」出展企画">
+  <meta property="og:description" content="11月7日（土）午後・8日（日）。Aoristos の企画、部誌、Tシャツのご案内。">
   <meta property="og:image" content="assets/blackboard-art.webp">
   <meta name="twitter:card" content="summary_large_image">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/style.css">
   <script>
-    window.pageConfig = { currentPage: 'index', basePath: '' };
+    window.pageConfig = { currentPage: 'index', basePath: '', hideRibbon: true };
   </script>
   <script src="assets/config.js"></script>
   <script src="assets/sheet.js" defer></script>
@@ -28,68 +28,32 @@
 <main id="main">
 
   <!-- Hero -->
-  <section class="hero" aria-labelledby="heroTitle">
+  <section class="hero hero-light" aria-labelledby="heroTitle">
     <div class="container">
-      <p class="hero-kicker">大阪星光学院 スクールフェア 2026</p>
-      <h1 class="hero-title" id="heroTitle">融合</h1>
-      <p class="hero-roman" aria-hidden="true">YUGO</p>
+      <img class="hero-logo" src="assets/aoristos-mark.svg" alt="" width="220" height="114">
+      <h1 class="hero-title hero-title-latin" id="heroTitle">Aoristos</h1>
+      <p class="hero-kicker">大阪星光学院 SF 2026「融合」出展</p>
       <p class="hero-dates">
-        <span>11.7<small>Sat</small></span><span class="sep">—</span><span>11.8<small>Sun</small></span>
+        <span>11.7<small>Sat 午後</small></span><span class="sep">—</span><span>11.8<small>Sun</small></span>
       </p>
-      <p class="hero-count" data-countdown aria-live="polite">2026年11月7日（土）・8日（日）開催</p>
+      <p class="hero-count" data-countdown aria-live="polite">2026年11月7日（土）午後・8日（日）</p>
       <p class="hero-links">
         <a class="more-link" href="projects.html">企画を見る</a>
-        <a class="more-link" href="info.html">来場案内</a>
+        <a class="more-link" href="timetable.html">タイムテーブル</a>
       </p>
     </div>
-    <div class="fusion" aria-hidden="true">
-      <svg viewBox="0 0 400 200">
-        <line class="axis" x1="0" y1="100" x2="400" y2="100"/>
-        <path class="core" d="M200 22.06A90 90 0 0 1 200 177.94A90 90 0 0 1 200 22.06z"/>
-        <circle class="ring ring-a" cx="155" cy="100" r="90"/>
-        <circle class="ring ring-b" cx="245" cy="100" r="90"/>
-      </svg>
-    </div>
   </section>
 
-  <!-- お知らせタイル（スプレッドシートの type = news） -->
-  <section class="tiles-band" id="tilesSection" aria-label="お知らせ" hidden>
+  <!-- 販売・お知らせ（スプレッドシートの type = news。無ければ config.js の初期値） -->
+  <section class="tiles-band" id="tilesSection" aria-label="販売とお知らせ" hidden>
     <div class="tiles" id="tiles"></div>
-  </section>
-
-  <!-- テーマ -->
-  <section class="band" aria-labelledby="themeTitle">
-    <div class="container statement reveal">
-      <p class="eyebrow">2026年のテーマ</p>
-      <h2 class="statement-lead" id="themeTitle">ちがう熱が、<br>ひとつに溶けあう。<br><span class="soft">二日間の、融合。</span></h2>
-      <div class="statement-body">
-        <p>
-          部活も、クラスも、学年も。ふだんは別々の場所で積み重ねてきたものが、この二日間だけは一つの校舎に集まります。
-          理科と工作、言葉と音、先輩の実績と後輩の挑戦。持ち寄ったものが混ざり合ったとき、ひとりでは作れなかった景色が生まれる。
-          それが、今年の SF のテーマ <strong>「融合」</strong> です。
-        </p>
-      </div>
-    </div>
-  </section>
-
-  <!-- 開催概要 -->
-  <section class="band band-tight" style="padding-top:0" aria-labelledby="factsTitle">
-    <div class="container">
-      <h2 class="section-title-sm" id="factsTitle">開催概要</h2>
-      <dl class="facts">
-        <div class="fact"><dt>日程</dt><dd>11月7日（土）<br>11月8日（日）<small>2026年・2日間開催</small></dd></div>
-        <div class="fact"><dt>時間</dt><dd>9:00 開始予定<small>詳しい時間は決まり次第お知らせします</small></dd></div>
-        <div class="fact"><dt>会場</dt><dd>大阪星光学院<small>中学校・高等学校（大阪市天王寺区）</small></dd></div>
-      </dl>
-      <p style="margin-top:28px"><a class="more-link" href="info.html">アクセスと来場のご案内</a></p>
-    </div>
   </section>
 
   <!-- 注目の企画 -->
   <section class="band band-alt" aria-labelledby="featuredTitle">
     <div class="container">
       <div class="section-head" style="text-align:left;margin-bottom:32px">
-        <h2 class="section-title" id="featuredTitle">企画をのぞく。</h2>
+        <h2 class="section-title" id="featuredTitle">Aoristos の企画。</h2>
         <a class="more-link" href="projects.html">すべての企画を見る</a>
       </div>
     </div>
@@ -98,6 +62,41 @@
       <div class="rail-controls">
         <button class="rail-btn" id="railPrev" type="button" aria-label="前へ"><svg viewBox="0 0 14 14"><path d="M9 2 4 7l5 5"/></svg></button>
         <button class="rail-btn" id="railNext" type="button" aria-label="次へ"><svg viewBox="0 0 14 14"><path d="m5 2 5 5-5 5"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 開催概要 -->
+  <section class="band band-tight" aria-labelledby="factsTitle">
+    <div class="container">
+      <h2 class="section-title-sm" id="factsTitle">開催概要</h2>
+      <dl class="facts">
+        <div class="fact"><dt>1日目</dt><dd>11月7日（土）<small>午後のみ・15:30 頃まで</small></dd></div>
+        <div class="fact"><dt>2日目</dt><dd>11月8日（日）<small>9:00 〜 15:30 頃</small></dd></div>
+        <div class="fact"><dt>会場</dt><dd>大阪星光学院<small>中学校・高等学校（大阪市天王寺区）</small></dd></div>
+      </dl>
+      <p style="margin-top:28px"><a class="more-link" href="info.html">アクセスと来場のご案内</a></p>
+    </div>
+  </section>
+
+  <!-- SF のテーマ -->
+  <section class="band band-dark theme-band" aria-labelledby="themeTitle">
+    <div class="container theme-grid">
+      <div class="reveal">
+        <p class="eyebrow">SF 2026 のテーマ</p>
+        <h2 class="theme-title" id="themeTitle">融合</h2>
+        <p class="theme-body">
+          今年の大阪星光学院 SF のテーマは「融合」。Aoristos の企画も、問題に挑む、展示を見る、手を動かして作る。
+          いろいろな楽しみ方が混ざり合う場所を目指しています。
+        </p>
+      </div>
+      <div class="fusion reveal" aria-hidden="true">
+        <svg viewBox="0 0 400 200">
+          <line class="axis" x1="0" y1="100" x2="400" y2="100"/>
+          <path class="core" d="M200 22.06A90 90 0 0 1 200 177.94A90 90 0 0 1 200 22.06z"/>
+          <circle class="ring ring-a" cx="155" cy="100" r="90"/>
+          <circle class="ring ring-b" cx="245" cy="100" r="90"/>
+        </svg>
       </div>
     </div>
   </section>
@@ -146,13 +145,13 @@
     <div class="container">
       <div class="section-head">
         <h2 class="section-title" id="followTitle">当日の速報は、SNS で。</h2>
-        <p class="section-sub">タイムテーブルの変更や混雑状況、天候による変更をいち早くお届けします。</p>
+        <p class="section-sub">企画の混雑状況や時間の変更、販売情報をお届けします。</p>
       </div>
       <ul class="social-grid" id="socialLinks"></ul>
     </div>
   </section>
 
-  <!-- このサイトについて -->
+  <!-- Aoristos について -->
   <section class="band" aria-labelledby="aboutSiteTitle">
     <div class="container about">
       <img src="assets/blackboard-art.webp"
@@ -161,10 +160,11 @@
            width="1280" height="720" alt="数式や化学式に囲まれて Aoristos と書かれた黒板アート"
            loading="lazy" decoding="async" class="reveal">
       <div class="reveal">
-        <p class="eyebrow">About this site</p>
-        <h2 id="aboutSiteTitle">このサイトは、<br>Aoristos がつくっています。</h2>
-        <p>大阪星光学院 SF 2026 の公式サイトは、Aoristos が制作・運用しています。</p>
-        <p>当日は Aoristos の部誌販売や AorXC、「科学の甲子園」展示なども行います。ぜひお立ち寄りください。</p>
+        <p class="eyebrow">About</p>
+        <h2 id="aboutSiteTitle">Aoristos について</h2>
+        <p>このページは、Aoristos が大阪星光学院 SF 2026 に出展する企画をご案内するために制作・運用しています。</p>
+        <p>AorXC、部誌の販売、「科学の甲子園」展示、これまでの実績展示などを行います。会場でお待ちしています。</p>
+        <p class="about-note">※ 学校および SF の公式サイトではありません。SF 全体のお知らせは学校の発表をご確認ください。</p>
       </div>
     </div>
   </section>

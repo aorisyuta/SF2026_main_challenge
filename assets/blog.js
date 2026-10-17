@@ -80,11 +80,11 @@
     }
 
     var p = posts[index];
-    document.title = p.title + ' — SF 2026 ブログ';
+    document.title = p.title + ' — Aoristos ブログ';
     var meta = document.querySelector('meta[name="description"]');
     if (meta && p.text) meta.setAttribute('content', p.text);
 
-    var shareText = encodeURIComponent(p.title + ' | 大阪星光学院 SF 2026');
+    var shareText = encodeURIComponent(p.title + ' | Aoristos（SF 2026）');
     var shareUrl = encodeURIComponent(location.href);
 
     article.innerHTML =
@@ -130,6 +130,7 @@
     var target = document.getElementById('blogList') || document.getElementById('postArticle');
     if (!target) return;
     window.SFSheet.load().then(function (data) {
+      if (data.error) throw data.error;
       renderList(data.posts);
       renderPost(data.posts);
     }).catch(function (err) {

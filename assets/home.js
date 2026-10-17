@@ -1,6 +1,6 @@
 /*
   home.js — トップページのシート連動部分
-  - お知らせタイル（type = news）：部誌発売中、Tシャツ発売中 など
+  - お知らせタイル（type = news）：部誌 PDF 版、Tシャツ など（シートに無ければ config.js の初期値）
   - 最新のブログ記事 3 件（type = post）
   - SNS リンク（type = link）
 */
@@ -21,8 +21,10 @@
       var cta = n.url
         ? '<p class="tile-links"><a class="btn' + (tone === 'dark' ? ' btn-light' : '') + '" href="' + E(n.url) + '"' + ext(n.url) + '>' + E(n.linkLabel || '詳しく見る') + '</a></p>'
         : '';
-      var img = n.image ? '<img class="tile-img" src="' + E(n.image) + '" alt="" loading="lazy" decoding="async">' : '';
-      return '<article class="tile tile-' + tone + wide + (n.image ? ' has-img' : '') + '">' +
+      var img = n.image
+        ? '<img class="tile-img" src="' + E(n.image) + '" alt="" loading="lazy" decoding="async">'
+        : n.art ? '<img class="tile-img tile-art" src="assets/art/' + E(n.art) + '.svg" alt="" width="480" height="300" decoding="async">' : '';
+      return '<article class="tile tile-' + tone + wide + (img ? ' has-img' : '') + '">' +
         '<div class="tile-copy">' +
           '<h3>' + E(n.title) + '</h3>' +
           (n.text ? '<p class="tile-sub">' + E(n.text) + '</p>' : '') +

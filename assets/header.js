@@ -12,13 +12,6 @@
   var page = window.pageConfig || {};
   var base = page.basePath || '';
 
-  // 融合のマーク：重なり合う二つの円（ヴェシカ・パイシス）
-  var MARK =
-    '<svg class="mark" viewBox="0 0 40 24" aria-hidden="true">' +
-      '<circle cx="14" cy="12" r="9.5"/><circle cx="26" cy="12" r="9.5"/>' +
-      '<path class="mark-core" d="M20 4.63A9.5 9.5 0 0 1 20 19.37A9.5 9.5 0 0 1 20 4.63z"/>' +
-    '</svg>';
-
   var NAV = [
     { key: 'projects', href: 'projects.html', label: '企画' },
     { key: 'timetable', href: 'timetable.html', label: 'タイムテーブル' },
@@ -42,8 +35,9 @@
       '<a class="skip-link" href="#main">本文へスキップ</a>' +
       '<header class="gnav" id="gnav">' +
         '<div class="gnav-inner">' +
-          '<a class="gnav-brand" href="' + base + 'index.html" aria-label="' + esc(CFG.shortName) + ' ホーム">' +
-            MARK + '<span class="gnav-brand-text">SF<span class="gnav-year">2026</span></span>' +
+          '<a class="gnav-brand" href="' + base + 'index.html" aria-label="Aoristos ホーム">' +
+            '<img class="gnav-logo" src="' + base + 'assets/aoristos-mark.svg" alt="" width="39" height="20">' +
+            '<span class="gnav-brand-text">Aoristos<span class="gnav-year">SF 2026</span></span>' +
           '</a>' +
           '<nav class="gnav-nav" id="gnavNav" aria-label="メイン">' +
             '<ul>' + links + '</ul>' +
@@ -84,9 +78,10 @@
     footer.innerHTML =
       '<div class="footer-inner">' +
         '<div class="footer-top">' +
-          '<div class="footer-brand">' + MARK +
-            '<div><p class="footer-theme">“' + esc(CFG.theme) + '”</p>' +
-            '<p class="footer-event">' + esc(CFG.eventName) + '<br>' + esc(dateLine()) + '</p></div>' +
+          '<div class="footer-brand">' +
+            '<img class="footer-logo" src="' + base + 'assets/aoristos-mark.svg" alt="" width="54" height="28">' +
+            '<div><p class="footer-theme">Aoristos</p>' +
+            '<p class="footer-event">' + esc(CFG.eventName) + '「' + esc(CFG.theme) + '」出展<br>' + esc(dateLine()) + '</p></div>' +
           '</div>' +
           '<div class="footer-cols">' +
             '<div><h2>サイト</h2><ul>' +
@@ -97,8 +92,8 @@
           '</div>' +
         '</div>' +
         '<div class="footer-bottom">' +
-          '<p>Copyright © 2026 ' + esc(CFG.producer) + '. 大阪星光学院 SF 2026 公式サイト</p>' +
-          '<p>制作・運用 ' + esc(CFG.producer) + '</p>' +
+          '<p>Copyright © 2026 ' + esc(CFG.producer) + '.</p>' +
+          '<p>このサイトは Aoristos による SF 2026 出展企画の案内ページです（学校・SF の公式サイトではありません）。</p>' +
         '</div>' +
       '</div>';
     document.body.appendChild(footer);

@@ -126,9 +126,10 @@ a:hover { text-decoration: underline; }
   border-bottom: 1px solid rgba(0, 0, 0, .08);
 }
 .gnav-inner { max-width: calc(var(--w) + var(--gutter) * 2); height: 100%; margin: 0 auto; padding: 0 var(--gutter); display: flex; align-items: center; justify-content: space-between; }
-.gnav-brand { display: flex; align-items: center; gap: 8px; color: var(--ink); font-weight: 700; font-size: 15px; letter-spacing: .02em; }
+.gnav-brand { display: flex; align-items: center; gap: 9px; color: var(--ink); font-weight: 700; font-size: 16px; letter-spacing: .01em; }
 .gnav-brand:hover { text-decoration: none; }
-.gnav-year { font-weight: 400; color: var(--ink-2); margin-left: 3px; }
+.gnav-logo { width: 39px; height: 20px; }
+.gnav-year { font-weight: 400; font-size: 12px; color: var(--ink-2); margin-left: 8px; letter-spacing: .02em; }
 .gnav-nav ul { display: flex; gap: 36px; }
 .gnav-nav a { color: var(--ink); opacity: .8; font-size: 13px; transition: opacity .2s; }
 .gnav-nav a:hover { opacity: 1; text-decoration: none; }
@@ -509,7 +510,7 @@ a:hover { text-decoration: underline; }
 .footer-inner { max-width: calc(var(--w) + var(--gutter) * 2); margin: 0 auto; padding: 40px var(--gutter) 24px; }
 .footer-top { display: flex; justify-content: space-between; gap: 40px; padding-bottom: 28px; border-bottom: 1px solid var(--line); }
 .footer-brand { display: flex; gap: 14px; align-items: flex-start; color: var(--ink); }
-.footer-brand .mark { margin-top: 3px; }
+.footer-logo { width: 54px; height: 28px; flex: none; }
 .footer-theme { font-size: 17px; font-weight: 700; }
 .footer-event { color: var(--ink-2); margin-top: 2px; }
 .footer-cols { display: flex; gap: 64px; }
@@ -577,3 +578,34 @@ a:hover { text-decoration: underline; }
   .tt-panel { break-after: page; }
 }
 .tt-list h3 a { color: var(--ink); } .tt-list h3 a:hover { color: var(--link); }
+
+/* =========================================================
+   Aoristos 版トップ：明るいヒーロー／テーマ帯
+   ========================================================= */
+.hero-light { background: var(--bg); color: var(--ink); padding: 80px 0 72px; }
+.hero-light .hero-kicker { color: var(--ink-2); margin-top: 18px; }
+.hero-light .hero-dates small, .hero-light .hero-dates .sep, .hero-light .hero-count { color: var(--ink-2); }
+.hero-light .hero-links a { color: var(--link); }
+.hero-logo { width: clamp(150px, 20vw, 220px); height: auto; margin: 0 auto 26px; }
+.hero-title-latin {
+  font-size: clamp(64px, 13vw, 156px); letter-spacing: -.035em; padding-left: 0; margin-top: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+}
+.hero-dates small { white-space: nowrap; }
+
+.tiles-band { background: var(--bg); }
+.tile-art { max-height: 300px; }
+
+.theme-band { overflow: hidden; }
+.theme-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; }
+.theme-band .eyebrow { color: var(--on-dark-2); }
+.theme-title { font-size: clamp(88px, 14vw, 168px); line-height: 1; font-weight: 700; letter-spacing: .04em; margin: 8px 0 24px; }
+.theme-body { color: var(--on-dark-2); font-size: clamp(17px, 1.9vw, 19px); max-width: 30em; }
+.theme-band .fusion { width: 100%; margin: 0; }
+
+.about-note { font-size: 14px; color: var(--ink-3) !important; margin-top: 20px !important; }
+
+@media (max-width: 833px) {
+  .theme-grid { grid-template-columns: 1fr; gap: 36px; }
+  .hero-light { padding: 56px 0 56px; }
+}

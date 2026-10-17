@@ -77,7 +77,7 @@ function pageTemplate(project) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${title} — 企画 | 大阪星光学院 SF 2026</title>
+  <title>${title} — Aoristos｜SF 2026</title>
   <meta name="description" content="${description}">
   <meta name="author" content="Aoristos">
   <meta name="theme-color" content="#ffffff">
