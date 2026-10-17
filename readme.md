@@ -107,6 +107,14 @@ URL の末尾に `?data=local` を付けると、スプレッドシートの代�
 
 ---
 
+## 公開（Cloudflare）
+
+リポジトリの `main` に push すると Cloudflare が自動でデプロイします（`npx wrangler deploy`）。
+
+- 設定は `wrangler.jsonc`。このファイルがあるので、ビルド時の自動セットアップは行われません
+- 公開しないファイル（`node_modules`・`readme.md`・`photo/` など）は `.assetsignore` に書きます
+- 存在しない URL には `404.html` を表示します
+
 ## ローカルで動かす
 
 `fetch` を使うため、ファイルを直接開かずローカルサーバー経由で開いてください。
