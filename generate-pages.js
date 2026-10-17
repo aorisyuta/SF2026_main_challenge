@@ -8,11 +8,10 @@
 
   エコ方針:
     - 外部 npm パッケージに依存しない（csv-parser / fs-extra を廃止）
-    - 既存ファイルは上書きしない（--force で明示的に上書き）
+    - ページは本文を持たない「器」なので、常にテンプレートと同じ内容に揃える
 
   使い方:
-    npm run generate          既存ファイルを残したまま不足分だけ生成
-    npm run generate -- --force   すべて再生成
+    npm run generate   CSV に合わせて projects/*.html を作成・更新し、CSV にないページを削除
 */
 
 const fs = require('fs');
@@ -78,21 +77,17 @@ function pageTemplate(project) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${title} — “BE SEIKO” 大阪星光学院 SF 2026</title>
+  <title>${title} — 企画 | 大阪星光学院 SF 2026</title>
   <meta name="description" content="${description}">
   <meta name="author" content="Aoristos">
-  <meta name="theme-color" content="#3a5129">
-  <link rel="icon" href="../assets/logo.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="../assets/style.css">
   <script>
-    window.pageConfig = {
-      title: '${title.replace(/'/g, "\\'")} — “BE SEIKO” 大阪星光学院 SF 2026',
-      pageTitle: '企画紹介',
-      pageSubtitle: '企画の詳しい情報',
-      currentPage: 'projects',
-      basePath: '../'
-    };
+    window.pageConfig = { currentPage: 'projects', basePath: '../' };
   </script>
+  <script src="../assets/config.js"></script>
+  <script src="../assets/sheet.js" defer></script>
   <script src="../assets/header.js" defer></script>
   <script src="../assets/script.js" defer></script>
   <script src="../assets/project-detail.js" defer></script>
@@ -100,37 +95,16 @@ function pageTemplate(project) {
 <body>
 
 <main id="main">
-  <a href="../projects.html" class="back-link">← 企画一覧に戻る</a>
-
-  <article id="projectDetail" class="card">
+  <article id="projectDetail">
     <!-- 本文は assets/projects-details.json から生成されます -->
-    <h1>${title}</h1>
-    <p class="muted">${description}</p>
+    <header class="page-hero page-hero-left">
+      <div class="container">
+        <h1 class="page-title">${title}</h1>
+        <p class="page-lead">${description}</p>
+      </div>
+    </header>
   </article>
 </main>
-
-<footer>
-  <div class="footer-inner">
-    <p>© <span id="currentYear">2026</span> Aoristos</p>
-    <nav class="footer-nav" aria-label="フッターナビゲーション">
-      <a href="../projects.html">企画紹介</a>
-      <a href="../timetable.html">タイムテーブル</a>
-      <a href="../info.html">インフォ</a>
-      <a href="../blog.html">ブログ</a>
-    </nav>
-    <p class="site-credit">Produced by <a href="https://www.instagram.com/your_account" target="_blank" rel="noopener noreferrer">Aoristos</a></p>
-    <div class="footer-social">
-      <a href="https://www.instagram.com/your_account" target="_blank" rel="noopener noreferrer" class="social-link" title="Instagram">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="#fff"/>
-          <circle cx="17.5" cy="6.5" r="1" fill="#fff"/>
-        </svg>
-        <span class="skip-link">Instagram</span>
-      </a>
-    </div>
-  </div>
-</footer>
 
 </body>
 </html>
@@ -154,19 +128,28 @@ function main() {
     const fileName = path.basename(project.link);
     const outputPath = path.join(OUTPUT_DIR, fileName);
 
-    if (fs.existsSync(outputPath) && !FORCE) {
-      console.log(`スキップ（既存）: projects/${fileName}`);
+    if (fs.existsSync(outputPath) && !FORCE && fs.readFileSync(outputPath, 'utf8') === pageTemplate(project)) {
       skipped++;
       continue;
     }
 
     fs.writeFileSync(outputPath, pageTemplate(project), 'utf8');
-    console.log(`生成: projects/${fileName}`);
+    console.log(`生成・更新: projects/${fileName}`);
     created++;
   }
 
-  console.log(`\n完了: ${created} 件生成 / ${skipped} 件スキップ`);
-  if (skipped && !FORCE) console.log('すべて作り直すには: npm run generate -- --force');
+  // CSV から消えた企画のページを削除
+  const keep = new Set(projects.map(p => path.basename(p.link)));
+  let removed = 0;
+  for (const f of fs.readdirSync(OUTPUT_DIR)) {
+    if (f.endsWith('.html') && !keep.has(f)) {
+      fs.unlinkSync(path.join(OUTPUT_DIR, f));
+      console.log(`削除（CSV にない）: projects/${f}`);
+      removed++;
+    }
+  }
+
+  console.log(`\n完了: ${created} 件生成・更新 / ${skipped} 件変更なし / ${removed} 件削除`);
 }
 
 main();

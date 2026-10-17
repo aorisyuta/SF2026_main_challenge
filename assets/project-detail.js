@@ -1,119 +1,92 @@
 /*
-  project-detail.js — Aoristos / Osaka Seiko Gakuin SF 2026
-  assets/projects-details.json から企画ページの本文を組み立てる。
-  ファイル名（例: electric.html）が企画 ID に対応する。
+  project-detail.js — 企画ページ（projects/<id>.html）の本文を
+  assets/projects-details.json から組み立てる。ファイル名が企画 ID。
 */
-
 (function () {
   'use strict';
 
-  function projectIdFromUrl() {
-    return window.location.pathname.split('/').pop().replace(/\.html$/, '') || 'index';
+  function el(tag, cls, text) {
+    var e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (text != null) e.textContent = text;
+    return e;
   }
 
-  function detailItem(label, content) {
-    var item = document.createElement('div');
-    item.className = 'detail-item';
-    var strong = document.createElement('strong');
-    strong.textContent = label;
-    var p = document.createElement('p');
-    p.textContent = content;
-    item.appendChild(strong);
-    item.appendChild(p);
-    return item;
+  function specRow(label, value) {
+    var row = el('div', 'spec-row');
+    row.appendChild(el('dt', null, label));
+    row.appendChild(el('dd', null, value));
+    return row;
   }
 
-  function section(heading) {
-    var sec = document.createElement('section');
-    sec.className = 'project-detail-section';
-    var h2 = document.createElement('h2');
-    h2.textContent = heading;
-    sec.appendChild(h2);
-    return sec;
-  }
+  function render(p, root) {
+    document.title = p.title + ' — 企画 | 大阪星光学院 SF 2026';
+    var cat = window.SFProjects ? window.SFProjects.categoryClass(p.category) : '';
 
-  function render(project, container) {
-    document.title = project.title + ' — SF 2026 企画紹介';
+    var hero = el('header', 'page-hero page-hero-left');
+    var inner = el('div', 'container');
+    if (p.category) inner.appendChild(el('p', 'eyebrow ' + cat, p.category));
+    inner.appendChild(el('h1', 'page-title', p.title));
+    if (p.description) inner.appendChild(el('p', 'page-lead', p.description));
+    hero.appendChild(inner);
 
-    var brandTitle = document.querySelector('.brand-title');
-    if (brandTitle) brandTitle.textContent = project.title;
-    var brandSub = document.querySelector('.brand-sub');
-    if (brandSub) brandSub.textContent = project.description || '企画の詳しい情報';
+    var body = el('div', 'container detail-body');
 
-    var hero = document.createElement('div');
-    hero.className = 'project-hero';
-
-    if (project.thumb) {
-      var thumbWrap = document.createElement('div');
-      thumbWrap.className = 'project-hero-thumb';
-      var img = document.createElement('img');
-      img.src = '../' + project.thumb;
+    if (p.thumb) {
+      var fig = el('figure', 'detail-figure');
+      var img = el('img');
+      img.src = '../' + p.thumb;
       img.alt = '';
-      img.loading = 'lazy';
       img.decoding = 'async';
-      img.addEventListener('error', function () { thumbWrap.remove(); });
-      thumbWrap.appendChild(img);
-      hero.appendChild(thumbWrap);
+      img.addEventListener('error', function () { fig.remove(); });
+      fig.appendChild(img);
+      body.appendChild(fig);
     }
 
-    var info = document.createElement('div');
-    info.className = 'project-hero-info';
-    var h1 = document.createElement('h1');
-    h1.textContent = project.title;
-    var lead = document.createElement('p');
-    lead.className = 'muted';
-    lead.textContent = project.description || '';
-    info.appendChild(h1);
-    info.appendChild(lead);
-    hero.appendChild(info);
-
-    container.textContent = '';
-    container.appendChild(hero);
-
-    if (project.fullDescription) {
-      var descSection = section('詳しい説明');
-      var p = document.createElement('p');
-      p.textContent = project.fullDescription;
-      descSection.appendChild(p);
-      container.appendChild(descSection);
+    if (p.fullDescription) {
+      var about = el('section', 'detail-about');
+      about.appendChild(el('h2', 'section-title-sm', 'この企画について'));
+      about.appendChild(el('p', null, p.fullDescription));
+      body.appendChild(about);
     }
 
-    var infoSection = section('開催情報');
-    if (project.location) infoSection.appendChild(detailItem('場所', project.location));
-    if (project.schedule) infoSection.appendChild(detailItem('開催時間・回数', project.schedule));
-    if (project.duration) infoSection.appendChild(detailItem('所要時間', project.duration));
-    container.appendChild(infoSection);
+    var specs = el('section', 'detail-specs');
+    specs.appendChild(el('h2', 'section-title-sm', '開催情報'));
+    var dl = el('dl', 'spec-list');
+    if (p.location) dl.appendChild(specRow('場所', p.location));
+    if (p.schedule) dl.appendChild(specRow('時間', p.schedule));
+    if (p.duration) dl.appendChild(specRow('所要時間', p.duration));
+    (p.details || []).forEach(function (d) { dl.appendChild(specRow(d.label, d.content)); });
+    specs.appendChild(dl);
+    body.appendChild(specs);
 
-    if (project.details && project.details.length) {
-      var otherSection = section('その他のご案内');
-      project.details.forEach(function (d) {
-        otherSection.appendChild(detailItem(d.label, d.content));
-      });
-      container.appendChild(otherSection);
-    }
+    var back = el('p', 'detail-back');
+    var a = el('a', 'more-link more-back', '企画一覧へ戻る');
+    a.href = '../projects.html';
+    back.appendChild(a);
+    body.appendChild(back);
+
+    root.textContent = '';
+    root.appendChild(hero);
+    root.appendChild(body);
   }
 
   document.addEventListener('DOMContentLoaded', function () {
-    var container = document.getElementById('projectDetail');
-    if (!container) return;
+    var root = document.getElementById('projectDetail');
+    if (!root) return;
+    var id = location.pathname.split('/').pop().replace(/\.html$/, '');
 
-    var id = projectIdFromUrl();
-
-    fetch('../assets/projects-details.json')
-      .then(function (res) {
-        if (!res.ok) throw new Error('projects-details.json の取得に失敗しました (' + res.status + ')');
-        return res.json();
-      })
-      .then(function (data) {
-        var project = (data.projects || []).find(function (p) { return p.id === id; });
-        if (!project) throw new Error('企画が見つかりません: ' + id);
-        render(project, container);
-      })
-      .catch(function (err) {
-        console.error(err);
-        container.innerHTML =
-          '<p class="no-results">企画情報を読み込めませんでした。' +
-          '<a href="../projects.html">企画一覧</a>からお探しください。</p>';
-      });
+    fetch('../assets/projects-details.json').then(function (res) {
+      if (!res.ok) throw new Error('projects-details.json の取得に失敗しました (' + res.status + ')');
+      return res.json();
+    }).then(function (data) {
+      var p = (data.projects || []).filter(function (x) { return x.id === id; })[0];
+      if (!p) throw new Error('企画が見つかりません: ' + id);
+      render(p, root);
+    }).catch(function (err) {
+      console.error(err);
+      var c = root.querySelector('.container') || root;
+      c.insertAdjacentHTML('beforeend', '<p class="empty">詳しい情報を読み込めませんでした。<a href="../projects.html">企画一覧</a>からお探しください。</p>');
+    });
   });
 })();

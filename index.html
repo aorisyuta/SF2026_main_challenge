@@ -3,144 +3,173 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>“BE SEIKO” 大阪星光学院 SF 2026 公式サイト</title>
-  <meta name="description" content="大阪星光学院スクールフェア（SF）2026「BE SEIKO」の公式サイト。企画紹介、タイムテーブル、来場案内をお届けします。制作：Aoristos。">
+  <title>“融合” 大阪星光学院 SF 2026 公式サイト</title>
+  <meta name="description" content="大阪星光学院スクールフェア（SF）2026「融合」の公式サイト。2026年11月7日（土）・8日（日）開催。企画紹介、タイムテーブル、来場案内、ブログ。">
   <meta name="author" content="Aoristos">
-  <meta name="theme-color" content="#3a5129">
+  <meta name="theme-color" content="#000000">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="“BE SEIKO” 大阪星光学院 SF 2026 公式サイト">
-  <meta property="og:description" content="2026年11月3日開催。大阪星光学院スクールフェアの公式サイトです。">
+  <meta property="og:title" content="“融合” 大阪星光学院 SF 2026">
+  <meta property="og:description" content="2026年11月7日（土）・8日（日）開催。大阪星光学院スクールフェアの公式サイトです。">
   <meta property="og:image" content="assets/blackboard-art.webp">
-  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/style.css">
   <script>
-    window.pageConfig = {
-      title: '“BE SEIKO” 大阪星光学院 SF 2026 公式サイト',
-      pageTitle: '“BE SEIKO” SF 2026',
-      pageSubtitle: '大阪星光学院 スクールフェア 公式サイト',
-      currentPage: 'index',
-      basePath: ''
-    };
-    // カウントダウンの基準日時（script.js が参照）
-    window.__heroDate = '2026-11-03T09:00:00';
+    window.pageConfig = { currentPage: 'index', basePath: '' };
   </script>
+  <script src="assets/config.js"></script>
+  <script src="assets/sheet.js" defer></script>
   <script src="assets/header.js" defer></script>
   <script src="assets/script.js" defer></script>
+  <script src="assets/home.js" defer></script>
 </head>
 <body>
 
 <main id="main">
-  <section class="hero card">
-    <div class="hero-inner">
-      <div>
-        <h2 class="hero-title">SF 2026 開催まで</h2>
-        <p id="countdown" class="hero-countdown" aria-live="polite">2026年11月3日 開催</p>
-        <p class="hero-sub">2026年11月3日（火・祝） 9:00 開始予定 ／ 大阪星光学院</p>
-        <a href="projects.html" class="button">企画を見る</a>
+
+  <!-- Hero -->
+  <section class="hero" aria-labelledby="heroTitle">
+    <div class="container">
+      <p class="hero-kicker">大阪星光学院 スクールフェア 2026</p>
+      <h1 class="hero-title" id="heroTitle">融合</h1>
+      <p class="hero-roman" aria-hidden="true">YUGO</p>
+      <p class="hero-dates">
+        <span>11.7<small>Sat</small></span><span class="sep">—</span><span>11.8<small>Sun</small></span>
+      </p>
+      <p class="hero-count" data-countdown aria-live="polite">2026年11月7日（土）・8日（日）開催</p>
+      <p class="hero-links">
+        <a class="more-link" href="projects.html">企画を見る</a>
+        <a class="more-link" href="info.html">来場案内</a>
+      </p>
+    </div>
+    <div class="fusion" aria-hidden="true">
+      <svg viewBox="0 0 400 200">
+        <line class="axis" x1="0" y1="100" x2="400" y2="100"/>
+        <path class="core" d="M200 22.06A90 90 0 0 1 200 177.94A90 90 0 0 1 200 22.06z"/>
+        <circle class="ring ring-a" cx="155" cy="100" r="90"/>
+        <circle class="ring ring-b" cx="245" cy="100" r="90"/>
+      </svg>
+    </div>
+  </section>
+
+  <!-- お知らせタイル（スプレッドシートの type = news） -->
+  <section class="tiles-band" id="tilesSection" aria-label="お知らせ" hidden>
+    <div class="tiles" id="tiles"></div>
+  </section>
+
+  <!-- テーマ -->
+  <section class="band" aria-labelledby="themeTitle">
+    <div class="container statement reveal">
+      <p class="eyebrow">2026年のテーマ</p>
+      <h2 class="statement-lead" id="themeTitle">ちがう熱が、<br>ひとつに溶けあう。<br><span class="soft">二日間の、融合。</span></h2>
+      <div class="statement-body">
+        <p>
+          部活も、クラスも、学年も。ふだんは別々の場所で積み重ねてきたものが、この二日間だけは一つの校舎に集まります。
+          理科と工作、言葉と音、先輩の実績と後輩の挑戦。持ち寄ったものが混ざり合ったとき、ひとりでは作れなかった景色が生まれる。
+          それが、今年の SF のテーマ <strong>「融合」</strong> です。
+        </p>
       </div>
     </div>
   </section>
 
-  <section class="card" id="introduction">
-    <h2>INTRODUCTION</h2>
-    <p>
-      大阪星光学院のスクールフェア（SF）2026 公式サイトへようこそ。
-      今年のテーマは <strong>“BE SEIKO”</strong>。部活動・クラス企画・有志ステージまで、
-      星光生がそれぞれの「らしさ」を持ち寄る2026年11月3日の一日を、このサイトからご案内します。
-      企画一覧、講堂のタイムテーブル、来場時のご案内は上のメニューからご覧ください。
-    </p>
-  </section>
-
-  <section class="card" id="news">
-    <h2>最新情報</h2>
-    <p>
-      最新のお知らせや準備の様子は<a href="blog.html">ブログ</a>と公式Instagramで随時お届けします。
-      当日はタイムテーブルの変更、見どころ、来場者向けの注意事項も発信します。
-      特に天候に関わる変更や入場整理の案内は、Instagramのストーリーズで速報を出す予定です。
-    </p>
-  </section>
-
-  <section class="card" id="what-is-sf">
-    <h2>What is “SF”?</h2>
-    <p>
-      スクールフェア、略して SF は大阪星光学院のいわゆる文化祭であり、星光生がかなりガチになる行事です。
-      毎年、定番の射的ゲームや食品の販売など様々なブースが準備されており、企画によっては1月から準備するものもあります。
-      ここ最近では木材を使った大型企画や、有名ミュージカル作品を再現した演劇など、大掛かりな企画が多く見られます。
-      それほどの情熱が注がれた SF が楽しくないわけがありません。
-    </p>
-  </section>
-
-  <section class="card" id="what-is-seiko">
-    <h2>What is “Seiko”?</h2>
-    <p>
-      大阪星光学院は「世の光であれ」を校訓に、約1000人の学生が共に学ぶ学舎（まなびや）です。
-      南部合宿や黒姫山荘合宿を通じて一つ屋根の下で生活するため、学生たちの絆は卒業後も強く続きます。
-      また男子校ということもあってか、体育祭や SF など行事の時のエネルギーは凄まじいものがあります。
-      先生方との距離も近く、生徒が気さくに話しかけることができ、先生方も行事には全力で取り組んでいます。
-    </p>
-  </section>
-
-  <section class="card" id="gallery">
-    <h2>黒板アート</h2>
-    <p>黒板アートをモチーフにした Aoristos のイメージ画像です。</p>
-    <img src="assets/blackboard-art.webp"
-         srcset="assets/blackboard-art-640.webp 640w, assets/blackboard-art.webp 1280w"
-         sizes="(max-width: 720px) 100vw, 720px"
-         width="1280" height="720"
-         alt="黒板に描かれた大型の黒板アート作品"
-         loading="lazy" decoding="async"
-         style="border-radius:10px;margin-top:0.8rem">
-  </section>
-
-  <section class="card" id="highlights">
-    <h2>イベントハイライト</h2>
-    <p>
-      今年の目玉は <strong>SFXC</strong>。小学生の部・中学／高校の部・大人／教員の部に分かれ、
-      その場で試験形式でオリジナル問題に挑戦できます（問題と解答の PDF は後日ネットで配布します）。
-      展示では「科学の甲子園」への取り組みと、先輩方がこれまでに残してきた実績をご紹介。
-      電気工学部の<strong>制作体験</strong>や<strong>イライラ棒</strong>では、電子回路のしくみを手を動かしながら体験できます。
-      Aoristos と電気工学部の部誌も会場でお求めいただけます。
-    </p>
-    <p>
-      各企画の内容は<a href="projects.html">企画紹介</a>、開催時間は<a href="timetable.html">タイムテーブル</a>をご確認ください。
-    </p>
-  </section>
-
-  <section class="card" id="map">
-    <h2>来場案内</h2>
-    <p>アクセス、校内マップ、当日のルールは<a href="info.html">インフォメーション</a>にまとめています。</p>
-    <a href="info.html" class="button">来場案内を見る</a>
-  </section>
-
-  <section class="card" id="about-aoristos">
-    <h2>このサイトについて</h2>
-    <p>
-      本サイトは <strong>Aoristos</strong> が制作・運用している、大阪星光学院 SF 2026 の公式サイトです。
-    </p>
-  </section>
-</main>
-
-<footer>
-  <div class="footer-inner">
-    <p>© <span id="currentYear">2026</span> Aoristos</p>
-    <nav class="footer-nav" aria-label="フッターナビゲーション">
-      <a href="projects.html">企画紹介</a>
-      <a href="timetable.html">タイムテーブル</a>
-      <a href="info.html">インフォ</a>
-      <a href="blog.html">ブログ</a>
-    </nav>
-    <p class="site-credit">Produced by <a href="https://www.instagram.com/your_account" target="_blank" rel="noopener noreferrer">Aoristos</a></p>
-    <div class="footer-social">
-      <a href="https://www.instagram.com/your_account" target="_blank" rel="noopener noreferrer" class="social-link" title="Instagram" aria-label="Instagram（別タブで開きます）">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="#fff"/>
-          <circle cx="17.5" cy="6.5" r="1" fill="#fff"/>
-        </svg>
-      </a>
+  <!-- 開催概要 -->
+  <section class="band band-tight" style="padding-top:0" aria-labelledby="factsTitle">
+    <div class="container">
+      <h2 class="section-title-sm" id="factsTitle">開催概要</h2>
+      <dl class="facts">
+        <div class="fact"><dt>日程</dt><dd>11月7日（土）<br>11月8日（日）<small>2026年・2日間開催</small></dd></div>
+        <div class="fact"><dt>時間</dt><dd>9:00 開始予定<small>詳しい時間は決まり次第お知らせします</small></dd></div>
+        <div class="fact"><dt>会場</dt><dd>大阪星光学院<small>中学校・高等学校（大阪市天王寺区）</small></dd></div>
+      </dl>
+      <p style="margin-top:28px"><a class="more-link" href="info.html">アクセスと来場のご案内</a></p>
     </div>
-  </div>
-</footer>
+  </section>
+
+  <!-- 注目の企画 -->
+  <section class="band band-alt" aria-labelledby="featuredTitle">
+    <div class="container">
+      <div class="section-head" style="text-align:left;margin-bottom:32px">
+        <h2 class="section-title" id="featuredTitle">企画をのぞく。</h2>
+        <a class="more-link" href="projects.html">すべての企画を見る</a>
+      </div>
+    </div>
+    <div class="rail-wrap">
+      <div class="rail" id="featuredRail" tabindex="0" aria-label="企画の一覧（横にスクロールできます）"></div>
+      <div class="rail-controls">
+        <button class="rail-btn" id="railPrev" type="button" aria-label="前へ"><svg viewBox="0 0 14 14"><path d="M9 2 4 7l5 5"/></svg></button>
+        <button class="rail-btn" id="railNext" type="button" aria-label="次へ"><svg viewBox="0 0 14 14"><path d="m5 2 5 5-5 5"/></svg></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最新のブログ -->
+  <section class="band" id="latestSection" aria-labelledby="latestTitle" hidden>
+    <div class="container">
+      <div class="section-head" style="text-align:left;margin-bottom:28px">
+        <h2 class="section-title" id="latestTitle">最新情報</h2>
+        <a class="more-link" href="blog.html">ブログをすべて読む</a>
+      </div>
+      <ul class="news-list" id="latestPosts"></ul>
+    </div>
+  </section>
+
+  <!-- SF と星光 -->
+  <section class="band band-alt" aria-labelledby="aboutSfTitle">
+    <div class="container">
+      <div class="section-head reveal">
+        <h2 class="section-title" id="aboutSfTitle">はじめての方へ。</h2>
+        <p class="section-sub">SF のこと、星光のこと。</p>
+      </div>
+      <div class="duo">
+        <article class="duo-card reveal">
+          <p class="eyebrow">What is “SF”?</p>
+          <h3>本気の文化祭。</h3>
+          <p>
+            スクールフェア、略して SF は大阪星光学院の文化祭です。定番の射的や食品販売から、木材を使った大型企画、
+            有名ミュージカルを再現した演劇まで。企画によっては1月から準備を始めるものもあり、星光生がいちばん熱くなる行事のひとつです。
+          </p>
+        </article>
+        <article class="duo-card reveal">
+          <p class="eyebrow">What is “Seiko”?</p>
+          <h3>世の光であれ。</h3>
+          <p>
+            大阪星光学院は「世の光であれ」を校訓に、約1000人が学ぶ中高一貫の男子校です。南部合宿や黒姫山荘合宿で寝食を共にするため、
+            生徒どうしの絆は卒業後も続きます。先生との距離も近く、行事には生徒も先生も全力で取り組みます。
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- フォロー（スプレッドシートの type = link） -->
+  <section class="band band-dark" id="followSection" aria-labelledby="followTitle" hidden>
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title" id="followTitle">当日の速報は、SNS で。</h2>
+        <p class="section-sub">タイムテーブルの変更や混雑状況、天候による変更をいち早くお届けします。</p>
+      </div>
+      <ul class="social-grid" id="socialLinks"></ul>
+    </div>
+  </section>
+
+  <!-- このサイトについて -->
+  <section class="band" aria-labelledby="aboutSiteTitle">
+    <div class="container about">
+      <img src="assets/blackboard-art.webp"
+           srcset="assets/blackboard-art-640.webp 640w, assets/blackboard-art.webp 1280w"
+           sizes="(max-width: 833px) 100vw, 540px"
+           width="1280" height="720" alt="数式や化学式に囲まれて Aoristos と書かれた黒板アート"
+           loading="lazy" decoding="async" class="reveal">
+      <div class="reveal">
+        <p class="eyebrow">About this site</p>
+        <h2 id="aboutSiteTitle">このサイトは、<br>Aoristos がつくっています。</h2>
+        <p>大阪星光学院 SF 2026 の公式サイトは、Aoristos が制作・運用しています。</p>
+        <p>当日は Aoristos の部誌販売や AorXC、「科学の甲子園」展示なども行います。ぜひお立ち寄りください。</p>
+      </div>
+    </div>
+  </section>
+
+</main>
 
 </body>
 </html>

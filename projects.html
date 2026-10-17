@@ -3,81 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>企画紹介 — “BE SEIKO” 大阪星光学院 SF 2026</title>
-  <meta name="description" content="大阪星光学院 SF 2026 の参加企画一覧。カテゴリーでの絞り込みと企画名の検索ができます。">
+  <title>企画 — “融合” 大阪星光学院 SF 2026</title>
+  <meta name="description" content="大阪星光学院 SF 2026 の参加企画一覧。キーワード検索と分類での絞り込みができます。">
   <meta name="author" content="Aoristos">
-  <meta name="theme-color" content="#3a5129">
-  <link rel="icon" href="assets/logo.svg" type="image/svg+xml">
+  <meta name="theme-color" content="#f5f5f7">
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="stylesheet" href="assets/style.css">
   <script>
-    window.pageConfig = {
-      title: '企画紹介 — “BE SEIKO” 大阪星光学院 SF 2026',
-      pageTitle: '企画紹介',
-      pageSubtitle: '今年の参加企画を一覧でご紹介します',
-      currentPage: 'projects',
-      basePath: ''
-    };
+    window.pageConfig = { currentPage: 'projects', basePath: '' };
   </script>
+  <script src="assets/config.js"></script>
+  <script src="assets/sheet.js" defer></script>
   <script src="assets/header.js" defer></script>
   <script src="assets/script.js" defer></script>
 </head>
 <body>
 
-<main id="main">
-  <section class="card">
-    <div class="split">
-      <div>
-        <h2>今年の企画一覧</h2>
-        <p class="muted">カテゴリーで絞り込み、検索で企画名を探せます。</p>
-      </div>
-      <div>
-        <label class="skip-link" for="projectsSearch">企画を検索</label>
-        <input id="projectsSearch" class="search-bar" type="search" placeholder="企画を検索（例：射的）" aria-label="企画を検索">
+<main id="main" class="band-alt">
+  <header class="page-hero">
+    <div class="container">
+      <h1 class="page-title">企画</h1>
+      <p class="page-lead">展示、体験、販売。今年の SF で出会える企画をまとめました。</p>
+    </div>
+  </header>
+
+  <section class="container" style="padding-bottom:100px" aria-label="企画一覧">
+    <div class="toolbar">
+      <label class="search">
+        <span class="skip-link">企画を検索</span>
+        <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="6"/><path d="m13 13 5 5"/></svg>
+        <input id="projectsSearch" type="search" placeholder="企画名・キーワードで検索" autocomplete="off">
+      </label>
+      <div class="toolbar-meta">
+        <span id="projectsCount" aria-live="polite"></span>
+        <button type="button" class="text-btn" id="toggleAll" aria-pressed="true">説明をすべて閉じる</button>
       </div>
     </div>
-  </section>
 
-  <section class="card filters">
-    <div class="split" style="width:100%">
-      <div class="filter-list">
-        <!-- 絞り込みボタンは projects.csv のタグから生成されます -->
-        <button type="button" class="filter-btn active" data-filter="*">すべて</button>
-      </div>
-      <div class="stack">
-        <button type="button" id="expandAllBtn" class="button button-secondary">▼ すべて開く</button>
-        <button type="button" id="collapseAllBtn" class="button button-secondary">▲ すべて閉じる</button>
-      </div>
+    <div class="chips" id="filterList" role="group" aria-label="分類で絞り込む"></div>
+
+    <div class="projects-grid" id="projectsGrid">
+      <p class="empty">読み込み中…</p>
     </div>
+    <p class="empty" id="projectsNoResults" hidden>条件に合う企画が見つかりませんでした。</p>
   </section>
-
-  <div class="projects-grid" id="projectsGrid">
-    <!-- 企画カードは assets/projects.csv から生成されます -->
-  </div>
-
-  <p class="no-results" id="projectsNoResults" hidden>条件に合う企画が見つかりませんでした。</p>
 </main>
-
-<footer>
-  <div class="footer-inner">
-    <p>© <span id="currentYear">2026</span> Aoristos</p>
-    <nav class="footer-nav" aria-label="フッターナビゲーション">
-      <a href="projects.html">企画紹介</a>
-      <a href="timetable.html">タイムテーブル</a>
-      <a href="info.html">インフォ</a>
-      <a href="blog.html">ブログ</a>
-    </nav>
-    <p class="site-credit">Produced by <a href="https://www.instagram.com/your_account" target="_blank" rel="noopener noreferrer">Aoristos</a></p>
-    <div class="footer-social">
-      <a href="https://www.instagram.com/your_account" target="_blank" rel="noopener noreferrer" class="social-link" title="Instagram" aria-label="Instagram（別タブで開きます）">
-        <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="2" y="2" width="20" height="20" rx="5" fill="currentColor"/>
-          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" fill="#fff"/>
-          <circle cx="17.5" cy="6.5" r="1" fill="#fff"/>
-        </svg>
-      </a>
-    </div>
-  </div>
-</footer>
 
 </body>
 </html>
