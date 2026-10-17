@@ -149,7 +149,9 @@ a:hover { text-decoration: underline; }
     padding: 24px calc(var(--gutter) + 26px); visibility: hidden; opacity: 0;
     transition: opacity .3s var(--ease), visibility .3s;
   }
-  .gnav.is-open { background: var(--bg); }
+  /* backdrop-filter があると fixed の子要素がヘッダー基準になり、メニューの背景が潰れるため開いている間は外す */
+  .gnav.is-open { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; border-bottom-color: transparent; }
+  .gnav.is-open .gnav-nav { height: calc(100vh - var(--nav-h)); height: calc(100dvh - var(--nav-h)); overflow-y: auto; }
   .gnav.is-open .gnav-nav { visibility: visible; opacity: 1; }
   .gnav-nav ul { flex-direction: column; gap: 4px; }
   .gnav-nav a { display: block; font-size: 28px; font-weight: 600; opacity: 1; padding: 6px 0; }
