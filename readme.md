@@ -125,7 +125,7 @@ npm start          # python3 -m http.server 8000
 /
 ├── index.html              トップ
 ├── projects.html           企画一覧（検索・絞り込み）
-├── timetable.html          タイムテーブル（1日目／2日目）
+├── timetable.html          タイムテーブル（AorXC・制作体験の実施時間）
 ├── info.html               来場案内（概要・アクセス・注意事項・FAQ）
 ├── blog.html               ブログ一覧
 ├── blog/post.html          ブログ記事（?id=記事ID）
