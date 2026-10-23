@@ -141,10 +141,14 @@ function main() {
   }
 
   // CSV から消えた企画のページを削除
+  // （このスクリプトが生成した「器」だけが対象。手書きの独立ページ、例えば
+  //   projects/aoristos-bushi-pre.html は CSV になくても残す）
+  const GENERATED_MARK = '本文は assets/projects-details.json から生成されます';
   const keep = new Set(projects.map(p => path.basename(p.link)));
   let removed = 0;
   for (const f of fs.readdirSync(OUTPUT_DIR)) {
-    if (f.endsWith('.html') && !keep.has(f)) {
+    if (f.endsWith('.html') && !keep.has(f) &&
+        fs.readFileSync(path.join(OUTPUT_DIR, f), 'utf8').includes(GENERATED_MARK)) {
       fs.unlinkSync(path.join(OUTPUT_DIR, f));
       console.log(`削除（CSV にない）: projects/${f}`);
       removed++;

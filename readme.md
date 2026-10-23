@@ -99,7 +99,8 @@ URL の末尾に `?data=local` を付けると、スプレッドシートの代�
    - 企画一覧の説明は**最初から開いた状態**で表示されます。
 
 2. 詳細を `assets/projects-details.json` に追加します。`id` はファイル名（`newpage`）と一致させてください。
-3. ページを生成します。CSV にない古いページは自動で削除されます。
+3. ページを生成します。CSV にない古いページは自動で削除されます
+   （このスクリプトが生成したページだけが対象。`projects/aoristos-bushi-pre.html` のような手書きの独立ページは消えません）。
 
    ```bash
    npm run generate
