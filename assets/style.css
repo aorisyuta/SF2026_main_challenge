@@ -83,6 +83,12 @@ a:hover { text-decoration: underline; }
 .eyebrow.cat-b { color: var(--cat-b); }
 .eyebrow.cat-c { color: var(--cat-c); }
 
+/* 分類（Aoristos／電気工学部／物理部）を色の点で見分けやすくする */
+.eyebrow.cat-a, .eyebrow.cat-b, .eyebrow.cat-c { display: inline-flex; align-items: center; gap: 7px; }
+.eyebrow.cat-a::before, .eyebrow.cat-b::before, .eyebrow.cat-c::before {
+  content: ""; width: 8px; height: 8px; border-radius: 50%; background: currentColor; flex: none;
+}
+
 .more-link { font-size: 17px; white-space: nowrap; }
 .more-link::after {
   content: ""; display: inline-block; width: .42em; height: .42em; margin-left: .35em;
@@ -272,7 +278,11 @@ a:hover { text-decoration: underline; }
   position: relative; flex: 0 0 clamp(260px, 30vw, 320px); min-height: 360px; scroll-snap-align: start;
   background: var(--bg); color: var(--ink); border-radius: var(--radius-l); padding: 30px 30px 72px;
   transition: transform .4s var(--ease);
+  border-left: 5px solid transparent;
 }
+.rail-card.cat-a { border-left-color: var(--cat-a); }
+.rail-card.cat-b { border-left-color: var(--cat-b); }
+.rail-card.cat-c { border-left-color: var(--cat-c); }
 .rail-card:hover { text-decoration: none; transform: scale(1.012); }
 .rail-card h3 { font-size: 28px; line-height: 1.2; font-weight: 700; }
 .rail-desc { margin-top: 14px; font-size: 17px; line-height: 1.6; color: var(--ink-2); }
@@ -332,6 +342,17 @@ a:hover { text-decoration: underline; }
    ========================================================= */
 .page-hero { padding: 80px 0 48px; text-align: center; }
 .page-hero-left { text-align: left; }
+.page-hero-left .container.cat-a,
+.page-hero-left .container.cat-b,
+.page-hero-left .container.cat-c { position: relative; }
+.page-hero-left .container.cat-a::before,
+.page-hero-left .container.cat-b::before,
+.page-hero-left .container.cat-c::before {
+  content: ""; position: absolute; left: 0; top: 6px; bottom: 6px; width: 5px; border-radius: 3px;
+}
+.page-hero-left .container.cat-a::before { background: var(--cat-a); }
+.page-hero-left .container.cat-b::before { background: var(--cat-b); }
+.page-hero-left .container.cat-c::before { background: var(--cat-c); }
 .page-title { font-size: clamp(40px, 7vw, 80px); line-height: 1.05; font-weight: 700; letter-spacing: -.005em; }
 .page-lead { font-size: clamp(19px, 2.4vw, 24px); line-height: 1.45; color: var(--ink-2); margin-top: 16px; font-weight: 500; max-width: 760px; }
 .page-hero:not(.page-hero-left) .page-lead { margin-left: auto; margin-right: auto; }
@@ -362,8 +383,22 @@ a:hover { text-decoration: underline; }
 .chip:hover { border-color: var(--ink-3); }
 .chip[aria-pressed="true"] { background: var(--ink); border-color: var(--ink); color: #fff; }
 
+/* 分類の絞り込みチップだけ、カードと同じ分類色にする */
+.chip.cat-a { color: var(--cat-a); border-color: color-mix(in srgb, var(--cat-a) 40%, var(--line)); }
+.chip.cat-b { color: var(--cat-b); border-color: color-mix(in srgb, var(--cat-b) 40%, var(--line)); }
+.chip.cat-c { color: var(--cat-c); border-color: color-mix(in srgb, var(--cat-c) 40%, var(--line)); }
+.chip.cat-a[aria-pressed="true"] { background: var(--cat-a); border-color: var(--cat-a); color: #fff; }
+.chip.cat-b[aria-pressed="true"] { background: var(--cat-b); border-color: var(--cat-b); color: #fff; }
+.chip.cat-c[aria-pressed="true"] { background: var(--cat-c); border-color: var(--cat-c); color: #fff; }
+
 .projects-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-.project-card { background: var(--bg); border-radius: var(--radius-m); overflow: hidden; display: flex; flex-direction: column; content-visibility: auto; contain-intrinsic-size: 320px; }
+.project-card {
+  background: var(--bg); border-radius: var(--radius-m); overflow: hidden; display: flex; flex-direction: column;
+  content-visibility: auto; contain-intrinsic-size: 320px; border-left: 5px solid transparent;
+}
+.project-card.cat-a { border-left-color: var(--cat-a); }
+.project-card.cat-b { border-left-color: var(--cat-b); }
+.project-card.cat-c { border-left-color: var(--cat-c); }
 .project-thumb { width: 100%; aspect-ratio: 16 / 10; object-fit: cover; }
 .project-body { display: flex; flex-direction: column; padding: 26px 26px 24px; flex: 1; }
 .project-head { display: flex; align-items: flex-start; gap: 12px; justify-content: space-between; }

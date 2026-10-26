@@ -25,6 +25,7 @@
 
     var hero = el('header', 'page-hero page-hero-left');
     var inner = el('div', 'container');
+    if (p.category && cat) inner.classList.add(cat);
     if (p.category) inner.appendChild(el('p', 'eyebrow ' + cat, p.category));
     inner.appendChild(el('h1', 'page-title', p.title));
     if (p.description) inner.appendChild(el('p', 'page-lead', p.description));

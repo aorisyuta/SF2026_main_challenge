@@ -141,6 +141,7 @@
 
     var body = el('div', 'project-body');
     var org = p.tagList[0];
+    if (org && CATEGORY_CLASS[org]) card.classList.add(CATEGORY_CLASS[org]);
     if (org) body.appendChild(el('p', 'eyebrow ' + categoryClass(org), org));
 
     var head = el('div', 'project-head');
@@ -221,6 +222,7 @@
         ['すべて'].concat(tagSet).forEach(function (t, i) {
           var b = el('button', 'chip', t);
           b.type = 'button';
+          if (CATEGORY_CLASS[t]) b.classList.add(CATEGORY_CLASS[t]);
           b.setAttribute('data-filter', i === 0 ? '*' : t);
           b.setAttribute('aria-pressed', i === 0 ? 'true' : 'false');
           filterList.appendChild(b);
@@ -280,6 +282,7 @@
         var a = el('a', 'rail-card');
         a.href = p.link || 'projects.html';
         var org = p.tagList[0];
+        if (org && CATEGORY_CLASS[org]) a.classList.add(CATEGORY_CLASS[org]);
         if (org) a.appendChild(el('p', 'eyebrow ' + categoryClass(org), org));
         a.appendChild(el('h3', null, p.title));
         a.appendChild(el('p', 'rail-desc', p.description));
