@@ -174,6 +174,8 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 ├── projects/*.html         企画詳細（generate-pages.js で生成）
 ├── generate-pages.js       企画詳細ページの生成
 ├── build-site.js           canonical・OGP・sitemap・_headers・dist/ の生成
+├── archive/                過去の SF のサイト（sf25/ = SF 2025）
+├── tools/rebase_sf25.py    アーカイブ取り込み時のパス書き換え
 ├── _headers / robots.txt / sitemap.xml   build-site.js が生成
 ├── templates/
 │   ├── site-data-template.csv   スプレッドシートのひな形
@@ -196,10 +198,34 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 
 ---
 
+## アーカイブ（過去のサイト）
+
+`archive/` に過去の SF のサイトを当時のまま保存しています（<https://sf.aoristos.net/archive/>）。
+
+| パス | 内容 |
+| --- | --- |
+| `archive/index.html` | アーカイブの案内ページ（フッターの「アーカイブ」から） |
+| `archive/sf25/` | SF 2025 のサイト。[sonneko/sf25-site](https://github.com/sonneko/sf25-site) の `gh-pages` ブランチ（Next.js の静的書き出し、2025-11-02 ビルド）を取り込んだもの |
+
+`archive/sf25/` はビルド済みの別サイトなので、`build-site.js` は中身に手を加えません（canonical・CSP の自動計算・sitemap の対象外）。
+Next.js のインラインスクリプトが動くよう、`_headers` で `/archive/sf25/*` だけ別の CSP を当てています。
+
+ルート `/` 前提で書き出されたファイルを `/archive/sf25/` で動かすため、取り込み時に `tools/rebase_sf25.py` でパスを書き換えています
+（あわせて、エラー報告の Google Apps Script への送信を無効化し、旧ドメインの `sitemap.xml` を削除）。取り込み直す場合:
+
+```bash
+git clone --depth 1 -b gh-pages https://github.com/sonneko/sf25-site /tmp/sf25-out && rm -rf /tmp/sf25-out/.git
+```
+
+```bash
+rm -rf archive/sf25 && cp -r /tmp/sf25-out archive/sf25 && python3 tools/rebase_sf25.py archive/sf25 /archive/sf25
+```
+
+---
+
 ## 設計方針
 
 - **デザイン**：余白と文字で見せる。影・グラデーション・絵文字は使わない。白・薄灰・黒の帯を交互に置く
-- **モチーフ**：重なり合う二つの円（朱と藍）。重なった部分がテーマ「融合」
 - **軽さ**：Web フォントなし（端末内蔵フォント）、外部ライブラリなし。スプレッドシートは1ページにつき1回だけ取得し、数分間ブラウザに保持
 - **カウントダウン**：分が変わるときだけ更新し、タブが非表示のあいだは停止。開催中は「1日目 開催中」などに自動で切り替わる
 - **アクセシビリティ**：キーボード操作、`prefers-reduced-motion` で動きを停止、見出し順の維持

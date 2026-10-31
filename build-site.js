@@ -31,6 +31,8 @@ const END = '<!-- site-meta:end -->';
 const OG_IMAGE = 'assets/og-image.jpg';
 const OG_IMAGE_SIZE = { width: 1200, height: 630 };
 const SKIP_DIRS = new Set(['.git', 'node_modules', '.wrangler', 'templates', 'photo', 'dist']);
+// 過去のサイト（archive/sf25/ など）はビルド済みの別サイトなので手を加えない。archive/ 直下の案内ページだけ対象
+const ARCHIVE_DIR = 'archive';
 
 /* ---------- 設定（assets/config.js）を読む ---------- */
 function loadConfig() {
@@ -45,6 +47,7 @@ function listHtml(dir = ROOT, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     if (e.name.startsWith('.') || SKIP_DIRS.has(e.name)) continue;
     const p = path.join(dir, e.name);
+    if (e.isDirectory() && path.relative(ROOT, dir).split(path.sep)[0] === ARCHIVE_DIR) continue;
     if (e.isDirectory()) listHtml(p, out);
     else if (e.name.endsWith('.html')) out.push(path.relative(ROOT, p).split(path.sep).join('/'));
   }
@@ -184,8 +187,23 @@ function buildHeaders(pages) {
     'upgrade-insecure-requests'
   ].join('; ');
 
+  const archiveCsp = [
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline'",
+    "style-src 'self' 'unsafe-inline'",
+    "img-src 'self' data: blob:",
+    "connect-src 'self'",
+    "frame-src https://www.google.com",
+    "font-src 'self' data:",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'self'",
+    'upgrade-insecure-requests'
+  ].join('; ');
+
   return `# このファイルは build-site.js が生成します。直接編集せず \`npm run build\` を実行してください。
-# Cloudflare（Workers 静的アセット）が各レスポンスにヘッダーを付けます。
+# Cloudflare（Pages / Workers 静的アセット）が各レスポンスにヘッダーを付けます。
 
 /*
   Content-Security-Policy: ${csp}
@@ -202,6 +220,15 @@ function buildHeaders(pages) {
 
 /favicon.ico
   Cache-Control: public, max-age=86400
+
+# 過去のサイト（SF25, Next.js の静的書き出し）。インラインスクリプトを多用するため専用の CSP に差し替える
+/archive/sf25/*
+  ! Content-Security-Policy
+  Content-Security-Policy: ${archiveCsp}
+
+# Next.js のビルド成果物はファイル名にハッシュが付いているので長期キャッシュ
+/archive/sf25/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
 `;
 }
 
