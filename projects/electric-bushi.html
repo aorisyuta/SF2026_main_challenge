@@ -38,19 +38,37 @@
   <script src="../assets/sheet.js?v=355b41c473" defer></script>
   <script src="../assets/header.js?v=80e0890d24" defer></script>
   <script src="../assets/script.js?v=4c1b05cff1" defer></script>
-  <script src="../assets/project-detail.js?v=633bcb8647" defer></script>
+  <script src="../assets/project-detail.js?v=640c8e813d" defer></script>
 </head>
 <body>
 
 <main id="main">
   <article id="projectDetail">
-    <!-- 本文は assets/projects-details.json から生成されます -->
+    <!-- 本文は assets/projects-details.json から生成されます（generate-pages.js が書き出し、project-detail.js が表示時に最新化） -->
     <header class="page-hero page-hero-left">
-      <div class="container">
+      <div class="container cat-b">
+        <p class="eyebrow cat-b">電気工学部</p>
         <h1 class="page-title">電気工学部部誌</h1>
         <p class="page-lead">電気工学部の活動をまとめた部誌です。</p>
       </div>
     </header>
+    <div class="container detail-body">
+      <section class="detail-about">
+        <h2 class="section-title-sm">この企画について</h2>
+        <p>一年間の制作や実験の記録を、部員がそれぞれの担当で記事にまとめた部誌です。会場で手に取ってご覧いただけます。</p>
+      </section>
+      <section class="detail-specs">
+        <h2 class="section-title-sm">開催情報</h2>
+        <dl class="spec-list">
+          <div class="spec-row"><dt>場所</dt><dd>高校棟3階 特別第3教室(SF企画の部屋)</dd></div>
+          <div class="spec-row"><dt>時間</dt><dd>SF 当日 終日</dd></div>
+          <div class="spec-row"><dt>所要時間</dt><dd>時間制限なし</dd></div>
+          <div class="spec-row"><dt>内容</dt><dd>部員による制作記事・実験記録などを掲載しています。</dd></div>
+          <div class="spec-row"><dt>イベント</dt><dd>星光 SF2026（大阪星光学院 スクールフェア 2026「融合」）</dd></div>
+        </dl>
+      </section>
+      <p class="detail-back"><a class="more-link more-back" href="../projects.html">企画一覧へ戻る</a></p>
+    </div>
   </article>
 </main>
 

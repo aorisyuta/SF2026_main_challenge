@@ -58,6 +58,7 @@
     if (p.schedule) dl.appendChild(specRow('時間', p.schedule));
     if (p.duration) dl.appendChild(specRow('所要時間', p.duration));
     (p.details || []).forEach(function (d) { dl.appendChild(specRow(d.label, d.content)); });
+    dl.appendChild(specRow('イベント', '星光 SF2026（大阪星光学院 スクールフェア 2026「融合」）'));
     specs.appendChild(dl);
     body.appendChild(specs);
 

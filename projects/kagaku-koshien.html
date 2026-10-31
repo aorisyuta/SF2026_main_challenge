@@ -38,19 +38,38 @@
   <script src="../assets/sheet.js?v=355b41c473" defer></script>
   <script src="../assets/header.js?v=80e0890d24" defer></script>
   <script src="../assets/script.js?v=4c1b05cff1" defer></script>
-  <script src="../assets/project-detail.js?v=633bcb8647" defer></script>
+  <script src="../assets/project-detail.js?v=640c8e813d" defer></script>
 </head>
 <body>
 
 <main id="main">
   <article id="projectDetail">
-    <!-- 本文は assets/projects-details.json から生成されます -->
+    <!-- 本文は assets/projects-details.json から生成されます（generate-pages.js が書き出し、project-detail.js が表示時に最新化） -->
     <header class="page-hero page-hero-left">
-      <div class="container">
+      <div class="container cat-a">
+        <p class="eyebrow cat-a">Aoristos</p>
         <h1 class="page-title">「科学の甲子園」展示</h1>
         <p class="page-lead">Aoristos が取り組んできた「科学の甲子園」の内容を紹介する展示です。</p>
       </div>
     </header>
+    <div class="container detail-body">
+      <section class="detail-about">
+        <h2 class="section-title-sm">この企画について</h2>
+        <p>科学の甲子園に向けて取り組んできた内容を、実際の問題や制作物とあわせて紹介します。どんな競技なのか、どのように準備を進めてきたのかを、部員が展示でご説明します。</p>
+      </section>
+      <section class="detail-specs">
+        <h2 class="section-title-sm">開催情報</h2>
+        <dl class="spec-list">
+          <div class="spec-row"><dt>場所</dt><dd>高校棟3階 特別第3教室(SF企画の部屋)</dd></div>
+          <div class="spec-row"><dt>時間</dt><dd>SF 当日 終日</dd></div>
+          <div class="spec-row"><dt>所要時間</dt><dd>時間制限なし</dd></div>
+          <div class="spec-row"><dt>参加方法</dt><dd>自由にご覧いただけます。</dd></div>
+          <div class="spec-row"><dt>料金</dt><dd>無料</dd></div>
+          <div class="spec-row"><dt>イベント</dt><dd>星光 SF2026（大阪星光学院 スクールフェア 2026「融合」）</dd></div>
+        </dl>
+      </section>
+      <p class="detail-back"><a class="more-link more-back" href="../projects.html">企画一覧へ戻る</a></p>
+    </div>
   </article>
 </main>
 

@@ -3,8 +3,9 @@
   generate-pages.js — Aoristos / Osaka Seiko Gakuin SF2026
 
   assets/projects.csv の link 列に書かれた企画ページ（projects/*.html）を生成する。
-  本文は projects/<id>.html を開いたときに assets/project-detail.js が
-  assets/projects-details.json から組み立てるため、ここでは共通の器だけを出力する。
+  本文は assets/projects-details.json から HTML に書き出す（検索エンジン向け）。
+  表示時には assets/project-detail.js が同じ JSON から組み立て直すので、
+  JSON だけ直してビルドを忘れても画面上は最新になる（検索エンジン向けの本文だけ古くなる）。
 
   エコ方針:
     - 外部 npm パッケージに依存しない（csv-parser / fs-extra を廃止）
@@ -69,7 +70,60 @@ function escapeHtml(s) {
     .replace(/"/g, '&quot;');
 }
 
-function pageTemplate(project) {
+const DETAILS_PATH = path.join(ROOT, 'assets', 'projects-details.json');
+const CATEGORY_CLASS = { 'Aoristos': 'cat-a', '電気工学部': 'cat-b', '物理部': 'cat-c' };  // script.js と同じ
+const EVENT_LABEL = '星光 SF2026（大阪星光学院 スクールフェア 2026「融合」）';
+
+function loadDetails() {
+  if (!fs.existsSync(DETAILS_PATH)) return {};
+  const map = {};
+  for (const p of (JSON.parse(fs.readFileSync(DETAILS_PATH, 'utf8')).projects || [])) map[p.id] = p;
+  return map;
+}
+
+/**
+ * 企画ページの本文。assets/project-detail.js の render() と同じ HTML を書き出す
+ * （検索エンジンが JavaScript を実行しなくても本文を読めるように）。
+ * 表示時には project-detail.js が JSON から組み立て直すので、内容は常に最新になる。
+ */
+function detailBody(project, d) {
+  const title = escapeHtml(project.title);
+  if (!d) {
+    return `    <header class="page-hero page-hero-left">
+      <div class="container">
+        <h1 class="page-title">${title}</h1>
+        <p class="page-lead">${escapeHtml(project.description)}</p>
+      </div>
+    </header>`;
+  }
+  const cat = d.category ? (CATEGORY_CLASS[d.category] || 'cat-x') : '';
+  const row = (label, value) => value ? `\n          <div class="spec-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}</dd></div>` : '';
+  const rows = row('場所', d.location) + row('時間', d.schedule) + row('所要時間', d.duration) +
+    (d.details || []).map(x => row(x.label, x.content)).join('') + row('イベント', EVENT_LABEL);
+
+  return `    <header class="page-hero page-hero-left">
+      <div class="container${cat ? ' ' + cat : ''}">${d.category ? `
+        <p class="eyebrow ${cat}">${escapeHtml(d.category)}</p>` : ''}
+        <h1 class="page-title">${escapeHtml(d.title || project.title)}</h1>${d.description ? `
+        <p class="page-lead">${escapeHtml(d.description)}</p>` : ''}
+      </div>
+    </header>
+    <div class="container detail-body">${d.thumb ? `
+      <figure class="detail-figure"><img src="../${escapeHtml(d.thumb)}" alt="" decoding="async"></figure>` : ''}${d.fullDescription ? `
+      <section class="detail-about">
+        <h2 class="section-title-sm">この企画について</h2>
+        <p>${escapeHtml(d.fullDescription)}</p>
+      </section>` : ''}
+      <section class="detail-specs">
+        <h2 class="section-title-sm">開催情報</h2>
+        <dl class="spec-list">${rows}
+        </dl>
+      </section>
+      <p class="detail-back"><a class="more-link more-back" href="../projects.html">企画一覧へ戻る</a></p>
+    </div>`;
+}
+
+function pageTemplate(project, d) {
   const title = escapeHtml(project.title);
   const description = escapeHtml(project.description);
   // 検索結果に出る説明文。企画の説明に、サイト名と「星光 SF2026」を添える
@@ -103,13 +157,8 @@ function pageTemplate(project) {
 
 <main id="main">
   <article id="projectDetail">
-    <!-- 本文は assets/projects-details.json から生成されます -->
-    <header class="page-hero page-hero-left">
-      <div class="container">
-        <h1 class="page-title">${title}</h1>
-        <p class="page-lead">${description}</p>
-      </div>
-    </header>
+    <!-- 本文は assets/projects-details.json から生成されます（generate-pages.js が書き出し、project-detail.js が表示時に最新化） -->
+${detailBody(project, d)}
   </article>
 </main>
 
@@ -132,6 +181,7 @@ function main() {
   }
 
   const projects = parseCSV(fs.readFileSync(CSV_PATH, 'utf8')).filter(p => p.title && p.link);
+  const details = loadDetails();
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
 
   let created = 0;
@@ -140,14 +190,15 @@ function main() {
   for (const project of projects) {
     // link は "projects/electric.html" 形式
     const fileName = path.basename(project.link);
+    const html = pageTemplate(project, details[fileName.replace(/\.html$/, '')]);
     const outputPath = path.join(OUTPUT_DIR, fileName);
 
-    if (fs.existsSync(outputPath) && !FORCE && stripMeta(fs.readFileSync(outputPath, 'utf8')) === stripMeta(pageTemplate(project))) {
+    if (fs.existsSync(outputPath) && !FORCE && stripMeta(fs.readFileSync(outputPath, 'utf8')) === stripMeta(html)) {
       skipped++;
       continue;
     }
 
-    fs.writeFileSync(outputPath, pageTemplate(project), 'utf8');
+    fs.writeFileSync(outputPath, html, 'utf8');
     console.log(`生成・更新: projects/${fileName}`);
     created++;
   }
