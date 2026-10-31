@@ -206,25 +206,10 @@ a:hover { text-decoration: underline; }
 .hero-links a { color: var(--link-dark); }
 .hero-links .more-link { font-size: 19px; }
 
-.fusion { width: min(560px, 86vw); margin: 64px auto 0; aspect-ratio: 2 / 1; }
-.fusion svg { width: 100%; height: 100%; overflow: visible; }
-.fusion .ring { fill: none; stroke-width: 1.2; }
-.fusion .ring-a { stroke: var(--shu); }
-.fusion .ring-b { stroke: #6d8cff; }
-.fusion .core { fill: #f5f5f7; }
-.fusion .core-glow { fill: url(#coreFade); }
-.fusion .axis { stroke: rgba(255, 255, 255, .16); stroke-width: .6; }
-
 @media (prefers-reduced-motion: no-preference) {
-  .js .fusion .ring-a { animation: slideA 2.2s var(--ease) both .2s; }
-  .js .fusion .ring-b { animation: slideB 2.2s var(--ease) both .2s; }
-  .js .fusion .core, .js .fusion .core-glow { animation: coreIn 1.4s var(--ease) both 1.6s; }
   .js .hero-title, .js .hero-kicker, .js .hero-roman { animation: rise 1.2s var(--ease) both; }
   .js .hero-dates, .js .hero-count, .js .hero-links { animation: rise 1.2s var(--ease) both .25s; }
 }
-@keyframes slideA { from { transform: translateX(-90px); opacity: 0; } to { transform: none; opacity: 1; } }
-@keyframes slideB { from { transform: translateX(90px); opacity: 0; } to { transform: none; opacity: 1; } }
-@keyframes coreIn { from { opacity: 0; } to { opacity: 1; } }
 @keyframes rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 
 /* ---------- Home — tiles（シートの news） ---------- */
@@ -610,16 +595,8 @@ a:hover { text-decoration: underline; }
 .tiles-band { background: var(--bg); }
 .tile-art { max-height: 300px; }
 
-.theme-band { overflow: hidden; }
-.theme-grid { display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; align-items: center; }
-.theme-band .eyebrow { color: var(--on-dark-2); }
-.theme-title { font-size: clamp(88px, 14vw, 168px); line-height: 1; font-weight: 700; letter-spacing: .04em; margin: 8px 0 24px; }
-.theme-body { color: var(--on-dark-2); font-size: clamp(17px, 1.9vw, 19px); max-width: 30em; }
-.theme-band .fusion { width: 100%; margin: 0; }
-
 .about-note { font-size: 14px; color: var(--ink-3) !important; margin-top: 20px !important; }
 
 @media (max-width: 833px) {
-  .theme-grid { grid-template-columns: 1fr; gap: 36px; }
   .hero-light { padding: 56px 0 56px; }
 }
