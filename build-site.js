@@ -102,11 +102,20 @@ function metaBlock(rel, html, cfg) {
   if (site) {
     if (rel !== '404.html') lines.push(`<meta property="og:url" content="${esc(site + publicPath(rel))}">`);
     lines.push(`<meta property="og:image" content="${esc(site + '/' + OG_IMAGE)}">`);
+    lines.push(`<meta property="og:image:secure_url" content="${esc(site + '/' + OG_IMAGE)}">`);
+    lines.push('<meta property="og:image:type" content="image/jpeg">');
     lines.push(`<meta property="og:image:width" content="${OG_IMAGE_SIZE.width}">`);
     lines.push(`<meta property="og:image:height" content="${OG_IMAGE_SIZE.height}">`);
     lines.push('<meta property="og:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">');
   }
+  // X（旧 Twitter）向け。og: だけでも読めるが、明示しておくとカードが安定して出る
   lines.push(`<meta name="twitter:card" content="${site ? 'summary_large_image' : 'summary'}">`);
+  lines.push(`<meta name="twitter:title" content="${esc(title)}">`);
+  if (desc) lines.push(`<meta name="twitter:description" content="${esc(desc)}">`);
+  if (site) {
+    lines.push(`<meta name="twitter:image" content="${esc(site + '/' + OG_IMAGE)}">`);
+    lines.push('<meta name="twitter:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">');
+  }
 
   return `${START}\n  ${lines.join('\n  ')}\n  ${END}`;
 }
