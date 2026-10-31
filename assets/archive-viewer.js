@@ -57,7 +57,7 @@
 
   titleEl.textContent = site.title;
   dateEl.textContent = site.date;
-  document.title = site.title + '（アーカイブ） — Aoristos｜SF 2026';
+  document.title = site.title + '（アーカイブ）｜Aoristos — 星光 SF2026';
 
   var current = null;
   function sync() {

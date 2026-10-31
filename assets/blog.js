@@ -84,7 +84,7 @@
     var meta = document.querySelector('meta[name="description"]');
     if (meta && p.text) meta.setAttribute('content', p.text);
 
-    var shareText = encodeURIComponent(p.title + ' | Aoristos（SF 2026）');
+    var shareText = encodeURIComponent(p.title + ' | Aoristos（SF2026）');
     var shareUrl = encodeURIComponent(location.href);
 
     article.innerHTML =

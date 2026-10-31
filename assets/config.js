@@ -1,5 +1,5 @@
 /*
-  config.js — Aoristos｜大阪星光学院 SF 2026 出展企画ページ
+  config.js — Aoristos｜大阪星光学院 SF2026 出展企画ページ
   サイト全体の設定はこのファイルだけを直せば全ページに反映されます。
 */
 window.SF_CONFIG = {
@@ -7,10 +7,13 @@ window.SF_CONFIG = {
   siteName: 'Aoristos',
   theme: '融合',
   eventName: '大阪星光学院 スクールフェア 2026',
-  shortName: 'SF 2026',
+  shortName: 'SF2026',
   producer: 'Aoristos',
   venue: '大阪星光学院 中学校・高等学校',
   venueArea: '大阪市天王寺区',
+  venueStreet: '伶人町1-6',
+  venuePostalCode: '543-0061',
+  room: '高校棟3階 特別第3教室',
 
   // SF 公式サイト（フッターなどからリンク）
   officialUrl: 'https://seikosf.jp',

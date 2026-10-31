@@ -1,7 +1,7 @@
 {
   "name": "sf2026-website",
   "version": "3.0.0",
-  "description": "“融合” 大阪星光学院 SF 2026 Aoristos 出展企画ページ（制作: Aoristos）",
+  "description": "“融合” 大阪星光学院 SF2026 Aoristos 出展企画ページ（制作: Aoristos）",
   "private": true,
   "main": "generate-pages.js",
   "scripts": {

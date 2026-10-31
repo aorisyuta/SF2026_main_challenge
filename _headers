@@ -19,9 +19,11 @@
   Cache-Control: public, max-age=86400
 
 # 過去のサイト（SF25, Next.js の静的書き出し）。インラインスクリプトを多用するため専用の CSP に差し替える
+# 「SF25 official web site」という題のまま検索に出て公式と紛らわしくならないよう noindex（案内は /archive/ から）
 /archive/sf25/*
   ! Content-Security-Policy
   Content-Security-Policy: default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self'; frame-src https://www.google.com; font-src 'self' data:; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'self'; upgrade-insecure-requests
+  X-Robots-Tag: noindex
 
 # Next.js のビルド成果物はファイル名にハッシュが付いているので長期キャッシュ
 /archive/sf25/_next/static/*
