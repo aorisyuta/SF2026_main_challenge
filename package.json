@@ -1,13 +1,18 @@
 {
   "name": "sf2026-website",
   "version": "3.0.0",
-  "description": "“融合” 大阪星光学院 SF 2026 公式サイト（制作: Aoristos）",
+  "description": "“融合” 大阪星光学院 SF 2026 Aoristos 出展企画ページ（制作: Aoristos）",
   "private": true,
   "main": "generate-pages.js",
   "scripts": {
     "generate": "node generate-pages.js",
-    "start": "python3 -m http.server 8000"
+    "build": "node generate-pages.js && node build-site.js",
+    "start": "python3 -m http.server 8000",
+    "preview": "npm run build && python3 -m http.server 8000 --directory dist"
   },
   "author": "Aoristos",
-  "license": "UNLICENSED"
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=18"
+  }
 }

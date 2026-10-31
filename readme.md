@@ -108,13 +108,45 @@ URL の末尾に `?data=local` を付けると、スプレッドシートの代�
 
 ---
 
-## 公開（Cloudflare）
+## 公開（Cloudflare Pages）
 
-リポジトリの `main` に push すると Cloudflare が自動でデプロイします（`npx wrangler deploy`）。
+本番の URL は **<https://sf.aoristos.net>**（`assets/config.js` の `siteUrl`）。
+リポジトリの `main` に push すると Cloudflare Pages が自動でデプロイします。
 
-- 設定は `wrangler.jsonc`。このファイルがあるので、ビルド時の自動セットアップは行われません
-- 公開しないファイル（`node_modules`・`readme.md`・`photo/` など）は `.assetsignore` に書きます
+### push する前に
+
+HTML・企画・`siteUrl` を変えたら、必ず次を実行してから commit してください。
+
+```bash
+npm run build
+```
+
+`generate-pages.js`（企画ページの生成）に続いて `build-site.js` が次を行います。
+
+| 出力 | 内容 |
+| --- | --- |
+| 各 HTML の `<!-- site-meta:start -->` 〜 `end` | canonical・OGP（`assets/og-image.jpg`、1200×630）・Twitter カード。**この間は手で書かない** |
+| `robots.txt` / `sitemap.xml` | 検索エンジン向け。`noindex` のページ・404・`blog/post.html` は sitemap に入れない |
+| `_headers` | セキュリティヘッダー（CSP・HSTS など）とキャッシュ設定。CSP で許可するインラインスクリプトは HTML から自動計算 |
+| `dist/` | 公開するファイルだけのコピー（`.assetsignore` に書いたものを除外）。git には入れない |
+
+> インラインの `<script>` を書き換えたのに `npm run build` を忘れると、CSP によってそのスクリプトが動かなくなります。
+
+### Cloudflare Pages の設定（推奨）
+
+ダッシュボードの「設定 → ビルド」で次のようにすると、`readme.md`・`templates/`・スクリプトなどの内部ファイルが公開されなくなります。
+
+| 項目 | 値 |
+| --- | --- |
+| ビルドコマンド | `npm run build` |
+| ビルド出力ディレクトリ | `dist` |
+
+（出力ディレクトリがリポジトリ直下のままでも `_headers` などは効きますが、内部ファイルも公開されます。）
+
 - 存在しない URL には `404.html` を表示します
+- `projects.html` のような URL は Cloudflare が `/projects` に転送するため、canonical・sitemap は拡張子なしで書いています
+- `wrangler.jsonc` / `.assetsignore` は Cloudflare Workers で公開する場合の設定です（`.assetsignore` は `dist/` の除外リストとしても使います）
+- `?data=local`（サンプル CSV の表示）は localhost でだけ有効です
 
 ## ローカルで動かす
 
@@ -122,6 +154,7 @@ URL の末尾に `?data=local` を付けると、スプレッドシートの代�
 
 ```bash
 npm start          # python3 -m http.server 8000
+npm run preview    # npm run build のあと dist/ を配信（本番と同じファイル構成で確認）
 ```
 
 <http://localhost:8000> を開きます。
@@ -140,6 +173,8 @@ npm start          # python3 -m http.server 8000
 ├── blog/post.html          ブログ記事（?id=記事ID）
 ├── projects/*.html         企画詳細（generate-pages.js で生成）
 ├── generate-pages.js       企画詳細ページの生成
+├── build-site.js           canonical・OGP・sitemap・_headers・dist/ の生成
+├── _headers / robots.txt / sitemap.xml   build-site.js が生成
 ├── templates/
 │   ├── site-data-template.csv   スプレッドシートのひな形
 │   └── site-data-template.xlsx  同（書式つき）

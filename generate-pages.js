@@ -12,6 +12,7 @@
 
   使い方:
     npm run generate   CSV に合わせて projects/*.html を作成・更新し、CSV にないページを削除
+    npm run build      上に加えて build-site.js（canonical・OGP・sitemap・_headers・dist/）も実行
 */
 
 const fs = require('fs');
@@ -81,6 +82,8 @@ function pageTemplate(project) {
   <meta name="description" content="${description}">
   <meta name="author" content="Aoristos">
   <meta name="theme-color" content="#ffffff">
+  <!-- site-meta:start -->
+  <!-- site-meta:end -->
   <link rel="icon" href="../favicon.ico" sizes="any">
   <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
@@ -113,6 +116,11 @@ function pageTemplate(project) {
 `;
 }
 
+/** build-site.js が書き込む canonical・OGP の部分は比較から外す */
+function stripMeta(html) {
+  return html.replace(/<!-- site-meta:start -->[\s\S]*?<!-- site-meta:end -->/, '');
+}
+
 function main() {
   if (!fs.existsSync(CSV_PATH)) {
     console.error('assets/projects.csv が見つかりません');
@@ -130,7 +138,7 @@ function main() {
     const fileName = path.basename(project.link);
     const outputPath = path.join(OUTPUT_DIR, fileName);
 
-    if (fs.existsSync(outputPath) && !FORCE && fs.readFileSync(outputPath, 'utf8') === pageTemplate(project)) {
+    if (fs.existsSync(outputPath) && !FORCE && stripMeta(fs.readFileSync(outputPath, 'utf8')) === stripMeta(pageTemplate(project))) {
       skipped++;
       continue;
     }

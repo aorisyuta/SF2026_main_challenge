@@ -5,7 +5,7 @@
   - SNS などのリンク（type = link）
 
   1 ページにつき通信は 1 回。sessionStorage に数分キャッシュしてページ移動では再取得しない。
-  URL に ?data=local を付けると templates/site-data-template.csv を読む（確認用）。
+  URL に ?data=local を付けると templates/site-data-template.csv を読む（ローカルでの確認用。本番では無効）。
 */
 (function () {
   'use strict';
@@ -197,7 +197,9 @@
   function sourceUrl() {
     var base = (window.pageConfig && window.pageConfig.basePath) || '';
     var params = new URLSearchParams(location.search);
-    if (params.get('data') === 'local' || !CFG.sheetCsvUrl) return { url: base + 'templates/site-data-template.csv', cache: false };
+    // ?data=local（サンプル CSV）はローカル確認用。本番では templates/ を公開しないので無効にする
+    var isLocalHost = /^(localhost|127\.0\.0\.1|\[::1\]|)$/.test(location.hostname);
+    if ((params.get('data') === 'local' && isLocalHost) || !CFG.sheetCsvUrl) return { url: base + 'templates/site-data-template.csv', cache: false };
     return { url: CFG.sheetCsvUrl, cache: true };
   }
 

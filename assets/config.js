@@ -13,6 +13,14 @@ window.SF_CONFIG = {
   venueArea: '大阪市天王寺区',
 
   /*
+    本番の公開 URL（末尾の / なし）。例: 'https://example.com'
+    canonical・OGP 画像・sitemap.xml・robots.txt に使います。
+    変更したら `npm run build` を実行してから push してください。
+    空欄のあいだは、絶対 URL が必要なタグ・ファイルは出力されません。
+  */
+  siteUrl: 'https://sf.aoristos.net',
+
+  /*
     開催日（日本時間）。カウントダウンと「開催中」表示に使う。
     open / close は「開催中」の判定用。timeLabel が画面に出る表記。
   */

@@ -1,14 +1,20 @@
-# 公開しないファイル（Cloudflare にアップロードされない）
+# 公開しないファイル（Cloudflare にアップロードされない / dist/ にコピーされない）
 .git
+.github
+.claude
 .gitignore
 .assetsignore
 .wrangler
+.dev.vars
 node_modules
+dist
 wrangler.jsonc
 package.json
 package-lock.json
 bun.lock
 bun.lockb
 generate-pages.js
+build-site.js
 readme.md
 photo
+templates
