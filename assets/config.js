@@ -12,6 +12,9 @@ window.SF_CONFIG = {
   venue: '大阪星光学院 中学校・高等学校',
   venueArea: '大阪市天王寺区',
 
+  // SF 公式サイト（フッターなどからリンク）
+  officialUrl: 'https://seikosf.jp',
+
   /*
     本番の公開 URL（末尾の / なし）。例: 'https://example.com'
     canonical・OGP 画像・sitemap.xml・robots.txt に使います。

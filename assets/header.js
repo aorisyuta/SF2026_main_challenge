@@ -91,12 +91,14 @@
               '<li><a href="' + base + 'index.html">ホーム</a></li>' +
               NAV.map(function (n) { return '<li><a href="' + base + n.href + '">' + n.label + '</a></li>'; }).join('') +
             '</ul></div>' +
+            (CFG.officialUrl ? '<div><h2>SF 2026</h2><ul><li><a href="' + esc(CFG.officialUrl) + '" target="_blank" rel="noopener noreferrer">SF 公式サイト</a></li></ul></div>' : '') +
             '<div><h2>フォロー</h2><ul class="footer-social" id="footerSocial"><li class="footer-muted">準備中</li></ul></div>' +
           '</div>' +
         '</div>' +
         '<div class="footer-bottom">' +
           '<p>Copyright © 2026 ' + esc(CFG.producer) + '.</p>' +
-          '<p>このサイトは Aoristos による SF 2026 出展企画の案内ページです（学校・SF の公式サイトではありません）。</p>' +
+          '<p>このサイトは Aoristos による SF 2026 出展企画の案内ページです（学校・SF の公式サイトではありません）。' +
+            (CFG.officialUrl ? 'SF 全体の情報は <a href="' + esc(CFG.officialUrl) + '" target="_blank" rel="noopener noreferrer">SF 公式サイト</a> をご覧ください。' : '') + '</p>' +
         '</div>' +
       '</div>';
     document.body.appendChild(footer);
