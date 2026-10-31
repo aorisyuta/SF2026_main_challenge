@@ -600,3 +600,54 @@ a:hover { text-decoration: underline; }
 @media (max-width: 833px) {
   .hero-light { padding: 56px 0 56px; }
 }
+
+/* ---------- Archive — 一覧 ---------- */
+.archive-list { display: grid; gap: 24px; }
+.archive-card { display: grid; grid-template-columns: 1.1fr 1fr; background: var(--bg); border-radius: var(--radius-l); overflow: hidden; }
+.archive-thumb { display: block; background: var(--bg-dark); }
+.archive-thumb img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 16 / 10; }
+.archive-body { padding: 40px; display: flex; flex-direction: column; }
+.archive-body h2 { font-size: 32px; line-height: 1.15; font-weight: 700; margin-bottom: 12px; }
+.archive-desc { color: var(--ink-2); }
+.archive-meta { margin-top: 20px; font-size: 14px; }
+.archive-meta div { display: grid; grid-template-columns: 4.5em 1fr; gap: 8px; padding: 8px 0; border-top: 1px solid var(--line); }
+.archive-meta dt { color: var(--ink-2); }
+.archive-actions { margin-top: auto; padding-top: 28px; }
+@media (max-width: 833px) {
+  .archive-card { grid-template-columns: 1fr; }
+  .archive-body { padding: 28px 24px 32px; }
+  .archive-body h2 { font-size: 26px; }
+}
+
+/* ---------- Archive — 閲覧ページ（Wayback Machine 風） ---------- */
+.viewer-page { height: 100%; overflow: hidden; }
+.viewer-page body { height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+.viewer-page .gnav { flex: none; }
+.viewer-bar { flex: none; background: var(--bg-dark-2); color: var(--on-dark); font-size: 13px; }
+.viewer-bar-inner { display: flex; align-items: center; gap: 14px; min-height: 44px; padding: 6px var(--gutter); }
+.viewer-badge { flex: none; font-size: 11px; font-weight: 700; letter-spacing: .08em; padding: 3px 8px; border-radius: 6px; background: var(--shu); color: #fff; }
+.viewer-title { flex: none; font-weight: 600; white-space: nowrap; }
+.viewer-date { flex: none; color: var(--on-dark-2); white-space: nowrap; }
+.viewer-path {
+  flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; font-size: 12px;
+  background: rgba(255, 255, 255, .08); color: var(--on-dark); border-radius: 8px; padding: 5px 10px;
+}
+.viewer-actions { flex: none; display: flex; gap: 6px; }
+.viewer-btn {
+  display: inline-flex; align-items: center; gap: 6px; height: 30px; padding: 0 12px; border-radius: 8px;
+  border: 0; background: rgba(255, 255, 255, .1); color: var(--on-dark); font-size: 13px; cursor: pointer; white-space: nowrap;
+}
+.viewer-btn:hover { background: rgba(255, 255, 255, .18); text-decoration: none; }
+.viewer-btn svg { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 1.8; }
+.viewer-frame-wrap { flex: 1 1 auto; position: relative; background: var(--bg-alt); }
+.viewer-frame { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; background: #fff; }
+.viewer-error { max-width: 560px; margin: 0 auto; padding: 80px var(--gutter); text-align: center; }
+@media (max-width: 833px) {
+  .viewer-bar-inner { flex-wrap: wrap; gap: 8px 10px; }
+  .viewer-date { display: none; }
+  .viewer-path { order: 3; flex-basis: 100%; }
+  .viewer-actions { margin-left: auto; }
+  .viewer-btn span { display: none; }
+  .viewer-btn { padding: 0 9px; }
+}

@@ -174,7 +174,7 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 ├── projects/*.html         企画詳細（generate-pages.js で生成）
 ├── generate-pages.js       企画詳細ページの生成
 ├── build-site.js           canonical・OGP・sitemap・_headers・dist/ の生成
-├── archive/                過去の SF のサイト（sf25/ = SF 2025）
+├── archive/                アーカイブ一覧・閲覧ページ（view.html）・過去のサイト（sf25/ = SF 2025）
 ├── tools/rebase_sf25.py    アーカイブ取り込み時のパス書き換え
 ├── _headers / robots.txt / sitemap.xml   build-site.js が生成
 ├── templates/
@@ -200,18 +200,22 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 
 ## アーカイブ（過去のサイト）
 
-`archive/` に過去の SF のサイトを当時のまま保存しています（<https://sf.aoristos.net/archive/>）。
+ナビの「アーカイブ」から、過去の SF のサイトを当時のまま見られます（<https://sf.aoristos.net/archive/>）。
+Wayback Machine のように、Aoristos のヘッダーと「ARCHIVE」バーの下に当時のサイトを埋め込んで表示します。
 
 | パス | 内容 |
 | --- | --- |
-| `archive/index.html` | アーカイブの案内ページ（フッターの「アーカイブ」から） |
-| `archive/sf25/` | SF 2025 のサイト。[sonneko/sf25-site](https://github.com/sonneko/sf25-site) の `gh-pages` ブランチ（Next.js の静的書き出し、2025-11-02 ビルド）を取り込んだもの |
+| `archive/index.html` | アーカイブ一覧（サイトごとのカードとボタン） |
+| `archive/view.html?site=sf25` | 閲覧ページ。`&path=/info` で特定のページを開く。中で移動するとアドレスバーも追従するので、URL をそのまま共有できる |
+| `archive/sf25/` | SF 2025 のサイト本体。[sonneko/sf25-site](https://github.com/sonneko/sf25-site) の `gh-pages` ブランチ（Next.js の静的書き出し、2025-11-02 ビルド）を取り込んだもの |
+| `assets/archive-viewer.js` | 閲覧ページの動作。サイトを増やすときは `SITES` に1行追加 |
+| `assets/archive-frame.js` | `archive/sf25/` を直接開いたとき、閲覧ページの中で開き直す（各 HTML の `<head>` に差し込み済み） |
 
 `archive/sf25/` はビルド済みの別サイトなので、`build-site.js` は中身に手を加えません（canonical・CSP の自動計算・sitemap の対象外）。
 Next.js のインラインスクリプトが動くよう、`_headers` で `/archive/sf25/*` だけ別の CSP を当てています。
 
 ルート `/` 前提で書き出されたファイルを `/archive/sf25/` で動かすため、取り込み時に `tools/rebase_sf25.py` でパスを書き換えています
-（あわせて、エラー報告の Google Apps Script への送信を無効化し、旧ドメインの `sitemap.xml` を削除）。取り込み直す場合:
+（あわせて `archive-frame.js` の差し込み、エラー報告の Google Apps Script への送信の無効化、旧ドメインの `sitemap.xml` の削除）。取り込み直す場合:
 
 ```bash
 git clone --depth 1 -b gh-pages https://github.com/sonneko/sf25-site /tmp/sf25-out && rm -rf /tmp/sf25-out/.git

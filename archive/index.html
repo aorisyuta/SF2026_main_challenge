@@ -26,7 +26,7 @@
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
   <link rel="stylesheet" href="../assets/style.css">
   <script>
-    window.pageConfig = { currentPage: '', basePath: '../' };
+    window.pageConfig = { currentPage: 'archive', basePath: '../' };
   </script>
   <script src="../assets/config.js"></script>
   <script src="../assets/sheet.js" defer></script>
@@ -35,32 +35,35 @@
 </head>
 <body>
 
-<main id="main">
+<main id="main" class="band-alt">
   <header class="page-hero">
     <div class="container">
       <h1 class="page-title">アーカイブ</h1>
-      <p class="page-lead">これまでの SF のウェブサイトを、当時のまま保存しています。</p>
+      <p class="page-lead">これまでの SF のウェブサイトを、当時のまま保存しています。このサイトの中で、そのまま操作して見られます。</p>
     </div>
   </header>
 
   <div class="container" style="padding-bottom:100px">
-
-    <section class="info-grid" id="sf25" aria-labelledby="h-sf25">
-      <h2 id="h-sf25">SF 2025</h2>
-      <div>
-        <p style="margin-bottom:20px">
-          <a href="sf25/index.html"><img src="sf25-thumb.jpg" alt="SF 2025 のウェブサイトのトップ画像" width="1200" height="649" loading="lazy" decoding="async" style="width:100%;height:auto;border-radius:18px"></a>
-        </p>
-        <dl class="spec-list">
-          <div class="spec-row"><dt>内容</dt><dd>大阪星光学院 スクールフェア 2025 のウェブサイト。企画一覧・企画検索・会場地図・ステージ企画など</dd></div>
-          <div class="spec-row"><dt>保存版</dt><dd>2025年11月2日のビルド</dd></div>
-          <div class="spec-row"><dt>ソース</dt><dd><a href="https://github.com/sonneko/sf25-site" target="_blank" rel="noopener noreferrer">github.com/sonneko/sf25-site</a></dd></div>
-        </dl>
-        <p class="info-note" style="margin-top:20px">日時・場所・連絡先などは当時の情報です。エラー報告の送信機能は停止しています。</p>
-        <p style="margin-top:24px"><a class="more-link" href="sf25/index.html">SF 2025 のサイトを見る</a></p>
-      </div>
-    </section>
-
+    <ul class="archive-list">
+      <li class="archive-card">
+        <a class="archive-thumb" href="view.html?site=sf25" tabindex="-1" aria-hidden="true">
+          <img src="sf25-thumb.jpg" alt="" width="1200" height="649" loading="lazy" decoding="async">
+        </a>
+        <div class="archive-body">
+          <p class="eyebrow">2025年11月</p>
+          <h2>SF 2025</h2>
+          <p class="archive-desc">大阪星光学院 スクールフェア 2025 のウェブサイト。企画一覧・企画検索・会場地図・ステージ企画など。</p>
+          <dl class="archive-meta">
+            <div><dt>保存日</dt><dd>2025年11月2日のビルド</dd></div>
+            <div><dt>ソース</dt><dd><a href="https://github.com/sonneko/sf25-site" target="_blank" rel="noopener noreferrer">sonneko/sf25-site</a></dd></div>
+          </dl>
+          <p class="archive-actions">
+            <a class="btn" href="view.html?site=sf25">SF 2025 のサイトを見る</a>
+          </p>
+        </div>
+      </li>
+    </ul>
+    <p class="info-note" style="margin-top:32px">※ 日時・場所・連絡先などは当時の情報です。エラー報告の送信機能は停止しています。</p>
   </div>
 </main>
 

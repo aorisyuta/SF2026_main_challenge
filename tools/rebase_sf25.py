@@ -19,6 +19,9 @@ icon_attr_re = re.compile(r'(?<=(?:src|ref)=")booths-icon/')
 # エラー報告の送信先（Google Apps Script）は無効化
 gas_re = re.compile(r'https://script\.google\.com/macros/s/[A-Za-z0-9_-]+/exec')
 
+# 直接開かれたら Aoristos の閲覧ページ（archive/view.html）の中で開き直すスクリプト
+frame_tag = '<script src="/assets/archive-frame.js"></script>'
+
 n = 0
 for p in src.rglob('*'):
     if p.suffix not in ('.html', '.txt', '.js', '.css') or not p.is_file():
@@ -30,6 +33,8 @@ for p in src.rglob('*'):
     t = icon_re.sub('"' + prefix + '/booths-icon/"', t)
     t = icon_attr_re.sub(prefix + '/booths-icon/', t)
     t = gas_re.sub('about:blank', t)
+    if p.suffix == '.html' and frame_tag not in t:
+        t = t.replace('<head>', '<head>' + frame_tag, 1)
     if t != o:
         p.write_text(t, 'utf-8')
         n += 1

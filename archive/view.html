@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja" class="viewer-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>アーカイブを見る — Aoristos｜SF 2026</title>
+  <meta name="description" content="これまでの大阪星光学院 SF のウェブサイトを、Aoristos のサイトの中で当時のまま閲覧できます。">
+  <meta name="author" content="Aoristos">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#ffffff">
+  <!-- site-meta:start -->
+  <meta property="og:site_name" content="Aoristos">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="アーカイブを見る — Aoristos｜SF 2026">
+  <meta property="og:description" content="これまでの大阪星光学院 SF のウェブサイトを、Aoristos のサイトの中で当時のまま閲覧できます。">
+  <meta property="og:url" content="https://sf.aoristos.net/archive/view">
+  <meta property="og:image" content="https://sf.aoristos.net/assets/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">
+  <meta name="twitter:card" content="summary_large_image">
+  <!-- site-meta:end -->
+  <link rel="icon" href="../favicon.ico" sizes="any">
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="stylesheet" href="../assets/style.css">
+  <script>
+    window.pageConfig = { currentPage: 'archive', basePath: '../', hideRibbon: true, noFooter: true };
+  </script>
+  <script src="../assets/config.js"></script>
+  <script src="../assets/sheet.js" defer></script>
+  <script src="../assets/header.js" defer></script>
+  <script src="../assets/archive-viewer.js" defer></script>
+</head>
+<body>
+
+<div class="viewer-bar" role="region" aria-label="アーカイブの閲覧">
+  <div class="viewer-bar-inner">
+    <span class="viewer-badge">ARCHIVE</span>
+    <span class="viewer-title" id="viewerTitle">アーカイブ</span>
+    <span class="viewer-date" id="viewerDate"></span>
+    <span class="viewer-path" id="viewerPath" title="表示中のページ">/</span>
+    <span class="viewer-actions">
+      <a class="viewer-btn" href="index.html" aria-label="アーカイブ一覧へ">
+        <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M9 2 4 7l5 5"/></svg><span>一覧</span>
+      </a>
+      <button class="viewer-btn" id="viewerHome" type="button" aria-label="このサイトのトップへ">
+        <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M2 7.2 7 2.5l5 4.7M3.5 6v5.5h7V6"/></svg><span>トップ</span>
+      </button>
+      <a class="viewer-btn" id="viewerOpen" href="#" target="_blank" rel="noopener" aria-label="新しいタブで開く">
+        <svg viewBox="0 0 14 14" aria-hidden="true"><path d="M8 2h4v4M12 2 6.5 7.5M10 8.5V12H2V4h3.5"/></svg><span>新しいタブ</span>
+      </a>
+    </span>
+  </div>
+</div>
+
+<main id="main" class="viewer-frame-wrap">
+  <iframe class="viewer-frame" id="viewerFrame" title="アーカイブされたサイト"></iframe>
+</main>
+
+</body>
+</html>

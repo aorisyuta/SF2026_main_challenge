@@ -1,9 +1,11 @@
 /*
   header.js — 共通のナビゲーション・お知らせリボン・フッターを生成する
   各ページで window.pageConfig を定義してから defer で読み込む。
-    currentPage: index / projects / timetable / info / blog
+    currentPage: index / projects / timetable / info / blog / archive
     basePath:    サブフォルダのページは '../'
     title:       タブに出るタイトル（省略時は既存の <title>）
+    hideRibbon:  true でお知らせリボンを出さない
+    noFooter:    true でフッターを出さない（アーカイブの閲覧ページなど）
 */
 (function () {
   'use strict';
@@ -16,7 +18,8 @@
     { key: 'projects', href: 'projects.html', label: '企画' },
     { key: 'timetable', href: 'timetable.html', label: 'タイムテーブル' },
     { key: 'blog', href: 'blog.html', label: 'ブログ' },
-    { key: 'info', href: 'info.html', label: '来場案内' }
+    { key: 'info', href: 'info.html', label: '来場案内' },
+    { key: 'archive', href: 'archive/index.html', label: 'アーカイブ' }
   ];
 
   function esc(s) {
@@ -87,7 +90,6 @@
             '<div><h2>サイト</h2><ul>' +
               '<li><a href="' + base + 'index.html">ホーム</a></li>' +
               NAV.map(function (n) { return '<li><a href="' + base + n.href + '">' + n.label + '</a></li>'; }).join('') +
-              '<li><a href="' + base + 'archive/index.html">アーカイブ</a></li>' +
             '</ul></div>' +
             '<div><h2>フォロー</h2><ul class="footer-social" id="footerSocial"><li class="footer-muted">準備中</li></ul></div>' +
           '</div>' +
@@ -129,7 +131,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     buildHeader();
-    buildFooter();
+    if (!page.noFooter) buildFooter();
     fillFromSheet();
   });
 })();
