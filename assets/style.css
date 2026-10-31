@@ -238,11 +238,11 @@ a:hover { text-decoration: underline; }
 .statement-body strong { color: var(--ink); font-weight: 600; }
 
 /* ---------- Home — facts ---------- */
-.facts { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--line); }
+.facts { display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); }
 .fact { padding: 32px 24px 0 0; }
 .fact + .fact { padding-left: 24px; border-left: 1px solid var(--line); }
 .fact dt { font-size: 14px; color: var(--ink-2); font-weight: 600; }
-.fact dd { margin: 6px 0 0; font-size: clamp(21px, 2.6vw, 28px); font-weight: 600; line-height: 1.35; font-variant-numeric: tabular-nums; }
+.fact dd { margin: 6px 0 0; font-size: clamp(20px, 2.3vw, 26px); font-weight: 600; line-height: 1.35; font-variant-numeric: tabular-nums; }
 .fact dd small { display: block; font-size: 15px; font-weight: 400; color: var(--ink-2); margin-top: 4px; }
 
 /* ---------- Home — rail（注目の企画） ---------- */
