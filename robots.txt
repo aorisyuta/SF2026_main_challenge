@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://sf.aoristos.net/sitemap.xml
+Sitemap: https://aoristos.net/sitemap.xml

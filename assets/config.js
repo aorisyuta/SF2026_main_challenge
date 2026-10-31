@@ -21,7 +21,7 @@ window.SF_CONFIG = {
     変更したら `npm run build` を実行してから push してください。
     空欄のあいだは、絶対 URL が必要なタグ・ファイルは出力されません。
   */
-  siteUrl: 'https://sf.aoristos.net',
+  siteUrl: 'https://aoristos.net',
 
   /*
     開催日（日本時間）。カウントダウンと「開催中」表示に使う。

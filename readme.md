@@ -110,7 +110,7 @@ URL の末尾に `?data=local` を付けると、スプレッドシートの代�
 
 ## 公開（Cloudflare Pages）
 
-本番の URL は **<https://sf.aoristos.net>**（`assets/config.js` の `siteUrl`）。
+本番の URL は **<https://aoristos.net>**（`assets/config.js` の `siteUrl`）。
 リポジトリの `main` に push すると Cloudflare Pages が自動でデプロイします。
 
 ### push する前に
@@ -200,7 +200,7 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 
 ## アーカイブ（過去のサイト）
 
-ナビの「アーカイブ」から、過去の SF のサイトを当時のまま見られます（<https://sf.aoristos.net/archive/>）。
+ナビの「アーカイブ」から、過去の SF のサイトを当時のまま見られます（<https://aoristos.net/archive/>）。
 Wayback Machine のように、Aoristos のヘッダーと「ARCHIVE」バーの下に当時のサイトを埋め込んで表示します。
 
 | パス | 内容 |

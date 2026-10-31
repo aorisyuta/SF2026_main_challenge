@@ -36,7 +36,7 @@
     return;
   }
 
-  // サイトの公開位置（例 https://sf.aoristos.net/archive/sf25/）
+  // サイトの公開位置（例 https://aoristos.net/archive/sf25/）
   var rootUrl = new URL(site.root, location.href);
   var rootPath = rootUrl.pathname;
 
