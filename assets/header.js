@@ -97,7 +97,7 @@
         '</div>' +
         '<div class="footer-bottom">' +
           '<p>Copyright © 2026 ' + esc(CFG.producer) + '.</p>' +
-          '<p>このサイトは Aoristos による SF2026 出展企画の案内ページです（学校・SF の公式サイトではありません）。' +
+          '<p>Aoristos 公式サイト。SF2026 の Aoristos 出展企画をご案内しています（大阪星光学院および SF 全体の公式サイトではありません）。' +
             (CFG.officialUrl ? 'SF 全体の情報は <a href="' + esc(CFG.officialUrl) + '" target="_blank" rel="noopener noreferrer">SF 公式サイト</a> をご覧ください。' : '') + '</p>' +
         '</div>' +
       '</div>';

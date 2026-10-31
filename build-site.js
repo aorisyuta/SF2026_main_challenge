@@ -143,7 +143,7 @@ function structuredData(cfg, site) {
       '@type': 'WebSite',
       '@id': site + '/#website',
       name: cfg.siteName || 'Aoristos',
-      alternateName: ['Aoristos 星光 SF2026', 'Aoristos SF2026'],
+      alternateName: ['Aoristos 公式サイト', 'Aoristos 星光 SF2026', 'Aoristos SF2026'],
       url: site + '/',
       inLanguage: 'ja',
       publisher: { '@id': org['@id'] }
