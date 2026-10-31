@@ -3,7 +3,8 @@
   build-site.js — Aoristos / Osaka Seiko Gakuin SF 2026
 
   公開前の仕上げを行う（外部パッケージ不要）。
-    1. 各 HTML の <head> に canonical・OGP・Twitter カードを書き込む
+    1. 各 HTML の <head> に canonical・OGP・Twitter カードを書き込み、
+       CSS・JS の URL に中身のハッシュ（?v=...）を付ける
        （<!-- site-meta:start --> 〜 <!-- site-meta:end --> の間を毎回作り直す）
     2. robots.txt・sitemap.xml を作る
     3. Cloudflare 用の _headers（セキュリティヘッダー・CSP・キャッシュ）を作る
@@ -73,7 +74,18 @@ function lastModified(rel) {
   return new Date().toISOString().slice(0, 10);
 }
 
-/* ---------- 1. <head> のメタ情報 ---------- */
+/* ---------- 1. <head> のメタ情報・CSS/JS の版 ---------- */
+const versionCache = new Map();
+function assetVersion(asset) {
+  if (!versionCache.has(asset)) {
+    const file = path.join(ROOT, asset);
+    versionCache.set(asset, fs.existsSync(file)
+      ? crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex').slice(0, 10)
+      : '0');
+  }
+  return versionCache.get(asset);
+}
+
 function metaBlock(rel, html, cfg) {
   const title = unesc((html.match(/<title>([\s\S]*?)<\/title>/) || [, ''])[1].trim());
   const desc = unesc((html.match(/<meta name="description" content="([^"]*)"/) || [, ''])[1]);
@@ -105,6 +117,10 @@ function applyMeta(rel, cfg) {
 
   // 手書きの古い OGP / Twitter タグはブロックに置き換える
   html = html.replace(/^[ \t]*<meta (?:property="og:|name="twitter:)[^>]*>\r?\n/gm, '');
+
+  // CSS・JS に中身のハッシュを付ける（更新したら URL が変わり、古いキャッシュが使われない）
+  html = html.replace(/((?:src|href)=")((?:\.\.\/)*|\/)?(assets\/[\w./-]+\.(?:css|js))(?:\?v=[0-9a-f]+)?"/g,
+    (all, attr, prefix, asset) => `${attr}${prefix || ''}${asset}?v=${assetVersion(asset)}"`);
 
   const block = metaBlock(rel, html, cfg);
   const re = new RegExp(`${START}[\\s\\S]*?${END}`);
@@ -214,9 +230,10 @@ function buildHeaders(pages) {
   Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=(), browsing-topics=()
   Cross-Origin-Opener-Policy: same-origin
 
-# CSS・JS・画像など。ファイル名にハッシュが無いので、1時間で再確認（裏で更新しつつ古い版を最大1日使う）
+# CSS・JS・画像・企画データなど。毎回サーバーに更新を確認する（変更がなければ 304 で軽い）
+# HTML から読む CSS・JS には ?v=<ハッシュ> が付くので、更新は確実に反映される
 /assets/*
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: public, max-age=0, must-revalidate
 
 /favicon.ico
   Cache-Control: public, max-age=86400

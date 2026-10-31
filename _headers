@@ -10,9 +10,10 @@
   Permissions-Policy: accelerometer=(), camera=(), geolocation=(), gyroscope=(), microphone=(), payment=(), usb=(), browsing-topics=()
   Cross-Origin-Opener-Policy: same-origin
 
-# CSS・JS・画像など。ファイル名にハッシュが無いので、1時間で再確認（裏で更新しつつ古い版を最大1日使う）
+# CSS・JS・画像・企画データなど。毎回サーバーに更新を確認する（変更がなければ 304 で軽い）
+# HTML から読む CSS・JS には ?v=<ハッシュ> が付くので、更新は確実に反映される
 /assets/*
-  Cache-Control: public, max-age=3600, stale-while-revalidate=86400
+  Cache-Control: public, max-age=0, must-revalidate
 
 /favicon.ico
   Cache-Control: public, max-age=86400

@@ -116,9 +116,11 @@ function pageTemplate(project) {
 `;
 }
 
-/** build-site.js が書き込む canonical・OGP の部分は比較から外す */
+/** build-site.js が書き込む canonical・OGP の部分と CSS/JS の版（?v=）は比較から外す */
 function stripMeta(html) {
-  return html.replace(/<!-- site-meta:start -->[\s\S]*?<!-- site-meta:end -->/, '');
+  return html
+    .replace(/<!-- site-meta:start -->[\s\S]*?<!-- site-meta:end -->/, '')
+    .replace(/(assets\/[\w./-]+\.(?:css|js))\?v=[0-9a-f]+/g, '$1');
 }
 
 function main() {
