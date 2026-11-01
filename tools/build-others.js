@@ -147,7 +147,7 @@ function stageList() {
 /* ---------- 企画カード ---------- */
 function card(b) {
   const search = [b.title, b.org, b.place, b.desc, b.kana || '', ...b.tags].join(' ');  // kana＝読み・別名（検索用、表示しない）
-  return `        <li class="ob-card${b.aoristos ? ' is-aor' : ''}" data-floor="${b.floor}" data-rooms="${esc(b.rooms.join('|'))}" data-tags="${esc(b.tags.join('|'))}" data-search="${esc(search)}">
+  return `        <li class="ob-card k-${tagKey(b.tags[0])}${b.aoristos ? ' is-aor' : ''}" data-floor="${b.floor}" data-rooms="${esc(b.rooms.join('|'))}" data-tags="${esc(b.tags.join('|'))}" data-search="${esc(search)}">
           <div class="ob-top"><span class="ob-tag tag-${tagKey(b.tags[0])}">${esc(b.tags[0])}</span>${b.price ? `<span class="ob-price">${esc(b.price)}</span>` : '<span class="ob-price is-free">料金表示なし</span>'}</div>
           <h4 class="ob-title">${esc(b.title)}</h4>
           <p class="ob-org">${esc(b.org)}</p>
@@ -355,7 +355,8 @@ const listHtml = `${head({
       <div class="map-tabs" id="mapTabs" role="tablist" aria-label="階を選ぶ">
 ${[1, 2, 3, 4, 5].map(f => `        <button type="button" role="tab" class="map-tab${f === 3 ? ' is-active' : ''}" data-floor="${f}" aria-selected="${f === 3}">${f}F<small>${byFloor(f).length}</small></button>`).join('\n')}
       </div>
-      <div class="map-box">
+      <p class="map-hint">地図は横にスクロールできます。部屋を押すと企画を表示します。</p>
+      <div class="map-box" id="mapBox">
 ${campusMap()}
       </div>
       <ul class="map-legend" aria-label="凡例">
@@ -384,6 +385,7 @@ ${TAGS.map(([t, k]) => `          <button type="button" class="chip chip-${k}" d
       </div>
 ${boothList()}
       <p class="empty" id="obEmpty" hidden>条件に合う企画がありません。</p>
+      <button type="button" class="ob-fab" id="obFab" aria-label="検索・絞り込みに戻る"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M9 15h2"/></svg>絞り込み<b id="obFabCount">${booths.length}</b></button>
     </section>
 
     ${SOURCE_NOTE}

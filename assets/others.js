@@ -46,6 +46,8 @@
       });
       groups.forEach(function (g) { g.hidden = !g.querySelector('.ob-card:not([hidden])'); });
       count.textContent = shown + ' 企画';
+      var fabCount = document.getElementById('obFabCount');
+      if (fabCount) fabCount.textContent = shown;
       empty.hidden = shown !== 0;
 
       if (roomBar) {
@@ -72,9 +74,22 @@
     }
 
     /* ---------- 校内マップ ---------- */
+    var mapBox = document.getElementById('mapBox');
+
+    // スマホで地図が横にスクロールするとき、注目の部屋（選んだ部屋 → Aoristos → 最初の企画）を中央に
+    function centerMap() {
+      if (!mapBox || mapBox.scrollWidth <= mapBox.clientWidth + 4) return;
+      var fig = mapBox.querySelector('.map-floor:not([hidden])'); if (!fig) return;
+      var target = fig.querySelector('.map-room.is-selected') || fig.querySelector('.map-room.is-aor') || fig.querySelector('.map-room[data-room]');
+      if (!target) { mapBox.scrollLeft = 0; return; }
+      var box = mapBox.getBoundingClientRect(), r = target.getBoundingClientRect();
+      mapBox.scrollLeft += (r.left + r.width / 2) - (box.left + box.width / 2);
+    }
+
     function showMapFloor(f) {
-      if (!f) return;
+      if (!f) { centerMap(); return; }
       document.querySelectorAll('.map-floor').forEach(function (m) { m.hidden = m.getAttribute('data-map-floor') !== f; });
+      requestAnimationFrame(centerMap);
       document.querySelectorAll('.map-tab').forEach(function (t) {
         var on = t.getAttribute('data-floor') === f;
         t.classList.toggle('is-active', on);
@@ -130,5 +145,20 @@
     }
     showMapFloor(state.floor);
     apply();
+    window.addEventListener('load', centerMap);
+
+    // スマホ：検索欄が見えなくなったら「絞り込み」ボタンを出す
+    var fab = document.getElementById('obFab');
+    var controls = document.querySelector('.ob-controls');
+    if (fab && controls && 'IntersectionObserver' in window) {
+      var inList = false, controlsVisible = true;
+      var update = function () { fab.classList.toggle('is-visible', inList && !controlsVisible); };
+      new IntersectionObserver(function (es) { controlsVisible = es[0].isIntersecting; update(); }).observe(controls);
+      new IntersectionObserver(function (es) { inList = es[0].isIntersecting; update(); }).observe(list);
+      fab.addEventListener('click', function () {
+        var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        controls.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+      });
+    }
   });
 })();

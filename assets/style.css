@@ -863,6 +863,56 @@ a.tagchart-row:hover { text-decoration: none; }
   .flow-axis .flow-day { display: none; }
   .ob-stats { gap: 28px; }
   .ob-stats strong { font-size: 32px; }
-  .map-box { padding: 6px; }
   .map-tab { font-size: 15px; padding: 9px 0; }
 }
+
+/* ---------- 他の企画：スマホ向け ---------- */
+@media (max-width: 833px) {
+  /* 校内マップ：大きく表示して横にスクロール（最初は Aoristos／選んだ部屋を中央に） */
+  .map-box { padding: 0; overflow-x: auto; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch; scrollbar-width: thin; }
+  .map-floor svg { width: 175%; max-width: none; }
+  .map-floor[data-map-floor="5"] svg { width: 130%; }
+  .map-hint { display: block; }
+  .map-room.is-booth, .map-room.is-aor, .map-room.is-stage { stroke-width: 3.5; }
+
+  /* ステージ：図は隠して時刻順の一覧だけ */
+  .gantt-wrap { display: none; }
+  .tt-mini { margin-top: 4px; }
+
+  /* 企画カード：詰めた表示（種類は左端の色で示す） */
+  .ob-section#list { padding: 24px 14px 88px; }
+  .ob-grid { gap: 8px; margin-top: 12px; }
+  .ob-card {
+    padding: 11px 14px 12px 14px; border-radius: 12px; border-left: 5px solid var(--k, var(--tag-other));
+    display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 10px; align-items: baseline;
+  }
+  .ob-card.k-food { --k: var(--tag-food); } .ob-card.k-game { --k: var(--tag-game); }
+  .ob-card.k-exhibit { --k: var(--tag-exhibit); } .ob-card.k-zine { --k: var(--tag-zine); }
+  .ob-card.k-shop { --k: var(--tag-shop); } .ob-card.k-try { --k: var(--tag-try); } .ob-card.k-ride { --k: var(--tag-ride); }
+  .ob-card.is-aor { border-left-color: var(--cat-a); }
+  .ob-top { display: contents; }
+  .ob-tag { display: none; }
+  .ob-title { grid-column: 1; grid-row: 1; margin: 0; font-size: 16px; line-height: 1.35; }
+  .ob-price { grid-column: 2; grid-row: 1; font-size: 14px; justify-self: end; white-space: nowrap; }
+  .ob-price.is-free { font-size: 11px; }
+  .ob-org { grid-column: 1; grid-row: 2; font-size: 12px; margin-top: 3px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .ob-place { grid-column: 2; grid-row: 2; margin: 3px 0 0; font-size: 12px; justify-self: end; white-space: nowrap; }
+  .ob-place svg { width: 12px; height: 12px; }
+  .ob-desc { grid-column: 1 / -1; grid-row: 3; font-size: 13px; margin-top: 5px; color: var(--ink-2); line-height: 1.6; }
+  .ob-link { grid-column: 1 / -1; margin-top: 6px; }
+  .ob-subtags { display: none; }
+  .ob-floor { margin-top: 20px; scroll-margin-top: calc(var(--nav-h) + 8px); }
+  .ob-floor-title { font-size: 18px; padding-bottom: 8px; }
+}
+.map-hint { display: none; font-size: 12px; color: var(--ink-2); margin: 0 0 8px; }
+
+/* スマホ：画面下の「絞り込み」ボタン（一覧の途中で検索・絞り込みに戻る） */
+.ob-fab {
+  position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 50;
+  display: none; align-items: center; gap: 8px; height: 48px; padding: 0 18px; border: 0; border-radius: 24px;
+  background: var(--ink); color: #fff; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+}
+.ob-fab svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
+.ob-fab b { font-variant-numeric: tabular-nums; font-weight: 700; background: rgba(255, 255, 255, .18); border-radius: 10px; padding: 1px 8px; font-size: 13px; }
+@media (max-width: 833px) { .ob-fab.is-visible { display: inline-flex; } }
+#list, #map, .ob-controls { scroll-margin-top: calc(var(--nav-h) + 8px); }
