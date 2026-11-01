@@ -402,6 +402,9 @@ ${TAGS.map(([t, k]) => `            <button type="button" class="chip chip-${k}"
         <div class="ob-status">
           <p class="ob-count" id="obCount" aria-live="polite">${booths.length} 企画</p>
           <ul class="ob-active" id="obActive" aria-label="選択中の条件"></ul>
+          <button type="button" class="ob-collapse" id="obCollapse" aria-pressed="false" aria-controls="list">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4h10M3 8h10M3 12h10"/></svg><span>説明を閉じる</span>
+          </button>
         </div>
       </div>
 

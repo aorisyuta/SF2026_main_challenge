@@ -187,6 +187,21 @@
     $('obReset').addEventListener('click', reset);
     $('obReset2').addEventListener('click', function () { reset(); search.focus({ preventScroll: true }); });
 
+    /* ---------- 説明の開閉（閉じると企画名・値段・場所だけの短い一覧になる） ---------- */
+    var collapse = $('obCollapse');
+    function setCollapsed(on) {
+      list.classList.toggle('is-compact', on);
+      collapse.setAttribute('aria-pressed', on ? 'true' : 'false');
+      collapse.querySelector('span').textContent = on ? '説明を開く' : '説明を閉じる';
+      try { localStorage.setItem('obCompact', on ? '1' : '0'); } catch (e) { /* 保存できなくても動く */ }
+    }
+    if (collapse) {
+      var saved = null;
+      try { saved = localStorage.getItem('obCompact'); } catch (e) { /* 無視 */ }
+      setCollapsed(saved === '1');
+      collapse.addEventListener('click', function () { setCollapsed(!list.classList.contains('is-compact')); });
+    }
+
     // URL の指定（概要ページの図から来たとき）
     if (state.room) {
       var el = document.querySelector('.map-room[data-room="' + state.room.replace(/[^\w-]/g, '') + '"]');

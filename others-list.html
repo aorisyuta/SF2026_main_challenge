@@ -30,15 +30,15 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="stylesheet" href="assets/style.css?v=312bcfbc99">
+  <link rel="stylesheet" href="assets/style.css?v=3a31793761">
   <script>
     window.pageConfig = { currentPage: 'others', basePath: '' };
   </script>
   <script src="assets/config.js?v=ff30474010"></script>
   <script src="assets/sheet.js?v=355b41c473" defer></script>
   <script src="assets/header.js?v=66b18f36b2" defer></script>
-  <script src="assets/script.js?v=4c1b05cff1" defer></script>
-  <script src="assets/others.js?v=52f29a3ccc" defer></script>
+  <script src="assets/script.js?v=dc6d1b5849" defer></script>
+  <script src="assets/others.js?v=ef13c9a27f" defer></script>
 </head>
 <body>
 <!-- このページは tools/build-others.js が assets/others-data.json から生成します。直接編集しないでください。 -->
@@ -100,6 +100,9 @@
         <div class="ob-status">
           <p class="ob-count" id="obCount" aria-live="polite">57 企画</p>
           <ul class="ob-active" id="obActive" aria-label="選択中の条件"></ul>
+          <button type="button" class="ob-collapse" id="obCollapse" aria-pressed="false" aria-controls="list">
+            <svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3 4h10M3 8h10M3 12h10"/></svg><span>説明を閉じる</span>
+          </button>
         </div>
       </div>
 

@@ -155,21 +155,9 @@
     }
     head.appendChild(h3);
 
+    // 企画数が少ないので、説明は常に表示（閉じるボタンは置かない）
     var desc = el('div', 'project-description');
-    desc.id = 'desc-' + Math.random().toString(36).slice(2, 9);
     desc.appendChild(el('p', null, p.description || ''));
-
-    if (p.description) {
-      var toggle = el('button', 'project-toggle');
-      toggle.type = 'button';
-      toggle.setAttribute('aria-controls', desc.id);
-      toggle.setAttribute('aria-expanded', 'true'); // 最初から開いた状態
-      toggle.setAttribute('aria-label', p.title + 'の説明を閉じる');
-      toggle.addEventListener('click', function () {
-        setExpanded(card, toggle.getAttribute('aria-expanded') !== 'true');
-      });
-      head.appendChild(toggle);
-    }
     body.appendChild(head);
     body.appendChild(desc);
 
@@ -189,15 +177,6 @@
 
     card.appendChild(body);
     return card;
-  }
-
-  function setExpanded(card, open) {
-    var t = card.querySelector('.project-toggle');
-    var d = card.querySelector('.project-description');
-    if (!t || !d) return;
-    d.hidden = !open;
-    t.setAttribute('aria-expanded', open ? 'true' : 'false');
-    t.setAttribute('aria-label', (card.querySelector('.project-title').textContent) + (open ? 'の説明を閉じる' : 'の説明を開く'));
   }
 
   function initProjectsPage() {
@@ -255,14 +234,6 @@
         if (!b) return;
         filterList.querySelectorAll('.chip').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
         apply();
-      });
-
-      var toggleAll = document.getElementById('toggleAll');
-      if (toggleAll) toggleAll.addEventListener('click', function () {
-        var open = toggleAll.getAttribute('aria-pressed') === 'true'; // true = 現在すべて開
-        cards.forEach(function (c) { setExpanded(c, !open); });
-        toggleAll.setAttribute('aria-pressed', open ? 'false' : 'true');
-        toggleAll.textContent = open ? '説明をすべて開く' : '説明をすべて閉じる';
       });
 
       apply();
