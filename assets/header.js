@@ -20,6 +20,7 @@
     { key: 'blog', href: 'blog.html', label: 'ブログ' },
     { key: 'others', href: 'others.html', label: '他の企画' },
     { key: 'info', href: 'info.html', label: '来場案内' },
+    { key: 'games', href: 'games/index.html', label: 'ゲーム' },
     { key: 'archive', href: 'archive/index.html', label: 'アーカイブ' }
   ];
 

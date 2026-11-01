@@ -180,6 +180,7 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 ├── info.html               来場案内（概要・アクセス・注意事項・FAQ）
 ├── others.html             他の企画の概要（基本情報・図・ステージの時間割。tools/build-others.js が生成）
 ├── others-list.html        他の企画の一覧（校内マップ・検索・絞り込み。同上）
+├── games/                  ゲーム（index.html＝一覧、integral-reels.html＝積分リール）
 ├── blog.html               ブログ一覧
 ├── blog/post.html          ブログ記事（?id=記事ID）
 ├── projects/*.html         企画詳細（generate-pages.js で生成）
@@ -226,6 +227,21 @@ SF 公式サイト（<https://seikosf.jp>）の企画・ステージ・校内マ
 - このデータのページは、見た目より見やすさ・使いやすさを優先しています（検索を先頭に、詰めた一覧、並び替え、開閉式の地図）
 - 書き換えたら `npm run build`。図（階ごとの企画数・種類別・1日の流れ・ステージ時間割）も自動で作り直されます
 - 時間や内容が変わったら公式サイトに合わせて直し、`retrieved`（取得日）も更新してください
+
+---
+
+## ゲーム（games/）
+
+ナビの「ゲーム」から。`games/index.html` が一覧、`games/integral-reels.html` が「積分リール」。
+
+| ファイル | 内容 |
+| --- | --- |
+| `assets/games/integral-reels.js` | ゲーム本体（式エンジン・厳密計算・問題生成・画面）。元のファイルから AI 解説（Claude アーティファクト専用）を外したもの |
+| `assets/games/integral-reels.css` | サイトに合わせた見た目。サイトの CSS とぶつからないよう `#app` の中に閉じている |
+| `assets/games/mathjax-config.js` | MathJax の設定（`tex-svg.js` より前に読む） |
+| `assets/vendor/mathjax/tex-svg.js` | MathJax 3.2.2（CSP で外部スクリプトを止めているのでサイト内に置いている。ライセンスは同じフォルダの LICENSE） |
+
+ゲームを追加するときは `games/` にページを作り、`games/index.html` にカードを足します。
 
 ---
 

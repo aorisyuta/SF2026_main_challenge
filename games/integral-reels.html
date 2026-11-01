@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ja" class="game-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>積分リール（ゲーム）｜Aoristos — 星光 SF2026</title>
+  <meta name="description" content="Aoristos の数学ゲーム「積分リール」。スワイプで次々に出てくる積分・微分の問題に、厳密値で答えて連続正解を目指します。部分積分、King's property、区分求積法、Wallis 積分など。">
+  <meta name="author" content="Aoristos">
+  <meta name="theme-color" content="#ffffff">
+  <!-- site-meta:start -->
+  <link rel="canonical" href="https://aoristos.net/games/integral-reels">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta property="og:site_name" content="Aoristos">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="積分リール（ゲーム）｜Aoristos — 星光 SF2026">
+  <meta property="og:description" content="Aoristos の数学ゲーム「積分リール」。スワイプで次々に出てくる積分・微分の問題に、厳密値で答えて連続正解を目指します。部分積分、King's property、区分求積法、Wallis 積分など。">
+  <meta property="og:url" content="https://aoristos.net/games/integral-reels">
+  <meta property="og:image" content="https://aoristos.net/assets/og-image.jpg">
+  <meta property="og:image:secure_url" content="https://aoristos.net/assets/og-image.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="積分リール（ゲーム）｜Aoristos — 星光 SF2026">
+  <meta name="twitter:description" content="Aoristos の数学ゲーム「積分リール」。スワイプで次々に出てくる積分・微分の問題に、厳密値で答えて連続正解を目指します。部分積分、King's property、区分求積法、Wallis 積分など。">
+  <meta name="twitter:image" content="https://aoristos.net/assets/og-image.jpg">
+  <meta name="twitter:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">
+  <!-- site-meta:end -->
+  <link rel="icon" href="../favicon.ico?v=23e911113c" sizes="any">
+  <link rel="icon" href="../assets/favicon.svg?v=18f7d0c58a" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=ff38aa79bb">
+  <link rel="stylesheet" href="../assets/style.css?v=cb2dfb153c">
+  <link rel="stylesheet" href="../assets/games/integral-reels.css?v=b2d884c7fd">
+  <script>
+    window.pageConfig = { currentPage: 'games', basePath: '../', hideRibbon: true, noFooter: true };
+  </script>
+  <script src="../assets/config.js?v=ff30474010"></script>
+  <script src="../assets/sheet.js?v=355b41c473" defer></script>
+  <script src="../assets/header.js?v=97e4f6dc19" defer></script>
+  <script src="../assets/games/mathjax-config.js?v=5261025b3f"></script>
+  <script src="../assets/vendor/mathjax/tex-svg.js?v=d4295dc337" defer></script>
+  <script src="../assets/games/integral-reels.js?v=080be62e2f" defer></script>
+</head>
+<body>
+
+<main id="main" class="game-stage">
+  <div id="app">
+    <header class="top">
+      <div class="row1">
+        <div class="ir-mark"><span class="int">∫</span>積分リール<small>by Aoristos</small></div>
+        <div class="icons">
+          <button class="ib" id="muteBtn" aria-label="効果音のオンオフ"></button>
+          <button class="ib" id="savedBtn" aria-label="保存した問題"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span class="badge" id="savedCount" hidden>0</span></button>
+        </div>
+      </div>
+      <div class="row2">
+        <span class="pill streak" id="streakPill" title="連続正解">連続 <b id="streak">0</b></span>
+        <span class="pill" title="累計XP">XP <b id="xp">0</b></span>
+        <span class="pill" title="正解数">正解 <b id="solvedN">0</b></span>
+      </div>
+    </header>
+
+    <main id="feed" aria-label="問題フィード"></main>
+
+    <div class="scrim" id="scrim"></div>
+
+    <section class="sheet" id="keySheet" aria-label="答えの入力">
+      <div class="grab"></div>
+      <div class="sheet-head">
+        <div><h2 id="keyTitle">答えを入力</h2><div class="sub">厳密値で入力。分数・ルート・指数は枠に書き込みます</div></div>
+        <button class="x" data-close aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="sheet-body">
+        <div class="display" id="display" aria-live="polite"><span class="ph" id="ph">ここに式が表示されます</span><span id="dispMath" class="ed"></span></div>
+        <div class="readout"><span class="msg" id="msg"></span><span class="num" id="approx"></span></div>
+        <div class="keys" id="keys"></div>
+        <button class="judge" id="judgeBtn">判定</button>
+        <div class="keyfoot"><span>◀▶ で枠を移動 · 式をタップしてカーソル移動 · log は自然対数</span><span id="attemptsLbl"></span></div>
+      </div>
+    </section>
+
+    <section class="sheet" id="solSheet" aria-label="解答・解説">
+      <div class="grab"></div>
+      <div class="sheet-head">
+        <div><h2 id="solTitle">解答・解説</h2><div class="sub" id="solSub"></div></div>
+        <button class="x" data-close aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="sheet-body" id="solBody"></div>
+    </section>
+
+    <section class="sheet" id="savedSheet" aria-label="保存した問題">
+      <div class="grab"></div>
+      <div class="sheet-head">
+        <div><h2>保存した問題</h2><div class="sub">この端末のブラウザに保存されます</div></div>
+        <button class="x" data-close aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+      </div>
+      <div class="sheet-body" id="savedBody"></div>
+    </section>
+
+    <div id="fxLayer"></div>
+    <canvas id="fx"></canvas>
+    <div id="toast" role="status"></div>
+  </div>
+</main>
+
+</body>
+</html>
