@@ -438,7 +438,7 @@ ${boothList()}
 
 function writeIfChanged(file, content) {
   const name = path.basename(file);
-  const strip = t => t.replace(/<!-- site-meta:start -->[\s\S]*?<!-- site-meta:end -->\n\s*/, '').replace(/(assets\/[\w./-]+\.(?:css|js))\?v=[0-9a-f]+/g, '$1');
+  const strip = t => t.replace(/<!-- site-meta:start -->[\s\S]*?<!-- site-meta:end -->\n\s*/, '').replace(/((?:assets\/)?[\w./-]+\.(?:css|js|ico|svg|png))\?v=[0-9a-f]+/g, '$1');
   if (fs.existsSync(file) && strip(fs.readFileSync(file, 'utf8')) === content) { console.log(name + ' は変更なし'); return; }
   fs.writeFileSync(file, content, 'utf8');
   console.log('生成・更新: ' + name);

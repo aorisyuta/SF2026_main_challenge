@@ -173,7 +173,7 @@ ${detailBody(project, d)}
 function stripMeta(html) {
   return html
     .replace(/<!-- site-meta:start -->[\s\S]*?<!-- site-meta:end -->/, '')
-    .replace(/(assets\/[\w./-]+\.(?:css|js))\?v=[0-9a-f]+/g, '$1');
+    .replace(/((?:assets\/)?[\w./-]+\.(?:css|js|ico|svg|png))\?v=[0-9a-f]+/g, '$1');
 }
 
 function main() {

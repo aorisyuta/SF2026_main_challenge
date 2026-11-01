@@ -93,6 +93,7 @@ function metaBlock(rel, html, cfg) {
   const lines = [];
 
   if (site && !noindex && rel !== '404.html') lines.push(`<link rel="canonical" href="${esc(site + publicPath(rel))}">`);
+  lines.push('<link rel="manifest" href="/site.webmanifest">');
   lines.push(`<meta property="og:site_name" content="${esc(cfg.siteName || 'Aoristos')}">`);
   lines.push('<meta property="og:locale" content="ja_JP">');
   lines.push(`<meta property="og:type" content="${rel === 'index.html' ? 'website' : 'article'}">`);
@@ -201,6 +202,9 @@ function applyMeta(rel, cfg) {
   // CSS・JS に中身のハッシュを付ける（更新したら URL が変わり、古いキャッシュが使われない）
   html = html.replace(/((?:src|href)=")((?:\.\.\/)*|\/)?(assets\/[\w./-]+\.(?:css|js))(?:\?v=[0-9a-f]+)?"/g,
     (all, attr, prefix, asset) => `${attr}${prefix || ''}${asset}?v=${assetVersion(asset)}"`);
+  // ファビコン類もブラウザが強く保存するので、中身が変わったら URL を変える
+  html = html.replace(/(<link rel="(?:icon|apple-touch-icon)" href=")((?:\.\.\/)*|\/)?((?:assets\/)?[\w.-]+\.(?:ico|svg|png))(?:\?v=[0-9a-f]+)?"/g,
+    (all, head, prefix, asset) => `${head}${prefix || ''}${asset}?v=${assetVersion(asset)}"`);
 
   const block = metaBlock(rel, html, cfg);
   const re = new RegExp(`${START}[\\s\\S]*?${END}`);
