@@ -144,10 +144,23 @@ function stageList() {
   }).join('\n');
 }
 
+/* ---------- いまのステージ（当日は現在時刻から others-top.js が書き換える） ---------- */
+function stageNow() {
+  const slots = data.stage.slots.map(s => ({ d: s.day, v: s.venue, s: s.start, e: s.end, t: s.title }));
+  const first = data.stage.slots.filter(s => s.day === 1 && s.start === '12:30');
+  return `<section class="ob-section ob-now" id="stageNow" aria-live="polite" data-slots="${esc(JSON.stringify(slots))}">
+      <h2 class="ob-h2">いまのステージ</h2>
+      <div class="ob-now-body" id="stageNowBody">
+        <p class="ob-now-msg">最初のステージ：<b>11/7（土）12:30</b> ${first.map(s => `${esc(s.venue)}「${esc(s.title)}」`).join('・')}</p>
+      </div>
+      <p class="ob-now-link"><a class="more-link" href="#h-stage">時間割をすべて見る</a></p>
+    </section>`;
+}
+
 /* ---------- 企画カード ---------- */
 function card(b) {
   const search = [b.title, b.org, b.place, b.desc, b.kana || '', ...b.tags].join(' ');  // kana＝読み・別名（検索用、表示しない）
-  return `        <li class="ob-card k-${tagKey(b.tags[0])}${b.aoristos ? ' is-aor' : ''}" data-floor="${b.floor}" data-rooms="${esc(b.rooms.join('|'))}" data-tags="${esc(b.tags.join('|'))}" data-search="${esc(search)}">
+  return `        <li class="ob-card k-${tagKey(b.tags[0])}${b.aoristos ? ' is-aor' : ''}" data-floor="${b.floor}" data-yen="${b.yen && b.yen.length ? b.yen[0] : ''}" data-name="${esc(b.kana ? b.kana.split(' ')[0] : b.title)}" data-rooms="${esc(b.rooms.join('|'))}" data-tags="${esc(b.tags.join('|'))}" data-search="${esc(search)}">
           <div class="ob-top"><span class="ob-tag tag-${tagKey(b.tags[0])}">${esc(b.tags[0])}</span>${b.price ? `<span class="ob-price">${esc(b.price)}</span>` : '<span class="ob-price is-free">料金表示なし</span>'}</div>
           <h4 class="ob-title">${esc(b.title)}</h4>
           <p class="ob-org">${esc(b.org)}</p>
@@ -231,24 +244,27 @@ const SOURCE_NOTE = `<p class="ob-source">情報は <a href="${esc(data.source)}
       時間や内容は変わることがあります。最新の情報は SF 公式サイトでご確認ください。</p>`;
 
 const html = `${head({
+  scripts: '\n  <script src="assets/others-top.js" defer></script>',
   title: '他の企画',
   desc: `星光 SF2026（大阪星光学院 スクールフェア 2026）のほかの企画を、図でまとめました。入場・金券・食品の時間、1日の流れ、階ごと・種類ごとの企画数、講堂・音楽室のステージの時間割。全 ${booths.length} 企画の一覧と校内マップへも。`
 })}
 <main id="main" class="band-alt">
-  <header class="page-hero">
+  <header class="page-hero ob-hero">
     <div class="container">
       <h1 class="page-title">他の企画</h1>
       <p class="page-lead">星光 SF2026 のほかの企画を、場所・種類・時間でまとめました。</p>
-      <p class="ob-hero-link"><a class="more-link" href="${LIST_PAGE}">企画一覧と校内マップ</a></p>
-      <ul class="ob-stats">
-        <li><strong>${booths.length}</strong><span>企画</span></li>
-        <li><strong>${Object.keys(data.stage.acts).length}</strong><span>ステージ</span></li>
-        <li><strong>2</strong><span>日間</span></li>
-      </ul>
+      <nav class="ob-quick" aria-label="このページの内容">
+        <a class="ob-quick-main" href="${LIST_PAGE}"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4.5 4.5"/></svg>企画を探す<small>一覧・校内マップ・${booths.length} 企画</small></a>
+        <a href="#h-stage">ステージの時間割</a>
+        <a href="#h-basics">入場・お金・食べ物</a>
+        <a href="#h-flow">1日の流れ</a>
+      </nav>
     </div>
   </header>
 
   <div class="container ob-wrap">
+
+    ${stageNow()}
 
     <section class="ob-section" aria-labelledby="h-basics">
       <h2 class="ob-h2" id="h-basics">まず知っておきたいこと</h2>
@@ -340,7 +356,7 @@ const listHtml = `${head({
   scripts: '\n  <script src="assets/others.js" defer></script>'
 })}
 <main id="main" class="band-alt">
-  <header class="page-hero">
+  <header class="page-hero ob-hero">
     <div class="container">
       <p class="eyebrow"><a href="others.html">他の企画</a></p>
       <h1 class="page-title">企画一覧</h1>
@@ -349,42 +365,50 @@ const listHtml = `${head({
   </header>
 
   <div class="container ob-wrap">
-    <section class="ob-section" id="map" aria-labelledby="h-map">
-      <h2 class="ob-h2" id="h-map">校内マップ</h2>
-      <p class="ob-note">色の付いた部屋を押すと、その部屋の企画を下の一覧に表示します。</p>
-      <div class="map-tabs" id="mapTabs" role="tablist" aria-label="階を選ぶ">
-${[1, 2, 3, 4, 5].map(f => `        <button type="button" role="tab" class="map-tab${f === 3 ? ' is-active' : ''}" data-floor="${f}" aria-selected="${f === 3}">${f}F<small>${byFloor(f).length}</small></button>`).join('\n')}
-      </div>
-      <p class="map-hint">地図は横にスクロールできます。部屋を押すと企画を表示します。</p>
-      <div class="map-box" id="mapBox">
-${campusMap()}
-      </div>
-      <ul class="map-legend" aria-label="凡例">
-        <li><span class="lg lg-booth"></span>企画のある部屋</li>
-        <li><span class="lg lg-aor"></span>Aoristos（特別第３教室）</li>
-        <li><span class="lg lg-stage"></span>ステージ（講堂・音楽室）</li>
-        <li><span class="lg-yen" aria-hidden="true">¥</span>金券売り場（図面の記号）</li>
-      </ul>
-      <p class="ob-note ob-map-note">図面：<a href="${esc(data.map.source)}" target="_blank" rel="noopener noreferrer">SF 公式サイトの校内マップ</a>。トイレ・AED の記号も図面に載っています。</p>
-    </section>
-
-    <section class="ob-section" id="list" aria-labelledby="h-list">
-      <h2 class="ob-h2" id="h-list">企画一覧</h2>
-      <p class="ob-room-filter" id="obRoom" hidden><span></span><button type="button" class="text-btn" id="obRoomClear">部屋の絞り込みを解除</button></p>
+    <section class="ob-section ob-finder" id="list" aria-label="企画を探す">
       <div class="ob-controls">
-        <input class="ob-search" id="obSearch" type="search" placeholder="企画名・団体・キーワードで探す" aria-label="企画を検索">
+        <input class="ob-search" id="obSearch" type="search" placeholder="企画名・食べ物などで探す（例：やきそば）" aria-label="企画を検索" autocomplete="off">
         <div class="ob-chips" id="obFloors" role="group" aria-label="階で絞り込む">
           <button type="button" class="chip is-active" data-floor="">すべての階</button>
-${[1, 2, 3, 4, 5].map(f => `          <button type="button" class="chip" data-floor="${f}">${f}F</button>`).join('\n')}
+${[1, 2, 3, 4, 5].map(f => `          <button type="button" class="chip" data-floor="${f}">${f === 1 ? '1F・屋外' : f + 'F'} <small>${byFloor(f).length}</small></button>`).join('\n')}
         </div>
         <div class="ob-chips" id="obTags" role="group" aria-label="種類で絞り込む">
           <button type="button" class="chip is-active" data-tag="">すべての種類</button>
-${TAGS.map(([t, k]) => `          <button type="button" class="chip chip-${k}" data-tag="${esc(t)}">${esc(t)}</button>`).join('\n')}
+${TAGS.map(([t, k]) => `          <button type="button" class="chip chip-${k}" data-tag="${esc(t)}"><span class="dot tag-${k}"></span>${esc(t)}</button>`).join('\n')}
         </div>
-        <p class="ob-count" id="obCount" aria-live="polite">${booths.length} 企画</p>
+        <div class="ob-bar">
+          <p class="ob-count" id="obCount" aria-live="polite">${booths.length} 企画</p>
+          <label class="ob-sort">並び順
+            <select id="obSort">
+              <option value="place">場所順</option>
+              <option value="cheap">安い順</option>
+              <option value="expensive">高い順</option>
+              <option value="name">名前順</option>
+            </select>
+          </label>
+          <button type="button" class="text-btn" id="obReset" hidden>条件をリセット</button>
+        </div>
       </div>
+      <p class="ob-room-filter" id="obRoom" hidden><span></span><button type="button" class="text-btn" id="obRoomClear">部屋の絞り込みを解除</button></p>
+
+      <details class="ob-mapbox" id="map" open>
+        <summary><span>校内マップ</span><small id="mapLabel">3F を表示中・階を選ぶと切り替わります</small></summary>
+        <p class="map-hint">地図は横にスクロールできます。色の付いた部屋を押すと、その部屋の企画だけを表示します。</p>
+        <div class="map-box" id="mapBox">
+${campusMap()}
+        </div>
+        <ul class="map-legend" aria-label="凡例">
+          <li><span class="lg lg-booth"></span>企画のある部屋（押せます）</li>
+          <li><span class="lg lg-aor"></span>Aoristos（特別第３教室）</li>
+          <li><span class="lg lg-stage"></span>ステージ（講堂・音楽室）</li>
+          <li><span class="lg-yen" aria-hidden="true">¥</span>金券売り場</li>
+        </ul>
+        <p class="ob-map-note">図面：<a href="${esc(data.map.source)}" target="_blank" rel="noopener noreferrer">SF 公式サイトの校内マップ</a>（トイレ・AED の記号つき）</p>
+      </details>
+
 ${boothList()}
-      <p class="empty" id="obEmpty" hidden>条件に合う企画がありません。</p>
+      <ul class="ob-grid ob-flat" id="obFlat" hidden></ul>
+      <p class="empty" id="obEmpty" hidden>条件に合う企画がありません。<button type="button" class="text-btn" id="obReset2">条件をリセット</button></p>
       <button type="button" class="ob-fab" id="obFab" aria-label="検索・絞り込みに戻る"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M9 15h2"/></svg>絞り込み<b id="obFabCount">${booths.length}</b></button>
     </section>
 

@@ -30,7 +30,7 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="stylesheet" href="assets/style.css?v=f4808a4d8d">
+  <link rel="stylesheet" href="assets/style.css?v=d3f61ec347">
   <script>
     window.pageConfig = { currentPage: 'others', basePath: '' };
   </script>
@@ -38,25 +38,34 @@
   <script src="assets/sheet.js?v=355b41c473" defer></script>
   <script src="assets/header.js?v=66b18f36b2" defer></script>
   <script src="assets/script.js?v=4c1b05cff1" defer></script>
+  <script src="assets/others-top.js?v=4b0ed227cc" defer></script>
 </head>
 <body>
 <!-- このページは tools/build-others.js が assets/others-data.json から生成します。直接編集しないでください。 -->
 
 <main id="main" class="band-alt">
-  <header class="page-hero">
+  <header class="page-hero ob-hero">
     <div class="container">
       <h1 class="page-title">他の企画</h1>
       <p class="page-lead">星光 SF2026 のほかの企画を、場所・種類・時間でまとめました。</p>
-      <p class="ob-hero-link"><a class="more-link" href="others-list.html">企画一覧と校内マップ</a></p>
-      <ul class="ob-stats">
-        <li><strong>57</strong><span>企画</span></li>
-        <li><strong>15</strong><span>ステージ</span></li>
-        <li><strong>2</strong><span>日間</span></li>
-      </ul>
+      <nav class="ob-quick" aria-label="このページの内容">
+        <a class="ob-quick-main" href="others-list.html"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4.5 4.5"/></svg>企画を探す<small>一覧・校内マップ・57 企画</small></a>
+        <a href="#h-stage">ステージの時間割</a>
+        <a href="#h-basics">入場・お金・食べ物</a>
+        <a href="#h-flow">1日の流れ</a>
+      </nav>
     </div>
   </header>
 
   <div class="container ob-wrap">
+
+    <section class="ob-section ob-now" id="stageNow" aria-live="polite" data-slots="[{&quot;d&quot;:1,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;12:30&quot;,&quot;e&quot;:&quot;13:30&quot;,&quot;t&quot;:&quot;中１合唱&quot;},{&quot;d&quot;:1,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;13:45&quot;,&quot;e&quot;:&quot;14:00&quot;,&quot;t&quot;:&quot;IgaIgaIgaI&quot;},{&quot;d&quot;:1,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;14:00&quot;,&quot;e&quot;:&quot;14:15&quot;,&quot;t&quot;:&quot;お通し400円。&quot;},{&quot;d&quot;:1,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;14:15&quot;,&quot;e&quot;:&quot;14:30&quot;,&quot;t&quot;:&quot;Davinci&quot;},{&quot;d&quot;:1,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;14:30&quot;,&quot;e&quot;:&quot;14:45&quot;,&quot;t&quot;:&quot;Know Weathers'&quot;},{&quot;d&quot;:1,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;14:45&quot;,&quot;e&quot;:&quot;15:00&quot;,&quot;t&quot;:&quot;Hexatone&quot;},{&quot;d&quot;:1,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;15:00&quot;,&quot;e&quot;:&quot;15:15&quot;,&quot;t&quot;:&quot;Navy Bloom&quot;},{&quot;d&quot;:1,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;15:15&quot;,&quot;e&quot;:&quot;15:30&quot;,&quot;t&quot;:&quot;カラオケ部&quot;},{&quot;d&quot;:1,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;15:30&quot;,&quot;e&quot;:&quot;15:45&quot;,&quot;t&quot;:&quot;Mr.adults&quot;},{&quot;d&quot;:1,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;15:45&quot;,&quot;e&quot;:&quot;16:00&quot;,&quot;t&quot;:&quot;漫才&quot;},{&quot;d&quot;:1,&quot;v&quot;:&quot;音楽室&quot;,&quot;s&quot;:&quot;12:30&quot;,&quot;e&quot;:&quot;14:00&quot;,&quot;t&quot;:&quot;けん玉教室&quot;},{&quot;d&quot;:1,&quot;v&quot;:&quot;音楽室&quot;,&quot;s&quot;:&quot;14:00&quot;,&quot;e&quot;:&quot;14:30&quot;,&quot;t&quot;:&quot;合唱部&quot;},{&quot;d&quot;:1,&quot;v&quot;:&quot;音楽室&quot;,&quot;s&quot;:&quot;14:30&quot;,&quot;e&quot;:&quot;15:00&quot;,&quot;t&quot;:&quot;ウルトラバンド&quot;},{&quot;d&quot;:1,&quot;v&quot;:&quot;音楽室&quot;,&quot;s&quot;:&quot;15:00&quot;,&quot;e&quot;:&quot;15:30&quot;,&quot;t&quot;:&quot;Stellarum Harmonia&quot;},{&quot;d&quot;:2,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;9:30&quot;,&quot;e&quot;:&quot;10:00&quot;,&quot;t&quot;:&quot;Davinci&quot;},{&quot;d&quot;:2,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;10:00&quot;,&quot;e&quot;:&quot;10:30&quot;,&quot;t&quot;:&quot;カラオケ部&quot;},{&quot;d&quot;:2,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;10:30&quot;,&quot;e&quot;:&quot;11:00&quot;,&quot;t&quot;:&quot;お通し400円。&quot;},{&quot;d&quot;:2,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;11:00&quot;,&quot;e&quot;:&quot;11:30&quot;,&quot;t&quot;:&quot;IgaIgaIgaI&quot;},{&quot;d&quot;:2,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;11:30&quot;,&quot;e&quot;:&quot;12:00&quot;,&quot;t&quot;:&quot;漫才&quot;},{&quot;d&quot;:2,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;12:00&quot;,&quot;e&quot;:&quot;12:30&quot;,&quot;t&quot;:&quot;SEIKO MC BATTLE&quot;},{&quot;d&quot;:2,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;12:30&quot;,&quot;e&quot;:&quot;13:00&quot;,&quot;t&quot;:&quot;Mr.adults&quot;},{&quot;d&quot;:2,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;13:00&quot;,&quot;e&quot;:&quot;13:30&quot;,&quot;t&quot;:&quot;Hexatone&quot;},{&quot;d&quot;:2,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;13:30&quot;,&quot;e&quot;:&quot;14:00&quot;,&quot;t&quot;:&quot;Navy Bloom&quot;},{&quot;d&quot;:2,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;14:00&quot;,&quot;e&quot;:&quot;14:30&quot;,&quot;t&quot;:&quot;Know Weathers'&quot;},{&quot;d&quot;:2,&quot;v&quot;:&quot;講堂&quot;,&quot;s&quot;:&quot;15:00&quot;,&quot;e&quot;:&quot;15:30&quot;,&quot;t&quot;:&quot;Stellarum Harmonia&quot;},{&quot;d&quot;:2,&quot;v&quot;:&quot;音楽室&quot;,&quot;s&quot;:&quot;9:30&quot;,&quot;e&quot;:&quot;11:00&quot;,&quot;t&quot;:&quot;けん玉教室&quot;},{&quot;d&quot;:2,&quot;v&quot;:&quot;音楽室&quot;,&quot;s&quot;:&quot;11:00&quot;,&quot;e&quot;:&quot;11:30&quot;,&quot;t&quot;:&quot;ウルトラバンド&quot;},{&quot;d&quot;:2,&quot;v&quot;:&quot;音楽室&quot;,&quot;s&quot;:&quot;11:40&quot;,&quot;e&quot;:&quot;12:10&quot;,&quot;t&quot;:&quot;合唱部&quot;}]">
+      <h2 class="ob-h2">いまのステージ</h2>
+      <div class="ob-now-body" id="stageNowBody">
+        <p class="ob-now-msg">最初のステージ：<b>11/7（土）12:30</b> 講堂「中１合唱」・音楽室「けん玉教室」</p>
+      </div>
+      <p class="ob-now-link"><a class="more-link" href="#h-stage">時間割をすべて見る</a></p>
+    </section>
 
     <section class="ob-section" aria-labelledby="h-basics">
       <h2 class="ob-h2" id="h-basics">まず知っておきたいこと</h2>

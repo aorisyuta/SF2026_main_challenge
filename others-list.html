@@ -30,7 +30,7 @@
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
-  <link rel="stylesheet" href="assets/style.css?v=f4808a4d8d">
+  <link rel="stylesheet" href="assets/style.css?v=d3f61ec347">
   <script>
     window.pageConfig = { currentPage: 'others', basePath: '' };
   </script>
@@ -38,13 +38,13 @@
   <script src="assets/sheet.js?v=355b41c473" defer></script>
   <script src="assets/header.js?v=66b18f36b2" defer></script>
   <script src="assets/script.js?v=4c1b05cff1" defer></script>
-  <script src="assets/others.js?v=80fce66dc7" defer></script>
+  <script src="assets/others.js?v=6a62ff794d" defer></script>
 </head>
 <body>
 <!-- このページは tools/build-others.js が assets/others-data.json から生成します。直接編集しないでください。 -->
 
 <main id="main" class="band-alt">
-  <header class="page-hero">
+  <header class="page-hero ob-hero">
     <div class="container">
       <p class="eyebrow"><a href="others.html">他の企画</a></p>
       <h1 class="page-title">企画一覧</h1>
@@ -53,18 +53,46 @@
   </header>
 
   <div class="container ob-wrap">
-    <section class="ob-section" id="map" aria-labelledby="h-map">
-      <h2 class="ob-h2" id="h-map">校内マップ</h2>
-      <p class="ob-note">色の付いた部屋を押すと、その部屋の企画を下の一覧に表示します。</p>
-      <div class="map-tabs" id="mapTabs" role="tablist" aria-label="階を選ぶ">
-        <button type="button" role="tab" class="map-tab" data-floor="1" aria-selected="false">1F<small>21</small></button>
-        <button type="button" role="tab" class="map-tab" data-floor="2" aria-selected="false">2F<small>11</small></button>
-        <button type="button" role="tab" class="map-tab is-active" data-floor="3" aria-selected="true">3F<small>11</small></button>
-        <button type="button" role="tab" class="map-tab" data-floor="4" aria-selected="false">4F<small>12</small></button>
-        <button type="button" role="tab" class="map-tab" data-floor="5" aria-selected="false">5F<small>2</small></button>
+    <section class="ob-section ob-finder" id="list" aria-label="企画を探す">
+      <div class="ob-controls">
+        <input class="ob-search" id="obSearch" type="search" placeholder="企画名・食べ物などで探す（例：やきそば）" aria-label="企画を検索" autocomplete="off">
+        <div class="ob-chips" id="obFloors" role="group" aria-label="階で絞り込む">
+          <button type="button" class="chip is-active" data-floor="">すべての階</button>
+          <button type="button" class="chip" data-floor="1">1F・屋外 <small>21</small></button>
+          <button type="button" class="chip" data-floor="2">2F <small>11</small></button>
+          <button type="button" class="chip" data-floor="3">3F <small>11</small></button>
+          <button type="button" class="chip" data-floor="4">4F <small>12</small></button>
+          <button type="button" class="chip" data-floor="5">5F <small>2</small></button>
+        </div>
+        <div class="ob-chips" id="obTags" role="group" aria-label="種類で絞り込む">
+          <button type="button" class="chip is-active" data-tag="">すべての種類</button>
+          <button type="button" class="chip chip-food" data-tag="飲食"><span class="dot tag-food"></span>飲食</button>
+          <button type="button" class="chip chip-game" data-tag="ゲーム"><span class="dot tag-game"></span>ゲーム</button>
+          <button type="button" class="chip chip-exhibit" data-tag="展示"><span class="dot tag-exhibit"></span>展示</button>
+          <button type="button" class="chip chip-zine" data-tag="部誌販売・配布"><span class="dot tag-zine"></span>部誌販売・配布</button>
+          <button type="button" class="chip chip-shop" data-tag="販売"><span class="dot tag-shop"></span>販売</button>
+          <button type="button" class="chip chip-try" data-tag="体験"><span class="dot tag-try"></span>体験</button>
+          <button type="button" class="chip chip-ride" data-tag="アトラクション"><span class="dot tag-ride"></span>アトラクション</button>
+        </div>
+        <div class="ob-bar">
+          <p class="ob-count" id="obCount" aria-live="polite">57 企画</p>
+          <label class="ob-sort">並び順
+            <select id="obSort">
+              <option value="place">場所順</option>
+              <option value="cheap">安い順</option>
+              <option value="expensive">高い順</option>
+              <option value="name">名前順</option>
+            </select>
+          </label>
+          <button type="button" class="text-btn" id="obReset" hidden>条件をリセット</button>
+        </div>
       </div>
-      <p class="map-hint">地図は横にスクロールできます。部屋を押すと企画を表示します。</p>
-      <div class="map-box" id="mapBox">
+      <p class="ob-room-filter" id="obRoom" hidden><span></span><button type="button" class="text-btn" id="obRoomClear">部屋の絞り込みを解除</button></p>
+
+      <details class="ob-mapbox" id="map" open>
+        <summary><span>校内マップ</span><small id="mapLabel">3F を表示中・階を選ぶと切り替わります</small></summary>
+        <p class="map-hint">地図は横にスクロールできます。色の付いた部屋を押すと、その部屋の企画だけを表示します。</p>
+        <div class="map-box" id="mapBox">
         <figure class="map-floor" data-map-floor="1" hidden>
           <svg viewBox="0 0 1380 810" role="img" aria-label="1F の校内マップ">
             <image href="assets/sfmap/maps-01.svg" x="0" y="0" width="1500" height="1000"/>
@@ -95,178 +123,153 @@
             <path class="map-room is-booth" d="M493.48,10h261l-24.54,91.58h-96l-4.42,16.5c-36.11,0-56.11,0-60,0l4.42-16.5h-105l24.54-91.58Z" tabindex="0" role="button" data-room="p2" data-room-name="第２体育館"><title>第２体育館：占いの館Ⅲ、鉄道研究会</title></path><path class="map-room is-stage" d="M1214.27,175h-420l4.42-16.5h-15l35.37-132h15l4.42-16.5h420l-44.21,165Z"><title>講堂：講堂ステージ</title></path>
           </svg>
         </figure>
-      </div>
-      <ul class="map-legend" aria-label="凡例">
-        <li><span class="lg lg-booth"></span>企画のある部屋</li>
-        <li><span class="lg lg-aor"></span>Aoristos（特別第３教室）</li>
-        <li><span class="lg lg-stage"></span>ステージ（講堂・音楽室）</li>
-        <li><span class="lg-yen" aria-hidden="true">¥</span>金券売り場（図面の記号）</li>
-      </ul>
-      <p class="ob-note ob-map-note">図面：<a href="https://seikosf.jp/map.html" target="_blank" rel="noopener noreferrer">SF 公式サイトの校内マップ</a>。トイレ・AED の記号も図面に載っています。</p>
-    </section>
+        </div>
+        <ul class="map-legend" aria-label="凡例">
+          <li><span class="lg lg-booth"></span>企画のある部屋（押せます）</li>
+          <li><span class="lg lg-aor"></span>Aoristos（特別第３教室）</li>
+          <li><span class="lg lg-stage"></span>ステージ（講堂・音楽室）</li>
+          <li><span class="lg-yen" aria-hidden="true">¥</span>金券売り場</li>
+        </ul>
+        <p class="ob-map-note">図面：<a href="https://seikosf.jp/map.html" target="_blank" rel="noopener noreferrer">SF 公式サイトの校内マップ</a>（トイレ・AED の記号つき）</p>
+      </details>
 
-    <section class="ob-section" id="list" aria-labelledby="h-list">
-      <h2 class="ob-h2" id="h-list">企画一覧</h2>
-      <p class="ob-room-filter" id="obRoom" hidden><span></span><button type="button" class="text-btn" id="obRoomClear">部屋の絞り込みを解除</button></p>
-      <div class="ob-controls">
-        <input class="ob-search" id="obSearch" type="search" placeholder="企画名・団体・キーワードで探す" aria-label="企画を検索">
-        <div class="ob-chips" id="obFloors" role="group" aria-label="階で絞り込む">
-          <button type="button" class="chip is-active" data-floor="">すべての階</button>
-          <button type="button" class="chip" data-floor="1">1F</button>
-          <button type="button" class="chip" data-floor="2">2F</button>
-          <button type="button" class="chip" data-floor="3">3F</button>
-          <button type="button" class="chip" data-floor="4">4F</button>
-          <button type="button" class="chip" data-floor="5">5F</button>
-        </div>
-        <div class="ob-chips" id="obTags" role="group" aria-label="種類で絞り込む">
-          <button type="button" class="chip is-active" data-tag="">すべての種類</button>
-          <button type="button" class="chip chip-food" data-tag="飲食">飲食</button>
-          <button type="button" class="chip chip-game" data-tag="ゲーム">ゲーム</button>
-          <button type="button" class="chip chip-exhibit" data-tag="展示">展示</button>
-          <button type="button" class="chip chip-zine" data-tag="部誌販売・配布">部誌販売・配布</button>
-          <button type="button" class="chip chip-shop" data-tag="販売">販売</button>
-          <button type="button" class="chip chip-try" data-tag="体験">体験</button>
-          <button type="button" class="chip chip-ride" data-tag="アトラクション">アトラクション</button>
-        </div>
-        <p class="ob-count" id="obCount" aria-live="polite">57 企画</p>
-      </div>
       <section class="ob-floor" data-floor-group="1" aria-labelledby="obf1">
         <h3 class="ob-floor-title" id="obf1">1F・グラウンド<span>21 企画</span></h3>
         <ul class="ob-grid">
-        <li class="ob-card k-food" data-floor="1" data-rooms="g1" data-tags="飲食" data-search="いてまえ焼きそば 野球部 屋外ブースG1 野球部による焼きそばの販売。 いてまえやきそば やきゅうぶ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="400" data-name="いてまえやきそば" data-rooms="g1" data-tags="飲食" data-search="いてまえ焼きそば 野球部 屋外ブースG1 野球部による焼きそばの販売。 いてまえやきそば やきゅうぶ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">400円</span></div>
           <h4 class="ob-title">いてまえ焼きそば</h4>
           <p class="ob-org">野球部</p>
           <p class="ob-desc">野球部による焼きそばの販売。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG1</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g2" data-tags="飲食" data-search="Joe籠包 高校テニス部 屋外ブースG2 テニス部手作りの小籠包。 じょーろんぽう こうこうてにすぶ 小籠包 しょうろんぽう 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 小籠包 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="250" data-name="じょーろんぽう" data-rooms="g2" data-tags="飲食" data-search="Joe籠包 高校テニス部 屋外ブースG2 テニス部手作りの小籠包。 じょーろんぽう こうこうてにすぶ 小籠包 しょうろんぽう 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 小籠包 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">250円</span></div>
           <h4 class="ob-title">Joe籠包</h4>
           <p class="ob-org">高校テニス部</p>
           <p class="ob-desc">テニス部手作りの小籠包。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG2</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g3" data-tags="飲食" data-search="とんぺい焼き バレーボール部 屋外ブースG3 豚肉と野菜を炒めて卵で包んだ、とんぺい焼き。 とんぺいやき ばれーぼーるぶ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="200" data-name="とんぺいやき" data-rooms="g3" data-tags="飲食" data-search="とんぺい焼き バレーボール部 屋外ブースG3 豚肉と野菜を炒めて卵で包んだ、とんぺい焼き。 とんぺいやき ばれーぼーるぶ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">200円</span></div>
           <h4 class="ob-title">とんぺい焼き</h4>
           <p class="ob-org">バレーボール部</p>
           <p class="ob-desc">豚肉と野菜を炒めて卵で包んだ、とんぺい焼き。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG3</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g4" data-tags="飲食" data-search="肉離れないバーガー 陸上競技部 屋外ブースG4 こだわりのパティとオリジナルソースのハンバーガー。 にくばなれないばーがー りくじょうきょうぎぶ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ ハンバーガー 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="300" data-name="にくばなれないばーがー" data-rooms="g4" data-tags="飲食" data-search="肉離れないバーガー 陸上競技部 屋外ブースG4 こだわりのパティとオリジナルソースのハンバーガー。 にくばなれないばーがー りくじょうきょうぎぶ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ ハンバーガー 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">300円</span></div>
           <h4 class="ob-title">肉離れないバーガー</h4>
           <p class="ob-org">陸上競技部</p>
           <p class="ob-desc">こだわりのパティとオリジナルソースのハンバーガー。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG4</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g5" data-tags="飲食" data-search="スティックポテト フィールドホッケー部 屋外ブースG5 塩で味付けした揚げたてのスティックポテト。 ふぃーるどほっけーぶ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="250" data-name="ふぃーるどほっけーぶ" data-rooms="g5" data-tags="飲食" data-search="スティックポテト フィールドホッケー部 屋外ブースG5 塩で味付けした揚げたてのスティックポテト。 ふぃーるどほっけーぶ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">250円</span></div>
           <h4 class="ob-title">スティックポテト</h4>
           <p class="ob-org">フィールドホッケー部</p>
           <p class="ob-desc">塩で味付けした揚げたてのスティックポテト。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG5</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g6" data-tags="飲食" data-search="ヤンニョムチキン 高校卓球部 屋外ブースG6 外はサクサク、甘辛味のヤンニョムチキン。 こうこうたっきゅうぶ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="150" data-name="こうこうたっきゅうぶ" data-rooms="g6" data-tags="飲食" data-search="ヤンニョムチキン 高校卓球部 屋外ブースG6 外はサクサク、甘辛味のヤンニョムチキン。 こうこうたっきゅうぶ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">150円～</span></div>
           <h4 class="ob-title">ヤンニョムチキン</h4>
           <p class="ob-org">高校卓球部</p>
           <p class="ob-desc">外はサクサク、甘辛味のヤンニョムチキン。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG6</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g7" data-tags="飲食" data-search="かわたまごのフレンチトースト 高校バスケットボール部 屋外ブースG7 国産の卵を使った、外はカリッと中はふんわりのフレンチトースト。 こうこうばすけっとぼーるぶ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="300" data-name="こうこうばすけっとぼーるぶ" data-rooms="g7" data-tags="飲食" data-search="かわたまごのフレンチトースト 高校バスケットボール部 屋外ブースG7 国産の卵を使った、外はカリッと中はふんわりのフレンチトースト。 こうこうばすけっとぼーるぶ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">300円</span></div>
           <h4 class="ob-title">かわたまごのフレンチトースト</h4>
           <p class="ob-org">高校バスケットボール部</p>
           <p class="ob-desc">国産の卵を使った、外はカリッと中はふんわりのフレンチトースト。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG7</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g8" data-tags="飲食" data-search="星光南部商店　屋外の部 ほしゼミ探究＋ 屋外ブースG8 梅ケーキ・金箔梅干し・梅ジュースなど、南部（みなべ）ゆかりの食品。屋内の部（2F 会議室）もあり。 せいこうみなべしょうてんやがいのぶ ほしぜみたんきゅう 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲み物 のみもの ドリンク 飲料 いんりょう 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="200" data-name="せいこうみなべしょうてんやがいのぶ" data-rooms="g8" data-tags="飲食" data-search="星光南部商店　屋外の部 ほしゼミ探究＋ 屋外ブースG8 梅ケーキ・金箔梅干し・梅ジュースなど、南部（みなべ）ゆかりの食品。屋内の部（2F 会議室）もあり。 せいこうみなべしょうてんやがいのぶ ほしぜみたんきゅう 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲み物 のみもの ドリンク 飲料 いんりょう 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">200円～</span></div>
           <h4 class="ob-title">星光南部商店　屋外の部</h4>
           <p class="ob-org">ほしゼミ探究＋</p>
           <p class="ob-desc">梅ケーキ・金箔梅干し・梅ジュースなど、南部（みなべ）ゆかりの食品。屋内の部（2F 会議室）もあり。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG8</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g9" data-tags="飲食" data-search="インド史に名を刻め 高1B 屋外ブースG9 インドカレーの販売。 いんどしになをきざめ カレー インドカレー 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ カレー 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="300" data-name="いんどしになをきざめ" data-rooms="g9" data-tags="飲食" data-search="インド史に名を刻め 高1B 屋外ブースG9 インドカレーの販売。 いんどしになをきざめ カレー インドカレー 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ カレー 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">300円</span></div>
           <h4 class="ob-title">インド史に名を刻め</h4>
           <p class="ob-org">高1B</p>
           <p class="ob-desc">インドカレーの販売。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG9</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g10" data-tags="飲食" data-search="ボスコ・ベイビーズ 高1C 屋外ブースG10 焼きたてのベビーカステラ。 ベビーカステラ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ ベビーカステラ 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="200" data-name="ベビーカステラ" data-rooms="g10" data-tags="飲食" data-search="ボスコ・ベイビーズ 高1C 屋外ブースG10 焼きたてのベビーカステラ。 ベビーカステラ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ ベビーカステラ 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">200円</span></div>
           <h4 class="ob-title">ボスコ・ベイビーズ</h4>
           <p class="ob-org">高1C</p>
           <p class="ob-desc">焼きたてのベビーカステラ。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG10</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g11" data-tags="飲食" data-search="ドンボスコットン 高1D 屋外ブースG11 わたあめの販売。 わたあめ 綿あめ わたがし 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ わたあめ 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="150" data-name="わたあめ" data-rooms="g11" data-tags="飲食" data-search="ドンボスコットン 高1D 屋外ブースG11 わたあめの販売。 わたあめ 綿あめ わたがし 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ わたあめ 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">150円</span></div>
           <h4 class="ob-title">ドンボスコットン</h4>
           <p class="ob-org">高1D</p>
           <p class="ob-desc">わたあめの販売。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG11</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g12" data-tags="飲食" data-search="タピすぎてオカ！ 高1E 屋外ブースG12 タピオカたっぷりのミルクティー。 タピオカ 飲み物 のみもの ドリンク 飲料 いんりょう タピオカミルクティー 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="300" data-name="タピオカ" data-rooms="g12" data-tags="飲食" data-search="タピすぎてオカ！ 高1E 屋外ブースG12 タピオカたっぷりのミルクティー。 タピオカ 飲み物 のみもの ドリンク 飲料 いんりょう タピオカミルクティー 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">300円</span></div>
           <h4 class="ob-title">タピすぎてオカ！</h4>
           <p class="ob-org">高1E</p>
           <p class="ob-desc">タピオカたっぷりのミルクティー。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG12</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g13" data-tags="飲食" data-search="Are You 夢チューロス 高2B 屋外ブースG13 甘いチュロスの販売。 ゆめちゅーろす チュロス チューロス 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="300" data-name="ゆめちゅーろす" data-rooms="g13" data-tags="飲食" data-search="Are You 夢チューロス 高2B 屋外ブースG13 甘いチュロスの販売。 ゆめちゅーろす チュロス チューロス 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">300円～</span></div>
           <h4 class="ob-title">Are You 夢チューロス</h4>
           <p class="ob-org">高2B</p>
           <p class="ob-desc">甘いチュロスの販売。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG13</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g14" data-tags="飲食" data-search="はしまきーち 高2C 屋外ブースG14 熱々でもちもちの箸巻き。 箸巻き はしまき 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="150" data-name="箸巻き" data-rooms="g14" data-tags="飲食" data-search="はしまきーち 高2C 屋外ブースG14 熱々でもちもちの箸巻き。 箸巻き はしまき 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">150円～</span></div>
           <h4 class="ob-title">はしまきーち</h4>
           <p class="ob-org">高2C</p>
           <p class="ob-desc">熱々でもちもちの箸巻き。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG14</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g15" data-tags="飲食" data-search="みかちゃんスモア 高2D 屋外ブースG15 マシュマロとチョコのスモア。外はカリッ、中はとろり。 スモア 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="150" data-name="スモア" data-rooms="g15" data-tags="飲食" data-search="みかちゃんスモア 高2D 屋外ブースG15 マシュマロとチョコのスモア。外はカリッ、中はとろり。 スモア 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">150円</span></div>
           <h4 class="ob-title">みかちゃんスモア</h4>
           <p class="ob-org">高2D</p>
           <p class="ob-desc">マシュマロとチョコのスモア。外はカリッ、中はとろり。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG15</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g16" data-tags="飲食" data-search="サレジオ亭 父親聖書教室 屋外ブースG16 SF 恒例の「合格フランク」。受験生を応援する企画。 されじおてい ちちおやせいしょきょうしつ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="250" data-name="されじおてい" data-rooms="g16" data-tags="飲食" data-search="サレジオ亭 父親聖書教室 屋外ブースG16 SF 恒例の「合格フランク」。受験生を応援する企画。 されじおてい ちちおやせいしょきょうしつ 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">250円</span></div>
           <h4 class="ob-title">サレジオ亭</h4>
           <p class="ob-org">父親聖書教室</p>
           <p class="ob-desc">SF 恒例の「合格フランク」。受験生を応援する企画。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG16</p>
         </li>
-        <li class="ob-card k-exhibit" data-floor="1" data-rooms="g17" data-tags="展示" data-search="ボランティア部 ボランティア部 屋外ブースG17 ボランティア部の活動紹介と、エコキャップアートの展示。 ぼらんてぃあぶ 展示">
+        <li class="ob-card k-exhibit" data-floor="1" data-yen="" data-name="ぼらんてぃあぶ" data-rooms="g17" data-tags="展示" data-search="ボランティア部 ボランティア部 屋外ブースG17 ボランティア部の活動紹介と、エコキャップアートの展示。 ぼらんてぃあぶ 展示">
           <div class="ob-top"><span class="ob-tag tag-exhibit">展示</span><span class="ob-price is-free">料金表示なし</span></div>
           <h4 class="ob-title">ボランティア部</h4>
           <p class="ob-org">ボランティア部</p>
           <p class="ob-desc">ボランティア部の活動紹介と、エコキャップアートの展示。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG17</p>
         </li>
-        <li class="ob-card k-game" data-floor="1" data-rooms="g18" data-tags="ゲーム" data-search="スーパーボールすくい 弓道部 屋外ブースG18 弓道部によるスーパーボールすくい。 きゅうどうぶ ゲーム">
+        <li class="ob-card k-game" data-floor="1" data-yen="200" data-name="きゅうどうぶ" data-rooms="g18" data-tags="ゲーム" data-search="スーパーボールすくい 弓道部 屋外ブースG18 弓道部によるスーパーボールすくい。 きゅうどうぶ ゲーム">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price">200円</span></div>
           <h4 class="ob-title">スーパーボールすくい</h4>
           <p class="ob-org">弓道部</p>
           <p class="ob-desc">弓道部によるスーパーボールすくい。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG18</p>
         </li>
-        <li class="ob-card k-food" data-floor="1" data-rooms="g19" data-tags="飲食" data-search="ドリンク堂 剣道部 屋外ブースG19 剣道部によるドリンクの販売。 どりんくどう けんどうぶ 飲み物 のみもの ドリンク 飲料 いんりょう ペットボトル飲料 飲食">
+        <li class="ob-card k-food" data-floor="1" data-yen="150" data-name="どりんくどう" data-rooms="g19" data-tags="飲食" data-search="ドリンク堂 剣道部 屋外ブースG19 剣道部によるドリンクの販売。 どりんくどう けんどうぶ 飲み物 のみもの ドリンク 飲料 いんりょう ペットボトル飲料 飲食">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">150円</span></div>
           <h4 class="ob-title">ドリンク堂</h4>
           <p class="ob-org">剣道部</p>
           <p class="ob-desc">剣道部によるドリンクの販売。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG19</p>
         </li>
-        <li class="ob-card k-try" data-floor="1" data-rooms="g20" data-tags="体験|販売" data-search="ふれあい広場 中学１年生 屋外ブースG20 障がい者施設「あかおに作業所」の方々との交流会。車いす体験と物品販売あり。 ふれあいひろば ちゅうがくねんせい 体験 販売">
+        <li class="ob-card k-try" data-floor="1" data-yen="" data-name="ふれあいひろば" data-rooms="g20" data-tags="体験|販売" data-search="ふれあい広場 中学１年生 屋外ブースG20 障がい者施設「あかおに作業所」の方々との交流会。車いす体験と物品販売あり。 ふれあいひろば ちゅうがくねんせい 体験 販売">
           <div class="ob-top"><span class="ob-tag tag-try">体験</span><span class="ob-price is-free">料金表示なし</span></div>
           <h4 class="ob-title">ふれあい広場</h4>
           <p class="ob-org">中学１年生</p>
@@ -274,7 +277,7 @@
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>1F 屋外ブースG20</p>
           <p class="ob-subtags">販売</p>
         </li>
-        <li class="ob-card k-game" data-floor="1" data-rooms="g21" data-tags="ゲーム" data-search="ゴールを揺らせ‼ 高校サッカー部 屋外ブースG21 サッカー部の PK チャレンジ。景品あり。 ごーるをゆらせ こうこうさっかーぶ PK サッカー PK ゲーム">
+        <li class="ob-card k-game" data-floor="1" data-yen="200" data-name="ごーるをゆらせ" data-rooms="g21" data-tags="ゲーム" data-search="ゴールを揺らせ‼ 高校サッカー部 屋外ブースG21 サッカー部の PK チャレンジ。景品あり。 ごーるをゆらせ こうこうさっかーぶ PK サッカー PK ゲーム">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price">200円</span></div>
           <h4 class="ob-title">ゴールを揺らせ‼</h4>
           <p class="ob-org">高校サッカー部</p>
@@ -286,7 +289,7 @@
       <section class="ob-floor" data-floor-group="2" aria-labelledby="obf2">
         <h3 class="ob-floor-title" id="obf2">2F<span>11 企画</span></h3>
         <ul class="ob-grid">
-        <li class="ob-card k-food" data-floor="2" data-rooms="juken" data-tags="飲食|部誌販売・配布|体験" data-search="星光南部商店　屋内の部 ほしゼミ探究＋ 会議室 南部（みなべ）ゆかりの食品と雑誌の販売。景品が当たる抽選付き。 せいこうみなべしょうてんおくないのぶ ほしぜみたんきゅう 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲み物 のみもの ドリンク 飲料 いんりょう 飲食 部誌販売・配布 体験">
+        <li class="ob-card k-food" data-floor="2" data-yen="100" data-name="せいこうみなべしょうてんおくないのぶ" data-rooms="juken" data-tags="飲食|部誌販売・配布|体験" data-search="星光南部商店　屋内の部 ほしゼミ探究＋ 会議室 南部（みなべ）ゆかりの食品と雑誌の販売。景品が当たる抽選付き。 せいこうみなべしょうてんおくないのぶ ほしぜみたんきゅう 食べ物 たべもの 食べもの 食事 ごはん ご飯 フード おやつ スイーツ 飲み物 のみもの ドリンク 飲料 いんりょう 飲食 部誌販売・配布 体験">
           <div class="ob-top"><span class="ob-tag tag-food">飲食</span><span class="ob-price">100円～</span></div>
           <h4 class="ob-title">星光南部商店　屋内の部</h4>
           <p class="ob-org">ほしゼミ探究＋</p>
@@ -294,7 +297,7 @@
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>2F 会議室</p>
           <p class="ob-subtags">部誌販売・配布 / 体験</p>
         </li>
-        <li class="ob-card k-try" data-floor="2" data-rooms="juken" data-tags="体験|販売" data-search="受験生相談 渉外広報部 会議室 星光生が学校生活や受験の体験をもとに、受験生の質問に答える相談会。星光グッズの販売も。 じゅけんせいそうだん しょうがいこうほうぶ 体験 販売">
+        <li class="ob-card k-try" data-floor="2" data-yen="" data-name="じゅけんせいそうだん" data-rooms="juken" data-tags="体験|販売" data-search="受験生相談 渉外広報部 会議室 星光生が学校生活や受験の体験をもとに、受験生の質問に答える相談会。星光グッズの販売も。 じゅけんせいそうだん しょうがいこうほうぶ 体験 販売">
           <div class="ob-top"><span class="ob-tag tag-try">体験</span><span class="ob-price is-free">料金表示なし</span></div>
           <h4 class="ob-title">受験生相談</h4>
           <p class="ob-org">渉外広報部</p>
@@ -302,14 +305,14 @@
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>2F 会議室</p>
           <p class="ob-subtags">販売</p>
         </li>
-        <li class="ob-card k-exhibit" data-floor="2" data-rooms="catho" data-tags="展示" data-search="山口お遍路 カトリック研究部 カトリックセンター カトリックの世界にふれる展示。 やまぐちおへんろ かとりっくけんきゅうぶ 展示">
+        <li class="ob-card k-exhibit" data-floor="2" data-yen="" data-name="やまぐちおへんろ" data-rooms="catho" data-tags="展示" data-search="山口お遍路 カトリック研究部 カトリックセンター カトリックの世界にふれる展示。 やまぐちおへんろ かとりっくけんきゅうぶ 展示">
           <div class="ob-top"><span class="ob-tag tag-exhibit">展示</span><span class="ob-price is-free">料金表示なし</span></div>
           <h4 class="ob-title">山口お遍路</h4>
           <p class="ob-org">カトリック研究部</p>
           <p class="ob-desc">カトリックの世界にふれる展示。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>2F カトリックセンター</p>
         </li>
-        <li class="ob-card k-game" data-floor="2" data-rooms="m1d" data-tags="ゲーム|展示" data-search="Seiko Quest Seiko Quest 中１D教室 スマホを使って校内を探検する企画。景品交換所では星光生と話せて、記念品がもらえる。 セイコークエスト せいこうくえすと スタンプラリー ゲーム 展示">
+        <li class="ob-card k-game" data-floor="2" data-yen="" data-name="セイコークエスト" data-rooms="m1d" data-tags="ゲーム|展示" data-search="Seiko Quest Seiko Quest 中１D教室 スマホを使って校内を探検する企画。景品交換所では星光生と話せて、記念品がもらえる。 セイコークエスト せいこうくえすと スタンプラリー ゲーム 展示">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price is-free">料金表示なし</span></div>
           <h4 class="ob-title">Seiko Quest</h4>
           <p class="ob-org">Seiko Quest</p>
@@ -317,7 +320,7 @@
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>2F 中１D教室</p>
           <p class="ob-subtags">展示</p>
         </li>
-        <li class="ob-card k-shop" data-floor="2" data-rooms="m1c" data-tags="販売|部誌販売・配布|ゲーム|展示" data-search="んけうすProject-2026 数学研究部 中１C教室 部員が作ったゲームの販売。 すうがくけんきゅうぶ 販売 部誌販売・配布 ゲーム 展示">
+        <li class="ob-card k-shop" data-floor="2" data-yen="150" data-name="すうがくけんきゅうぶ" data-rooms="m1c" data-tags="販売|部誌販売・配布|ゲーム|展示" data-search="んけうすProject-2026 数学研究部 中１C教室 部員が作ったゲームの販売。 すうがくけんきゅうぶ 販売 部誌販売・配布 ゲーム 展示">
           <div class="ob-top"><span class="ob-tag tag-shop">販売</span><span class="ob-price">150円</span></div>
           <h4 class="ob-title">んけうすProject-2026</h4>
           <p class="ob-org">数学研究部</p>
@@ -325,21 +328,21 @@
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>2F 中１C教室</p>
           <p class="ob-subtags">部誌販売・配布 / ゲーム / 展示</p>
         </li>
-        <li class="ob-card k-shop" data-floor="2" data-rooms="m1a|m1b" data-tags="販売" data-search="中１バザー 中学１年生 中１A教室・中１B教室 各家庭から集まった品物のバザー。午前と午後の2回販売。 ちゅういちばざー ちゅうがくねんせい 販売">
+        <li class="ob-card k-shop" data-floor="2" data-yen="" data-name="ちゅういちばざー" data-rooms="m1a|m1b" data-tags="販売" data-search="中１バザー 中学１年生 中１A教室・中１B教室 各家庭から集まった品物のバザー。午前と午後の2回販売。 ちゅういちばざー ちゅうがくねんせい 販売">
           <div class="ob-top"><span class="ob-tag tag-shop">販売</span><span class="ob-price is-free">料金表示なし</span></div>
           <h4 class="ob-title">中１バザー</h4>
           <p class="ob-org">中学１年生</p>
           <p class="ob-desc">各家庭から集まった品物のバザー。午前と午後の2回販売。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>2F 中１A教室・中１B教室</p>
         </li>
-        <li class="ob-card k-exhibit" data-floor="2" data-rooms="shodo" data-tags="展示" data-search="ライフル射撃ミュージアム ライフル射撃部 書道教室 ライフル射撃競技の紹介。専用スーツを着たパフォーマンスあり。 らいふるしゃげきみゅーじあむ らいふるしゃげきぶ 展示">
+        <li class="ob-card k-exhibit" data-floor="2" data-yen="" data-name="らいふるしゃげきみゅーじあむ" data-rooms="shodo" data-tags="展示" data-search="ライフル射撃ミュージアム ライフル射撃部 書道教室 ライフル射撃競技の紹介。専用スーツを着たパフォーマンスあり。 らいふるしゃげきみゅーじあむ らいふるしゃげきぶ 展示">
           <div class="ob-top"><span class="ob-tag tag-exhibit">展示</span><span class="ob-price is-free">料金表示なし</span></div>
           <h4 class="ob-title">ライフル射撃ミュージアム</h4>
           <p class="ob-org">ライフル射撃部</p>
           <p class="ob-desc">ライフル射撃競技の紹介。専用スーツを着たパフォーマンスあり。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>2F 書道教室</p>
         </li>
-        <li class="ob-card k-exhibit" data-floor="2" data-rooms="art" data-tags="展示|販売|部誌販売・配布" data-search="美術展示・販売 美術部 美術室 部員の作品展示と、部誌・エコバッグの販売。 びじゅつてんじはんばい びじゅつぶ 展示 販売 部誌販売・配布">
+        <li class="ob-card k-exhibit" data-floor="2" data-yen="100" data-name="びじゅつてんじはんばい" data-rooms="art" data-tags="展示|販売|部誌販売・配布" data-search="美術展示・販売 美術部 美術室 部員の作品展示と、部誌・エコバッグの販売。 びじゅつてんじはんばい びじゅつぶ 展示 販売 部誌販売・配布">
           <div class="ob-top"><span class="ob-tag tag-exhibit">展示</span><span class="ob-price">100円～</span></div>
           <h4 class="ob-title">美術展示・販売</h4>
           <p class="ob-org">美術部</p>
@@ -347,21 +350,21 @@
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>2F 美術室</p>
           <p class="ob-subtags">販売 / 部誌販売・配布</p>
         </li>
-        <li class="ob-card k-ride" data-floor="2" data-rooms="tech" data-tags="アトラクション" data-search="柔道部お化け屋敷 柔道部 技術室 柔道部が毎年行うお化け屋敷。 じゅうどうぶおばけやしき じゅうどうぶ ホラー こわい 怖い アトラクション">
+        <li class="ob-card k-ride" data-floor="2" data-yen="200" data-name="じゅうどうぶおばけやしき" data-rooms="tech" data-tags="アトラクション" data-search="柔道部お化け屋敷 柔道部 技術室 柔道部が毎年行うお化け屋敷。 じゅうどうぶおばけやしき じゅうどうぶ ホラー こわい 怖い アトラクション">
           <div class="ob-top"><span class="ob-tag tag-ride">アトラクション</span><span class="ob-price">200円</span></div>
           <h4 class="ob-title">柔道部お化け屋敷</h4>
           <p class="ob-org">柔道部</p>
           <p class="ob-desc">柔道部が毎年行うお化け屋敷。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>2F 技術室</p>
         </li>
-        <li class="ob-card k-exhibit" data-floor="2" data-rooms="av" data-tags="展示" data-search="映画『フェリスはある朝突然に』 ESS部 視聴覚室 映画『フェリスはある朝突然に』のリメイク作品。 えいがふぇりすはあるあさとつぜんに 展示">
+        <li class="ob-card k-exhibit" data-floor="2" data-yen="" data-name="えいがふぇりすはあるあさとつぜんに" data-rooms="av" data-tags="展示" data-search="映画『フェリスはある朝突然に』 ESS部 視聴覚室 映画『フェリスはある朝突然に』のリメイク作品。 えいがふぇりすはあるあさとつぜんに 展示">
           <div class="ob-top"><span class="ob-tag tag-exhibit">展示</span><span class="ob-price is-free">料金表示なし</span></div>
           <h4 class="ob-title">映画『フェリスはある朝突然に』</h4>
           <p class="ob-org">ESS部</p>
           <p class="ob-desc">映画『フェリスはある朝突然に』のリメイク作品。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>2F 視聴覚室</p>
         </li>
-        <li class="ob-card k-shop" data-floor="2" data-rooms="h1d|h1e" data-tags="販売|部誌販売・配布|ゲーム|アトラクション|展示" data-search="スターライトプラネタリウム~star-full~ 天文部 高１D教室・高１E教室 手作りのドームと、新しく作り直した投影機によるプラネタリウム。 てんもんぶ プラネタリウム 星 ほし 販売 部誌販売・配布 ゲーム アトラクション 展示">
+        <li class="ob-card k-shop" data-floor="2" data-yen="50" data-name="てんもんぶ" data-rooms="h1d|h1e" data-tags="販売|部誌販売・配布|ゲーム|アトラクション|展示" data-search="スターライトプラネタリウム~star-full~ 天文部 高１D教室・高１E教室 手作りのドームと、新しく作り直した投影機によるプラネタリウム。 てんもんぶ プラネタリウム 星 ほし 販売 部誌販売・配布 ゲーム アトラクション 展示">
           <div class="ob-top"><span class="ob-tag tag-shop">販売</span><span class="ob-price">50円～</span></div>
           <h4 class="ob-title">スターライトプラネタリウム~star-full~</h4>
           <p class="ob-org">天文部</p>
@@ -374,28 +377,28 @@
       <section class="ob-floor" data-floor-group="3" aria-labelledby="obf3">
         <h3 class="ob-floor-title" id="obf3">3F<span>11 企画</span></h3>
         <ul class="ob-grid">
-        <li class="ob-card k-game" data-floor="3" data-rooms="m2d" data-tags="ゲーム" data-search="Giocare a bowling 中2D 中２D教室 教室で遊べるボウリング。子どもも楽しめる内容。 ボウリング ゲーム">
+        <li class="ob-card k-game" data-floor="3" data-yen="100" data-name="ボウリング" data-rooms="m2d" data-tags="ゲーム" data-search="Giocare a bowling 中2D 中２D教室 教室で遊べるボウリング。子どもも楽しめる内容。 ボウリング ゲーム">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price">100円</span></div>
           <h4 class="ob-title">Giocare a bowling</h4>
           <p class="ob-org">中2D</p>
           <p class="ob-desc">教室で遊べるボウリング。子どもも楽しめる内容。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>3F 中２D教室</p>
         </li>
-        <li class="ob-card k-game" data-floor="3" data-rooms="m2c" data-tags="ゲーム" data-search="ラウンド2 中2C 中２C教室 景品付きのゲーム大会。 ゲーム ゲーム">
+        <li class="ob-card k-game" data-floor="3" data-yen="200" data-name="ゲーム" data-rooms="m2c" data-tags="ゲーム" data-search="ラウンド2 中2C 中２C教室 景品付きのゲーム大会。 ゲーム ゲーム">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price">200円</span></div>
           <h4 class="ob-title">ラウンド2</h4>
           <p class="ob-org">中2C</p>
           <p class="ob-desc">景品付きのゲーム大会。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>3F 中２C教室</p>
         </li>
-        <li class="ob-card k-exhibit" data-floor="3" data-rooms="m2a|m2b" data-tags="展示" data-search="美術・書道展示 中学１年生 中２A教室・中２B教室 中1の書道作品、中学生の美術作品、各教科の作品の展示。 びじゅつしょどうてんじ ちゅうがくねんせい 展示">
+        <li class="ob-card k-exhibit" data-floor="3" data-yen="" data-name="びじゅつしょどうてんじ" data-rooms="m2a|m2b" data-tags="展示" data-search="美術・書道展示 中学１年生 中２A教室・中２B教室 中1の書道作品、中学生の美術作品、各教科の作品の展示。 びじゅつしょどうてんじ ちゅうがくねんせい 展示">
           <div class="ob-top"><span class="ob-tag tag-exhibit">展示</span><span class="ob-price is-free">料金表示なし</span></div>
           <h4 class="ob-title">美術・書道展示</h4>
           <p class="ob-org">中学１年生</p>
           <p class="ob-desc">中1の書道作品、中学生の美術作品、各教科の作品の展示。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>3F 中２A教室・中２B教室</p>
         </li>
-        <li class="ob-card k-shop" data-floor="3" data-rooms="sci" data-tags="販売|部誌販売・配布|展示" data-search="(マッド)サイエンティスト達の集い 化学部 化学実験室 レジンやビスマスなどの販売と、演示実験（2時間ごと・1日3回）。 まっどさいえんてぃすとたちのつどい かがくぶ 実験 じっけん 化学 かがく レジン ビスマス 販売 部誌販売・配布 展示">
+        <li class="ob-card k-shop" data-floor="3" data-yen="100" data-name="まっどさいえんてぃすとたちのつどい" data-rooms="sci" data-tags="販売|部誌販売・配布|展示" data-search="(マッド)サイエンティスト達の集い 化学部 化学実験室 レジンやビスマスなどの販売と、演示実験（2時間ごと・1日3回）。 まっどさいえんてぃすとたちのつどい かがくぶ 実験 じっけん 化学 かがく レジン ビスマス 販売 部誌販売・配布 展示">
           <div class="ob-top"><span class="ob-tag tag-shop">販売</span><span class="ob-price">100円～</span></div>
           <h4 class="ob-title">(マッド)サイエンティスト達の集い</h4>
           <p class="ob-org">化学部</p>
@@ -403,7 +406,7 @@
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>3F 化学実験室</p>
           <p class="ob-subtags">部誌販売・配布 / 展示</p>
         </li>
-        <li class="ob-card k-shop" data-floor="3" data-rooms="bio" data-tags="販売|部誌販売・配布|体験|展示" data-search="解体新書 ライフサイエンス部 生物実験室 カエルの解剖や、苔テラリウム作りの体験。 かいたいしんしょ らいふさいえんすぶ 販売 部誌販売・配布 体験 展示">
+        <li class="ob-card k-shop" data-floor="3" data-yen="50" data-name="かいたいしんしょ" data-rooms="bio" data-tags="販売|部誌販売・配布|体験|展示" data-search="解体新書 ライフサイエンス部 生物実験室 カエルの解剖や、苔テラリウム作りの体験。 かいたいしんしょ らいふさいえんすぶ 販売 部誌販売・配布 体験 展示">
           <div class="ob-top"><span class="ob-tag tag-shop">販売</span><span class="ob-price">50円～</span></div>
           <h4 class="ob-title">解体新書</h4>
           <p class="ob-org">ライフサイエンス部</p>
@@ -411,7 +414,7 @@
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>3F 生物実験室</p>
           <p class="ob-subtags">部誌販売・配布 / 体験 / 展示</p>
         </li>
-        <li class="ob-card k-zine" data-floor="3" data-rooms="sr4" data-tags="部誌販売・配布|ゲーム" data-search="『君のクイズ』 クイズ研究会 特別第４教室 早押しクイズ体験（無料）と、ペーパークイズ。 きみのくいず くいずけんきゅうかい 部誌 部誌販売・配布 ゲーム">
+        <li class="ob-card k-zine" data-floor="3" data-yen="50" data-name="きみのくいず" data-rooms="sr4" data-tags="部誌販売・配布|ゲーム" data-search="『君のクイズ』 クイズ研究会 特別第４教室 早押しクイズ体験（無料）と、ペーパークイズ。 きみのくいず くいずけんきゅうかい 部誌 部誌販売・配布 ゲーム">
           <div class="ob-top"><span class="ob-tag tag-zine">部誌販売・配布</span><span class="ob-price">50円</span></div>
           <h4 class="ob-title">『君のクイズ』</h4>
           <p class="ob-org">クイズ研究会</p>
@@ -419,7 +422,7 @@
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>3F 特別第４教室</p>
           <p class="ob-subtags">ゲーム</p>
         </li>
-        <li class="ob-card k-zine is-aor" data-floor="3" data-rooms="sr3" data-tags="部誌販売・配布|ゲーム|体験|展示" data-search="Σ feat. Aoristos 電気工学部, 物理部, Aoristos 特別第３教室 物理部・電気工学部・Aoristos の合同企画。展示・体験・部誌販売。 でんきこうがくぶぶつりぶ 電工部 でんこうぶ 部誌販売・配布 ゲーム 体験 展示">
+        <li class="ob-card k-zine is-aor" data-floor="3" data-yen="50" data-name="でんきこうがくぶぶつりぶ" data-rooms="sr3" data-tags="部誌販売・配布|ゲーム|体験|展示" data-search="Σ feat. Aoristos 電気工学部, 物理部, Aoristos 特別第３教室 物理部・電気工学部・Aoristos の合同企画。展示・体験・部誌販売。 でんきこうがくぶぶつりぶ 電工部 でんこうぶ 部誌販売・配布 ゲーム 体験 展示">
           <div class="ob-top"><span class="ob-tag tag-zine">部誌販売・配布</span><span class="ob-price">50円～</span></div>
           <h4 class="ob-title">Σ feat. Aoristos</h4>
           <p class="ob-org">電気工学部, 物理部, Aoristos</p>
@@ -428,28 +431,28 @@
           <p class="ob-subtags">ゲーム / 体験 / 展示</p>
           <p class="ob-link"><a class="more-link" href="projects.html">Aoristos の企画を詳しく見る</a></p>
         </li>
-        <li class="ob-card k-game" data-floor="3" data-rooms="h2e" data-tags="ゲーム" data-search="的当て FUNNY MONKEY STUDENTS 高２E教室 的にボールを当ててポイントを競うゲーム。 まとあて ゲーム">
+        <li class="ob-card k-game" data-floor="3" data-yen="150" data-name="まとあて" data-rooms="h2e" data-tags="ゲーム" data-search="的当て FUNNY MONKEY STUDENTS 高２E教室 的にボールを当ててポイントを競うゲーム。 まとあて ゲーム">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price">150円</span></div>
           <h4 class="ob-title">的当て</h4>
           <p class="ob-org">FUNNY MONKEY STUDENTS</p>
           <p class="ob-desc">的にボールを当ててポイントを競うゲーム。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>3F 高２E教室</p>
         </li>
-        <li class="ob-card k-game" data-floor="3" data-rooms="h2c" data-tags="ゲーム" data-search="フリースローだけだけどイイカナ？♡ 中2A 高２C教室 フリースローでハイスコアを目指すゲーム。  ゲーム">
+        <li class="ob-card k-game" data-floor="3" data-yen="100" data-name="フリースローだけだけどイイカナ？♡" data-rooms="h2c" data-tags="ゲーム" data-search="フリースローだけだけどイイカナ？♡ 中2A 高２C教室 フリースローでハイスコアを目指すゲーム。  ゲーム">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price">100円</span></div>
           <h4 class="ob-title">フリースローだけだけどイイカナ？♡</h4>
           <p class="ob-org">中2A</p>
           <p class="ob-desc">フリースローでハイスコアを目指すゲーム。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>3F 高２C教室</p>
         </li>
-        <li class="ob-card k-game" data-floor="3" data-rooms="h2b" data-tags="ゲーム" data-search="まと、あります。 中3C 高２B教室 ダーツなどのミニゲーム。  ゲーム">
+        <li class="ob-card k-game" data-floor="3" data-yen="150" data-name="まと、あります。" data-rooms="h2b" data-tags="ゲーム" data-search="まと、あります。 中3C 高２B教室 ダーツなどのミニゲーム。  ゲーム">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price">150円～</span></div>
           <h4 class="ob-title">まと、あります。</h4>
           <p class="ob-org">中3C</p>
           <p class="ob-desc">ダーツなどのミニゲーム。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>3F 高２B教室</p>
         </li>
-        <li class="ob-card k-game" data-floor="3" data-rooms="h2a" data-tags="ゲーム" data-search="Nightmare or Dream 中3A 高２A教室 ポーカーとブラックジャック。 ポーカー・ブラックジャック ゲーム">
+        <li class="ob-card k-game" data-floor="3" data-yen="200" data-name="ポーカー・ブラックジャック" data-rooms="h2a" data-tags="ゲーム" data-search="Nightmare or Dream 中3A 高２A教室 ポーカーとブラックジャック。 ポーカー・ブラックジャック ゲーム">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price">200円</span></div>
           <h4 class="ob-title">Nightmare or Dream</h4>
           <p class="ob-org">中3A</p>
@@ -461,14 +464,14 @@
       <section class="ob-floor" data-floor-group="4" aria-labelledby="obf4">
         <h3 class="ob-floor-title" id="obf4">4F<span>12 企画</span></h3>
         <ul class="ob-grid">
-        <li class="ob-card k-ride" data-floor="4" data-rooms="lroom" data-tags="アトラクション" data-search="ジェットコースター アミューズメント課 大教室 生徒が一から手作りしたジェットコースター。 あみゅーずめんとか コースター 乗り物 のりもの アトラクション">
+        <li class="ob-card k-ride" data-floor="4" data-yen="600" data-name="あみゅーずめんとか" data-rooms="lroom" data-tags="アトラクション" data-search="ジェットコースター アミューズメント課 大教室 生徒が一から手作りしたジェットコースター。 あみゅーずめんとか コースター 乗り物 のりもの アトラクション">
           <div class="ob-top"><span class="ob-tag tag-ride">アトラクション</span><span class="ob-price">600円</span></div>
           <h4 class="ob-title">ジェットコースター</h4>
           <p class="ob-org">アミューズメント課</p>
           <p class="ob-desc">生徒が一から手作りしたジェットコースター。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>4F 大教室</p>
         </li>
-        <li class="ob-card k-game" data-floor="4" data-rooms="sf41" data-tags="ゲーム|部誌販売・配布" data-search="将棋部 囲碁将棋部 ４階特別教室 部員との対局、盤の貸し出し、部誌の販売。棋力を問わず参加できる。 しょうぎぶ いごしょうぎぶ 将棋 囲碁 ゲーム 部誌販売・配布">
+        <li class="ob-card k-game" data-floor="4" data-yen="50" data-name="しょうぎぶ" data-rooms="sf41" data-tags="ゲーム|部誌販売・配布" data-search="将棋部 囲碁将棋部 ４階特別教室 部員との対局、盤の貸し出し、部誌の販売。棋力を問わず参加できる。 しょうぎぶ いごしょうぎぶ 将棋 囲碁 ゲーム 部誌販売・配布">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price">50円</span></div>
           <h4 class="ob-title">将棋部</h4>
           <p class="ob-org">囲碁将棋部</p>
@@ -476,28 +479,28 @@
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>4F ４階特別教室</p>
           <p class="ob-subtags">部誌販売・配布</p>
         </li>
-        <li class="ob-card k-game" data-floor="4" data-rooms="m3d" data-tags="ゲーム" data-search="人間黒ひげ危機一髪？？ 高1A 中３D教室 人が入って遊ぶ「黒ひげ危機一髪」。 にんげんくろひげききいっぱつ ゲーム">
+        <li class="ob-card k-game" data-floor="4" data-yen="250" data-name="にんげんくろひげききいっぱつ" data-rooms="m3d" data-tags="ゲーム" data-search="人間黒ひげ危機一髪？？ 高1A 中３D教室 人が入って遊ぶ「黒ひげ危機一髪」。 にんげんくろひげききいっぱつ ゲーム">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price">250円</span></div>
           <h4 class="ob-title">人間黒ひげ危機一髪？？</h4>
           <p class="ob-org">高1A</p>
           <p class="ob-desc">人が入って遊ぶ「黒ひげ危機一髪」。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>4F 中３D教室</p>
         </li>
-        <li class="ob-card k-game" data-floor="4" data-rooms="m3c" data-tags="ゲーム" data-search="とにかく叩け！モグラ叩き 中2B 中３C教室 モグラたたきゲーム。 とにかくたたけもぐらたたき ゲーム">
+        <li class="ob-card k-game" data-floor="4" data-yen="100" data-name="とにかくたたけもぐらたたき" data-rooms="m3c" data-tags="ゲーム" data-search="とにかく叩け！モグラ叩き 中2B 中３C教室 モグラたたきゲーム。 とにかくたたけもぐらたたき ゲーム">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price">100円</span></div>
           <h4 class="ob-title">とにかく叩け！モグラ叩き</h4>
           <p class="ob-org">中2B</p>
           <p class="ob-desc">モグラたたきゲーム。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>4F 中３C教室</p>
         </li>
-        <li class="ob-card k-game" data-floor="4" data-rooms="m3b" data-tags="ゲーム" data-search="突然殴りかかられた 中3B 中３B教室 ストラックアウト。景品あり。 とつぜんなぐりかかられた ストラックアウト ゲーム">
+        <li class="ob-card k-game" data-floor="4" data-yen="200" data-name="とつぜんなぐりかかられた" data-rooms="m3b" data-tags="ゲーム" data-search="突然殴りかかられた 中3B 中３B教室 ストラックアウト。景品あり。 とつぜんなぐりかかられた ストラックアウト ゲーム">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price">200円</span></div>
           <h4 class="ob-title">突然殴りかかられた</h4>
           <p class="ob-org">中3B</p>
           <p class="ob-desc">ストラックアウト。景品あり。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>4F 中３B教室</p>
         </li>
-        <li class="ob-card k-exhibit" data-floor="4" data-rooms="m3a" data-tags="展示|販売" data-search="SEIKO PHOTO STUDIO 写真部 中３A教室 部員の写真の展示と、写真部オリジナルグッズの販売。 しゃしんぶ 展示 販売">
+        <li class="ob-card k-exhibit" data-floor="4" data-yen="250" data-name="しゃしんぶ" data-rooms="m3a" data-tags="展示|販売" data-search="SEIKO PHOTO STUDIO 写真部 中３A教室 部員の写真の展示と、写真部オリジナルグッズの販売。 しゃしんぶ 展示 販売">
           <div class="ob-top"><span class="ob-tag tag-exhibit">展示</span><span class="ob-price">250円～</span></div>
           <h4 class="ob-title">SEIKO PHOTO STUDIO</h4>
           <p class="ob-org">写真部</p>
@@ -505,7 +508,7 @@
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>4F 中３A教室</p>
           <p class="ob-subtags">販売</p>
         </li>
-        <li class="ob-card k-zine" data-floor="4" data-rooms="sn2" data-tags="部誌販売・配布|ゲーム|展示" data-search="地歴研究部 地歴研究部 特別第２教室 調査した場所をまとめた部誌の配布と、関連するクイズ。 ちれきけんきゅうぶ 部誌販売・配布 ゲーム 展示">
+        <li class="ob-card k-zine" data-floor="4" data-yen="50" data-name="ちれきけんきゅうぶ" data-rooms="sn2" data-tags="部誌販売・配布|ゲーム|展示" data-search="地歴研究部 地歴研究部 特別第２教室 調査した場所をまとめた部誌の配布と、関連するクイズ。 ちれきけんきゅうぶ 部誌販売・配布 ゲーム 展示">
           <div class="ob-top"><span class="ob-tag tag-zine">部誌販売・配布</span><span class="ob-price">50円</span></div>
           <h4 class="ob-title">地歴研究部</h4>
           <p class="ob-org">地歴研究部</p>
@@ -513,28 +516,28 @@
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>4F 特別第２教室</p>
           <p class="ob-subtags">ゲーム / 展示</p>
         </li>
-        <li class="ob-card k-game" data-floor="4" data-rooms="sn1" data-tags="ゲーム" data-search="ケシバーサルスタジオシゲマツ 高2A 特別第１教室 消しゴムで対戦する「消しバト」のテーマパーク風企画。 消しバトゲーム ゲーム">
+        <li class="ob-card k-game" data-floor="4" data-yen="100" data-name="消しバトゲーム" data-rooms="sn1" data-tags="ゲーム" data-search="ケシバーサルスタジオシゲマツ 高2A 特別第１教室 消しゴムで対戦する「消しバト」のテーマパーク風企画。 消しバトゲーム ゲーム">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price">100円</span></div>
           <h4 class="ob-title">ケシバーサルスタジオシゲマツ</h4>
           <p class="ob-org">高2A</p>
           <p class="ob-desc">消しゴムで対戦する「消しバト」のテーマパーク風企画。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>4F 特別第１教室</p>
         </li>
-        <li class="ob-card k-zine" data-floor="4" data-rooms="h3e" data-tags="部誌販売・配布" data-search="言語同好会 言語同好会 高３E教室 言語学をテーマにした部誌の配布。 げんごどうこうかい 部誌 部誌販売・配布">
+        <li class="ob-card k-zine" data-floor="4" data-yen="" data-name="げんごどうこうかい" data-rooms="h3e" data-tags="部誌販売・配布" data-search="言語同好会 言語同好会 高３E教室 言語学をテーマにした部誌の配布。 げんごどうこうかい 部誌 部誌販売・配布">
           <div class="ob-top"><span class="ob-tag tag-zine">部誌販売・配布</span><span class="ob-price is-free">料金表示なし</span></div>
           <h4 class="ob-title">言語同好会</h4>
           <p class="ob-org">言語同好会</p>
           <p class="ob-desc">言語学をテーマにした部誌の配布。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>4F 高３E教室</p>
         </li>
-        <li class="ob-card k-zine" data-floor="4" data-rooms="h3e" data-tags="部誌販売・配布" data-search="シン・文集 新聞部 高３E教室 新聞部の文集の販売。 しんぶんしゅう しんぶんぶ 部誌（文集） 部誌販売・配布">
+        <li class="ob-card k-zine" data-floor="4" data-yen="50" data-name="しんぶんしゅう" data-rooms="h3e" data-tags="部誌販売・配布" data-search="シン・文集 新聞部 高３E教室 新聞部の文集の販売。 しんぶんしゅう しんぶんぶ 部誌（文集） 部誌販売・配布">
           <div class="ob-top"><span class="ob-tag tag-zine">部誌販売・配布</span><span class="ob-price">50円</span></div>
           <h4 class="ob-title">シン・文集</h4>
           <p class="ob-org">新聞部</p>
           <p class="ob-desc">新聞部の文集の販売。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>4F 高３E教室</p>
         </li>
-        <li class="ob-card k-zine" data-floor="4" data-rooms="h3b" data-tags="部誌販売・配布|体験" data-search="星光満天宮 文芸部 高３B教室 お賽銭・祈祷・おみくじで、学業や恋愛などを占う。 せいこうまんてんぐう ぶんげいぶ 部誌販売・配布 体験">
+        <li class="ob-card k-zine" data-floor="4" data-yen="50" data-name="せいこうまんてんぐう" data-rooms="h3b" data-tags="部誌販売・配布|体験" data-search="星光満天宮 文芸部 高３B教室 お賽銭・祈祷・おみくじで、学業や恋愛などを占う。 せいこうまんてんぐう ぶんげいぶ 部誌販売・配布 体験">
           <div class="ob-top"><span class="ob-tag tag-zine">部誌販売・配布</span><span class="ob-price">50円～</span></div>
           <h4 class="ob-title">星光満天宮</h4>
           <p class="ob-org">文芸部</p>
@@ -542,7 +545,7 @@
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>4F 高３B教室</p>
           <p class="ob-subtags">体験</p>
         </li>
-        <li class="ob-card k-game" data-floor="4" data-rooms="h3a" data-tags="ゲーム" data-search="いししの縁日 中3D 高３A教室 縁日ゲーム。 いししのえんにち 縁日ゲーム ゲーム">
+        <li class="ob-card k-game" data-floor="4" data-yen="200" data-name="いししのえんにち" data-rooms="h3a" data-tags="ゲーム" data-search="いししの縁日 中3D 高３A教室 縁日ゲーム。 いししのえんにち 縁日ゲーム ゲーム">
           <div class="ob-top"><span class="ob-tag tag-game">ゲーム</span><span class="ob-price">200円</span></div>
           <h4 class="ob-title">いししの縁日</h4>
           <p class="ob-org">中3D</p>
@@ -554,14 +557,14 @@
       <section class="ob-floor" data-floor-group="5" aria-labelledby="obf5">
         <h3 class="ob-floor-title" id="obf5">5F<span>2 企画</span></h3>
         <ul class="ob-grid">
-        <li class="ob-card k-try" data-floor="5" data-rooms="p2" data-tags="体験" data-search="占いの館Ⅲ 高校サッカー部 第２体育館 占い。 うらないのやかたさん こうこうさっかーぶ 体験">
+        <li class="ob-card k-try" data-floor="5" data-yen="150" data-name="うらないのやかたさん" data-rooms="p2" data-tags="体験" data-search="占いの館Ⅲ 高校サッカー部 第２体育館 占い。 うらないのやかたさん こうこうさっかーぶ 体験">
           <div class="ob-top"><span class="ob-tag tag-try">体験</span><span class="ob-price">150円</span></div>
           <h4 class="ob-title">占いの館Ⅲ</h4>
           <p class="ob-org">高校サッカー部</p>
           <p class="ob-desc">占い。</p>
           <p class="ob-place"><svg viewBox="0 0 14 14" aria-hidden="true"><path d="M7 13s4.5-4.2 4.5-7.5a4.5 4.5 0 0 0-9 0C2.5 8.8 7 13 7 13Z"/><circle cx="7" cy="5.5" r="1.6"/></svg>5F 第２体育館</p>
         </li>
-        <li class="ob-card k-shop" data-floor="5" data-rooms="p2" data-tags="販売|部誌販売・配布|体験|展示" data-search="鉄道研究会 鉄道研究会 第２体育館 鉄道の運転体験と展示。 てつどうけんきゅうかい 鉄研 てっけん 電車 でんしゃ 販売 部誌販売・配布 体験 展示">
+        <li class="ob-card k-shop" data-floor="5" data-yen="50" data-name="てつどうけんきゅうかい" data-rooms="p2" data-tags="販売|部誌販売・配布|体験|展示" data-search="鉄道研究会 鉄道研究会 第２体育館 鉄道の運転体験と展示。 てつどうけんきゅうかい 鉄研 てっけん 電車 でんしゃ 販売 部誌販売・配布 体験 展示">
           <div class="ob-top"><span class="ob-tag tag-shop">販売</span><span class="ob-price">50円～</span></div>
           <h4 class="ob-title">鉄道研究会</h4>
           <p class="ob-org">鉄道研究会</p>
@@ -571,7 +574,8 @@
         </li>
         </ul>
       </section>
-      <p class="empty" id="obEmpty" hidden>条件に合う企画がありません。</p>
+      <ul class="ob-grid ob-flat" id="obFlat" hidden></ul>
+      <p class="empty" id="obEmpty" hidden>条件に合う企画がありません。<button type="button" class="text-btn" id="obReset2">条件をリセット</button></p>
       <button type="button" class="ob-fab" id="obFab" aria-label="検索・絞り込みに戻る"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M9 15h2"/></svg>絞り込み<b id="obFabCount">57</b></button>
     </section>
 
