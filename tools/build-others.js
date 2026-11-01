@@ -245,14 +245,14 @@ const SOURCE_NOTE = `<p class="ob-source">情報は <a href="${esc(data.source)}
 
 const html = `${head({
   scripts: '\n  <script src="assets/others-top.js" defer></script>',
-  title: '他の企画',
-  desc: `星光 SF2026（大阪星光学院 スクールフェア 2026）のほかの企画を、図でまとめました。入場・金券・食品の時間、1日の流れ、階ごと・種類ごとの企画数、講堂・音楽室のステージの時間割。全 ${booths.length} 企画の一覧と校内マップへも。`
+  title: '大阪星光学院 SF2026 まとめ（ステージ時間割・入場・金券）',
+  desc: `大阪星光学院 SF2026（スクールフェア 2026「融合」・11月7日〜8日）の企画を Aoristos がまとめたページ。講堂・音楽室のステージ時間割、入場方法・金券・食品の時間、1日の流れ、階ごと・種類ごとの企画数。全 ${booths.length} 企画の一覧と校内マップへも。`
 })}
 <main id="main" class="band-alt">
   <header class="page-hero ob-hero">
     <div class="container">
       <h1 class="page-title">他の企画</h1>
-      <p class="page-lead">星光 SF2026 のほかの企画を、場所・種類・時間でまとめました。</p>
+      <p class="page-lead">大阪星光学院 SF2026 の企画を、場所・種類・時間でまとめました。</p>
       <nav class="ob-quick" aria-label="このページの内容">
         <a class="ob-quick-main" href="${LIST_PAGE}"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4.5 4.5"/></svg>企画を探す<small>一覧・校内マップ・${booths.length} 企画</small></a>
         <a href="#h-stage">ステージの時間割</a>
@@ -351,8 +351,8 @@ ${stageList()}
 `;
 
 const listHtml = `${head({
-  title: '企画一覧・校内マップ（他の企画）',
-  desc: `星光 SF2026（大阪星光学院 スクールフェア 2026）の全 ${booths.length} 企画を、校内マップ・検索・階・種類で探せる一覧。飲食・ゲーム・展示・アトラクションなど。`,
+  title: '大阪星光学院 SF2026 企画一覧・校内マップ',
+  desc: `大阪星光学院 SF2026（スクールフェア 2026）の全 ${booths.length} 企画を、校内マップ・検索・階・種類で探せる一覧（Aoristos によるまとめ）。焼きそばなどの飲食、ゲーム、展示、お化け屋敷・ジェットコースターなどのアトラクション。`,
   scripts: '\n  <script src="assets/others.js" defer></script>'
 })}
 <main id="main" class="band-alt">
@@ -360,7 +360,7 @@ const listHtml = `${head({
     <div class="container">
       <p class="eyebrow"><a href="others.html">他の企画</a></p>
       <h1 class="page-title">企画一覧</h1>
-      <p class="page-lead">星光 SF2026 の全 ${booths.length} 企画を、校内マップと一覧で探せます。</p>
+      <p class="page-lead">大阪星光学院 SF2026 の全 ${booths.length} 企画を、校内マップと一覧で探せます。</p>
     </div>
   </header>
 

@@ -1028,3 +1028,13 @@ a.tagchart-row:hover { text-decoration: none; }
 .is-compact .ob-place { grid-row: 2; margin-top: 3px; font-size: 13px; }
 .is-compact .ob-card { padding-top: 11px; padding-bottom: 11px; }
 .is-compact .ob-grid { gap: 6px; }
+
+/* トップ：SF 全体の情報へのリンク */
+.sf-all-lead { color: var(--ink-2); margin-top: -8px; }
+.sf-all { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 20px; }
+.sf-all a { display: flex; flex-direction: column; gap: 4px; height: 100%; padding: 18px 20px; border-radius: var(--radius-m); background: var(--bg-alt); color: var(--ink); }
+.sf-all a:hover { text-decoration: none; background: #e8e8ed; }
+.sf-all strong { font-size: 17px; }
+.sf-all strong::after { content: " ›"; color: var(--link); }
+.sf-all span { font-size: 13px; color: var(--ink-2); }
+@media (max-width: 833px) { .sf-all { grid-template-columns: 1fr; gap: 8px; } }
