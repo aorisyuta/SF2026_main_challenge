@@ -1,9 +1,10 @@
 #!/usr/bin/env node
 /*
-  tools/build-others.js — 「他の企画」ページ（others.html）を作る
+  tools/build-others.js — 「他の企画」の2ページを作る
 
-  データ: assets/others-data.json（SF 公式サイト https://seikosf.jp の企画・ステージ情報をまとめ直したもの）
-  出力  : others.html（本文を HTML に書き出す。絞り込みは assets/others.js）
+  データ: assets/others-data.json（SF 公式サイト https://seikosf.jp の企画・ステージ・校内マップの情報をまとめ直したもの）
+  出力  : others.html       概要（基本情報・1日の流れ・階ごと/種類別の図・ステージの時間割）
+          others-list.html  企画一覧（校内マップ・検索・絞り込み。動きは assets/others.js）
 
   使い方: npm run build（generate-pages.js の後、build-site.js の前に実行される）
 */
@@ -13,6 +14,8 @@ const path = require('path');
 const ROOT = path.join(__dirname, '..');
 const data = JSON.parse(fs.readFileSync(path.join(ROOT, 'assets', 'others-data.json'), 'utf8'));
 const OUT = path.join(ROOT, 'others.html');
+const OUT_LIST = path.join(ROOT, 'others-list.html');
+const LIST_PAGE = 'others-list.html';
 
 const esc = s => String(s == null ? '' : s)
   .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -80,14 +83,14 @@ ${floors.map(f => {
     const aor = list.find(b => b.aoristos);
     const places = [...new Set(list.map(b => b.outdoor ? 'グラウンド（屋外ブース）' : b.place.split('・')[0]))];
     const extra = f === 5 ? '講堂・第２体育館' : f === 4 ? '音楽室ステージあり' : '';
-    return `      <button class="bldg-floor${aor ? ' has-aor' : ''}" type="button" role="listitem" data-floor="${f}" aria-label="${FLOOR_LABEL[f]}：${list.length}企画。この階の企画に絞り込む">
+    return `      <a class="bldg-floor${aor ? ' has-aor' : ''}" role="listitem" href="${LIST_PAGE}?floor=${f}#map" aria-label="${FLOOR_LABEL[f]}：${list.length}企画。この階の地図と企画を見る">
         <span class="bldg-num">${f}F</span>
         <span class="bldg-body">
           <span class="bldg-bar" style="width:${(list.length / max * 100).toFixed(1)}%">${segs.map(s => `<span class="tag-${s.k}" style="flex:${s.n}"></span>`).join('')}</span>
           <span class="bldg-meta"><strong>${list.length}</strong> 企画${extra ? `<em>${extra}</em>` : ''}${aor ? '<em class="bldg-aor">Aoristos はここ（特別第３教室）</em>' : ''}</span>
           <span class="bldg-places">${esc(places.slice(0, 4).join('・'))}${places.length > 4 ? ' ほか' : ''}</span>
         </span>
-      </button>`;
+      </a>`;
   }).join('\n')}
       <div class="bldg-ground" aria-hidden="true">グラウンド</div>
     </div>`;
@@ -96,11 +99,11 @@ ${floors.map(f => {
 /* ---------- 図3：種類別 ---------- */
 function tagChart() {
   return `<ul class="tagchart">
-${tagCount.map(x => `      <li><button type="button" class="tagchart-row" data-tag="${esc(x.t)}">
+${tagCount.map(x => `      <li><a class="tagchart-row" href="${LIST_PAGE}?tag=${encodeURIComponent(x.t)}#list">
         <span class="tagchart-label">${esc(x.t)}</span>
         <span class="tagchart-track"><span class="tagchart-bar tag-${x.k}" style="width:${(x.n / maxTag * 100).toFixed(1)}%"></span></span>
         <span class="tagchart-n">${x.n}</span>
-      </button></li>`).join('\n')}
+      </a></li>`).join('\n')}
     </ul>`;
 }
 
@@ -144,7 +147,7 @@ function stageList() {
 /* ---------- 企画カード ---------- */
 function card(b) {
   const search = [b.title, b.org, b.place, b.desc, b.kana || '', ...b.tags].join(' ');  // kana＝読み・別名（検索用、表示しない）
-  return `        <li class="ob-card${b.aoristos ? ' is-aor' : ''}" data-floor="${b.floor}" data-tags="${esc(b.tags.join('|'))}" data-search="${esc(search)}">
+  return `        <li class="ob-card${b.aoristos ? ' is-aor' : ''}" data-floor="${b.floor}" data-rooms="${esc(b.rooms.join('|'))}" data-tags="${esc(b.tags.join('|'))}" data-search="${esc(search)}">
           <div class="ob-top"><span class="ob-tag tag-${tagKey(b.tags[0])}">${esc(b.tags[0])}</span>${b.price ? `<span class="ob-price">${esc(b.price)}</span>` : '<span class="ob-price is-free">料金表示なし</span>'}</div>
           <h4 class="ob-title">${esc(b.title)}</h4>
           <p class="ob-org">${esc(b.org)}</p>
@@ -164,14 +167,47 @@ ${byFloor(f).map(card).join('\n')}
       </section>`).join('\n');
 }
 
+/* ---------- 校内マップ（公式の図面に、企画のある部屋を重ねる） ---------- */
+function campusMap() {
+  const roomBooths = id => booths.filter(b => b.rooms.includes(id));
+  const STAGE = { mus: '音楽室ステージ', p1: '講堂ステージ' };
+  return Object.keys(data.map.floors).map(Number).sort((a, b) => a - b).map(f => {
+    const fl = data.map.floors[f];
+    let [vx, vy, vw, vh] = fl.viewBox.split(' ').map(Number);
+    const rooms = fl.rooms.map(r => {
+      const bs = roomBooths(r.id);
+      const aor = bs.some(b => b.aoristos);
+      const cls = aor ? 'is-aor' : bs.length ? 'is-booth' : STAGE[r.id] ? 'is-stage' : '';
+      if (!cls) return '';
+      const label = bs.length ? `${r.name}：${bs.map(b => b.title).join('、')}` : STAGE[r.id] ? `${r.name}：${STAGE[r.id]}` : r.name;
+      const attrs = bs.length ? ` tabindex="0" role="button" data-room="${r.id}" data-room-name="${esc(r.name)}"` : '';
+      return `<path class="map-room ${cls}" d="${esc(r.d)}"${attrs}><title>${esc(label)}</title></path>`;
+    }).join('');
+    const pins = fl.rooms.filter(r => roomBooths(r.id).some(b => b.aoristos)).map(r =>
+      `<g class="map-pin" transform="translate(${r.cx} ${r.cy - 64})"><rect x="-82" y="-26" width="164" height="40" rx="20"/><text y="2" text-anchor="middle">Aoristos はここ</text></g>`).join('');
+    // 吹き出しが図の上にはみ出す階は、表示範囲を上に広げる
+    fl.rooms.filter(r => roomBooths(r.id).some(b => b.aoristos)).forEach(r => {
+      const top = r.cy - 100;
+      if (top < vy) { vh += vy - top; vy = top; }
+    });
+    return `        <figure class="map-floor" data-map-floor="${f}"${f === 3 ? '' : ' hidden'}>
+          <svg viewBox="${vx} ${vy} ${vw} ${vh}" role="img" aria-label="${f}F の校内マップ">
+            <image href="${esc(fl.image)}" x="0" y="0" width="1500" height="1000"/>
+            ${rooms}${pins}
+          </svg>
+        </figure>`;
+  }).join('\n');
+}
+
 /* ---------- ページ ---------- */
-const html = `<!DOCTYPE html>
+function head(o) {
+  return `<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>他の企画｜Aoristos — 星光 SF2026</title>
-  <meta name="description" content="星光 SF2026（大阪星光学院 スクールフェア 2026）のほかの企画を、場所・種類・時間でまとめました。飲食・ゲーム・展示・アトラクション ${booths.length} 企画と、講堂・音楽室のステージの時間割、入場・金券・食品の時間など。">
+  <title>${o.title}｜Aoristos — 星光 SF2026</title>
+  <meta name="description" content="${esc(o.desc)}">
   <meta name="author" content="Aoristos">
   <meta name="theme-color" content="#ffffff">
   <link rel="icon" href="favicon.ico" sizes="any">
@@ -184,17 +220,26 @@ const html = `<!DOCTYPE html>
   <script src="assets/config.js"></script>
   <script src="assets/sheet.js" defer></script>
   <script src="assets/header.js" defer></script>
-  <script src="assets/script.js" defer></script>
-  <script src="assets/others.js" defer></script>
+  <script src="assets/script.js" defer></script>${o.scripts || ''}
 </head>
 <body>
 <!-- このページは tools/build-others.js が assets/others-data.json から生成します。直接編集しないでください。 -->
+`;
+}
 
+const SOURCE_NOTE = `<p class="ob-source">情報は <a href="${esc(data.source)}" target="_blank" rel="noopener noreferrer">SF 公式サイト</a> の内容（${esc(data.retrieved.replace(/-/g, '/'))} 時点）をもとに、Aoristos が見やすくまとめ直したものです。
+      時間や内容は変わることがあります。最新の情報は SF 公式サイトでご確認ください。</p>`;
+
+const html = `${head({
+  title: '他の企画',
+  desc: `星光 SF2026（大阪星光学院 スクールフェア 2026）のほかの企画を、図でまとめました。入場・金券・食品の時間、1日の流れ、階ごと・種類ごとの企画数、講堂・音楽室のステージの時間割。全 ${booths.length} 企画の一覧と校内マップへも。`
+})}
 <main id="main" class="band-alt">
   <header class="page-hero">
     <div class="container">
       <h1 class="page-title">他の企画</h1>
       <p class="page-lead">星光 SF2026 のほかの企画を、場所・種類・時間でまとめました。</p>
+      <p class="ob-hero-link"><a class="more-link" href="${LIST_PAGE}">企画一覧と校内マップ</a></p>
       <ul class="ob-stats">
         <li><strong>${booths.length}</strong><span>企画</span></li>
         <li><strong>${Object.keys(data.stage.acts).length}</strong><span>ステージ</span></li>
@@ -242,12 +287,12 @@ const html = `<!DOCTYPE html>
     <section class="ob-section ob-two" aria-labelledby="h-where">
       <div>
         <h2 class="ob-h2" id="h-where">どの階に何がある？</h2>
-        <p class="ob-note">階を押すと、その階の企画だけを表示します。色は企画の種類です。</p>
+        <p class="ob-note">階を押すと、その階の校内マップと企画を表示します。色は企画の種類です。</p>
         ${building()}
       </div>
       <div>
         <h2 class="ob-h2" id="h-kind">種類別の企画数</h2>
-        <p class="ob-note">押すと、その種類の企画だけを表示します（1つの企画が複数の種類を持つことがあります）。</p>
+        <p class="ob-note">押すと、その種類の企画を一覧で表示します（1つの企画が複数の種類を持つことがあります）。</p>
         ${tagChart()}
       </div>
     </section>
@@ -273,8 +318,58 @@ ${stageList()}
       </details>
     </section>
 
+    <section class="ob-section ob-cta" aria-labelledby="h-cta">
+      <div>
+        <h2 class="ob-h2" id="h-cta">企画一覧と校内マップ</h2>
+        <p class="ob-note">全 ${booths.length} 企画を、校内マップ・検索・階・種類で探せます。</p>
+      </div>
+      <a class="btn" href="${LIST_PAGE}">企画一覧と校内マップを見る</a>
+    </section>
+
+    ${SOURCE_NOTE}
+  </div>
+</main>
+
+</body>
+</html>
+`;
+
+const listHtml = `${head({
+  title: '企画一覧・校内マップ（他の企画）',
+  desc: `星光 SF2026（大阪星光学院 スクールフェア 2026）の全 ${booths.length} 企画を、校内マップ・検索・階・種類で探せる一覧。飲食・ゲーム・展示・アトラクションなど。`,
+  scripts: '\n  <script src="assets/others.js" defer></script>'
+})}
+<main id="main" class="band-alt">
+  <header class="page-hero">
+    <div class="container">
+      <p class="eyebrow"><a href="others.html">他の企画</a></p>
+      <h1 class="page-title">企画一覧</h1>
+      <p class="page-lead">星光 SF2026 の全 ${booths.length} 企画を、校内マップと一覧で探せます。</p>
+    </div>
+  </header>
+
+  <div class="container ob-wrap">
+    <section class="ob-section" id="map" aria-labelledby="h-map">
+      <h2 class="ob-h2" id="h-map">校内マップ</h2>
+      <p class="ob-note">色の付いた部屋を押すと、その部屋の企画を下の一覧に表示します。</p>
+      <div class="map-tabs" id="mapTabs" role="tablist" aria-label="階を選ぶ">
+${[1, 2, 3, 4, 5].map(f => `        <button type="button" role="tab" class="map-tab${f === 3 ? ' is-active' : ''}" data-floor="${f}" aria-selected="${f === 3}">${f}F<small>${byFloor(f).length}</small></button>`).join('\n')}
+      </div>
+      <div class="map-box">
+${campusMap()}
+      </div>
+      <ul class="map-legend" aria-label="凡例">
+        <li><span class="lg lg-booth"></span>企画のある部屋</li>
+        <li><span class="lg lg-aor"></span>Aoristos（特別第３教室）</li>
+        <li><span class="lg lg-stage"></span>ステージ（講堂・音楽室）</li>
+        <li><span class="lg-yen" aria-hidden="true">¥</span>金券売り場（図面の記号）</li>
+      </ul>
+      <p class="ob-note ob-map-note">図面：<a href="${esc(data.map.source)}" target="_blank" rel="noopener noreferrer">SF 公式サイトの校内マップ</a>。トイレ・AED の記号も図面に載っています。</p>
+    </section>
+
     <section class="ob-section" id="list" aria-labelledby="h-list">
       <h2 class="ob-h2" id="h-list">企画一覧</h2>
+      <p class="ob-room-filter" id="obRoom" hidden><span></span><button type="button" class="text-btn" id="obRoomClear">部屋の絞り込みを解除</button></p>
       <div class="ob-controls">
         <input class="ob-search" id="obSearch" type="search" placeholder="企画名・団体・キーワードで探す" aria-label="企画を検索">
         <div class="ob-chips" id="obFloors" role="group" aria-label="階で絞り込む">
@@ -291,8 +386,7 @@ ${boothList()}
       <p class="empty" id="obEmpty" hidden>条件に合う企画がありません。</p>
     </section>
 
-    <p class="ob-source">情報は <a href="${esc(data.source)}" target="_blank" rel="noopener noreferrer">SF 公式サイト</a> の内容（${esc(data.retrieved.replace(/-/g, '/'))} 時点）をもとに、Aoristos が見やすくまとめ直したものです。
-      時間や内容は変わることがあります。最新の情報は SF 公式サイトでご確認ください。</p>
+    ${SOURCE_NOTE}
   </div>
 </main>
 
@@ -300,9 +394,13 @@ ${boothList()}
 </html>
 `;
 
-if (!fs.existsSync(OUT) || fs.readFileSync(OUT, 'utf8').replace(/<!-- site-meta:start -->[\s\S]*?<!-- site-meta:end -->\n\s*/, '').replace(/(assets\/[\w./-]+\.(?:css|js))\?v=[0-9a-f]+/g, '$1') !== html) {
-  fs.writeFileSync(OUT, html, 'utf8');
-  console.log('生成・更新: others.html');
-} else {
-  console.log('others.html は変更なし');
+function writeIfChanged(file, content) {
+  const name = path.basename(file);
+  const strip = t => t.replace(/<!-- site-meta:start -->[\s\S]*?<!-- site-meta:end -->\n\s*/, '').replace(/(assets\/[\w./-]+\.(?:css|js))\?v=[0-9a-f]+/g, '$1');
+  if (fs.existsSync(file) && strip(fs.readFileSync(file, 'utf8')) === content) { console.log(name + ' は変更なし'); return; }
+  fs.writeFileSync(file, content, 'utf8');
+  console.log('生成・更新: ' + name);
 }
+writeIfChanged(OUT, html);
+writeIfChanged(OUT_LIST, listHtml);
+

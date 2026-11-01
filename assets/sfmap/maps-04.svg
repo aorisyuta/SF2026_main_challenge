@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1500 1000">
+  <defs>
+    <style>
+      .cls-1 {
+        fill: #c9cee4;
+      }
+
+      .cls-2 {
+        letter-spacing: -.12em;
+      }
+
+      .cls-3, .cls-4 {
+        font-size: 21px;
+      }
+
+      .cls-5, .cls-6 {
+        fill: #fff;
+      }
+
+      .cls-7 {
+        letter-spacing: -.11em;
+      }
+
+      .cls-6 {
+        fill-rule: evenodd;
+      }
+
+      .cls-8 {
+        letter-spacing: 0em;
+      }
+
+      .cls-9, .cls-10 {
+        letter-spacing: -.13em;
+      }
+
+      .cls-11, .cls-4, .cls-12 {
+        font-family: NotoSansJP-Regular, 'Noto Sans JP', 'Hiragino Kaku Gothic ProN', 'Hiragino Sans', 'Yu Gothic', sans-serif;
+        font-variation-settings: 'wght' 400;
+        isolation: isolate;
+      }
+
+      .cls-13 {
+        letter-spacing: -.11em;
+      }
+
+      .cls-14 {
+        fill: #fafafb;
+      }
+
+      .cls-15 {
+        letter-spacing: -.1em;
+      }
+
+      .cls-16 {
+        letter-spacing: -.13em;
+      }
+
+      .cls-17 {
+        letter-spacing: -.12em;
+      }
+
+      .cls-10, .cls-12 {
+        font-size: 19.5px;
+      }
+
+      .cls-18 {
+        fill: #eceef4;
+      }
+
+      .cls-19 {
+        fill: #d54418;
+      }
+
+      .cls-20 {
+        letter-spacing: -.12em;
+      }
+
+      .cls-21 {
+        fill: #314499;
+      }
+    </style>
+  </defs>
+  <g id="_レイヤー_1" data-name="レイヤー 1">
+    <g>
+      <path id="maps_H2A" data-name="maps H2A" class="cls-18" d="M1304.27,175h-98.1l19.9-74.25h98.1l-19.9,74.25Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M1304.65,175.5h-99.14l.17-.63,20-74.62h99.13l-.17.63-20,74.62ZM1206.82,174.5h97.07l19.63-73.25h-97.06l-19.63,73.25Z"/>
+    </g>
+    <g>
+      <path id="maps_H2A-2" data-name="maps H2A" class="cls-18" d="M1108.07,175h98.1l19.9-74.25h-98.1l-19.9,74.25Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M1206.55,175.5h-99.13l.17-.63,20-74.62h99.14l-.17.63-20,74.62ZM1108.72,174.5h97.06l19.63-73.25h-97.07l-19.63,73.25Z"/>
+    </g>
+    <g>
+      <path id="maps_H2C" data-name="maps H2C" class="cls-18" d="M1009.97,175h-98.1l19.9-74.25h98.1l-19.9,74.25Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M1010.35,175.5h-99.13l.17-.63,20-74.62h99.13l-.17.63-20,74.62ZM912.52,174.5h97.06l19.63-73.25h-97.06l-19.63,73.25Z"/>
+    </g>
+    <g>
+      <path id="maps_H2C-2" data-name="maps H2C" class="cls-18" d="M1108.07,175h-98.1l19.9-74.25h98.1l-19.9,74.25Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M1108.45,175.5h-99.14l.17-.63,20-74.62h99.13l-.17.63-20,74.62ZM1010.62,174.5h97.07l19.63-73.25h-97.06l-19.63,73.25Z"/>
+    </g>
+    <g>
+      <path id="maps_H2E" data-name="maps H2E" class="cls-18" d="M911.87,175h-98.1l19.9-74.25h98.1l-19.9,74.25Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M912.25,175.5h-99.13l.17-.63,20-74.62h99.14l-.17.63-20,74.62ZM814.42,174.5h97.06l19.63-73.25h-97.07l-19.63,73.25Z"/>
+    </g>
+    <g>
+      <polygon class="cls-18" points="209.98 284.31 195.06 340 315.05 340 329.98 284.31 209.98 284.31"/>
+      <path class="cls-1" d="M315.44,340.5h-121.03l.17-.63,15.02-56.06h121.04l-.17.63-15.02,56.06ZM195.71,339.5h118.96l14.65-54.69h-118.96l-14.65,54.69Z"/>
+    </g>
+    <g>
+      <polygon class="cls-18" points="344.9 228.62 224.9 228.62 209.98 284.31 329.98 284.31 344.9 228.62"/>
+      <path class="cls-1" d="M330.36,284.81h-121.04l.17-.63,15.02-56.06h121.04l-.17.63-15.02,56.06ZM210.63,283.81h118.96l14.65-54.69h-118.96l-14.65,54.69Z"/>
+    </g>
+    <polygon class="cls-1" points="1304.75 175.13 1303.78 174.87 1347.83 10.5 748.86 10.5 740.02 43.5 468.99 43.5 477.83 10.5 313.86 10.5 307.33 34.88 306.36 34.62 313.09 9.5 479.13 9.5 470.29 42.5 739.25 42.5 748.09 9.5 1349.13 9.5 1348.96 10.13 1304.75 175.13"/>
+    <path class="cls-1" d="M213.75,720H47.72l6.63-24.75H9.35l.17-.63L148.88,174.5h30l6.53-24.38.97.26-6.73,25.12h-30L10.65,694.25h45l-6.63,24.75h163.96L358.88,174.5h74.83c.18-.6.55-1.93.9-3.14.83-2.93,1.19-4.19,1.42-4.73h-.04c.03-.13.06-.22.19-.27.1-.13.19-.12.33-.11l.21.02c.52-.03,1.44-.04,3.08-.04,2.18,0,5.38-.01,9.47-.02,8.4,0,20.58,0,35.29-.01,28.33,0,66.23.01,105.52.02,42.05.01,85.69.03,120.88.03h.29l.14.25q.12.2-1.34,5.59c-.26.97-.5,1.85-.65,2.41h594.85v1h-595.77l-.15-.23q-.12-.19.76-3.44c.43-1.58.98-3.6,1.24-4.58-35.09,0-78.45-.01-120.24-.03-75.84-.02-147.6-.05-153.23.02l-.62,2.3-.02-.2c-.21.75-.45,1.57-.65,2.29q-1.01,3.56-1.1,3.68l-.15.19h-74.67l-145.9,544.5Z"/>
+    <polygon class="cls-1" points="276.28 150.75 185.9 150.75 185.9 149.75 275.52 149.75 306.36 34.62 307.33 34.88 276.28 150.75"/>
+    <g>
+      <path id="maps_M3B" data-name="maps M3B" class="cls-18" d="M315.06,340l-15.03,56.1h-120l15.03-56.1h120Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M300.41,396.6h-121.04l.17-.63,15.13-56.47h121.04l-.17.63-15.13,56.47ZM180.67,395.6h118.96l14.76-55.1h-118.96l-14.76,55.1Z"/>
+    </g>
+    <g>
+      <path id="maps_M3A" data-name="maps M3A" class="cls-18" d="M300.02,396.1l-14.37,53.63h-120l14.37-53.63h120Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M286.04,450.23h-121.04l.17-.63,14.47-54h121.04l-.17.63-14.47,54ZM166.31,449.23h118.96l14.1-52.62h-118.96l-14.1,52.62Z"/>
+    </g>
+    <g>
+      <path id="maps_Physics" data-name="maps Physics" class="cls-18" d="M271.95,500.88l-23.21,86.63h-120l23.21-86.63h120Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M249.12,588h-121.04l.17-.63,23.31-87h121.04l-.17.63-23.31,87ZM129.39,587h118.96l22.94-85.62h-118.96l-22.94,85.62Z"/>
+    </g>
+    <g>
+      <path id="maps_Music" data-name="maps Music" class="cls-18" d="M248.74,587.5l-22.11,82.5h-120l22.11-82.5h120Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M227.02,670.5h-121.04l.17-.63,22.21-82.87h121.04l-.17.63-22.21,82.87ZM107.28,669.5h118.96l21.84-81.5h-118.96l-21.84,81.5Z"/>
+    </g>
+    <g>
+      <path id="maps_SNo1" data-name="maps SNo1" class="cls-18" d="M1132.79,76h-147.75l17.68-66h147.75l-17.68,66Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M1133.18,76.5h-148.79l.17-.63,17.78-66.37h148.79l-.17.63-17.78,66.37ZM985.7,75.5h146.71l17.42-65h-146.71l-17.42,65Z"/>
+    </g>
+    <g>
+      <path id="maps_SNo2" data-name="maps SNo2" class="cls-18" d="M985.79,76h-102l17.68-66h102l-17.68,66Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M986.18,76.5h-103.04l.17-.63,17.78-66.37h103.04l-.17.63-17.78,66.37ZM884.45,75.5h100.96l17.42-65h-100.96l-17.42,65Z"/>
+    </g>
+    <g>
+      <path id="maps_Lroom" data-name="maps Lroom" class="cls-18" d="M710.98,166.75l22.11-82.5h-274.5l-22.11,82.5h274.5Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M711.36,167.25h-275.54l.17-.63,22.21-82.87h275.54l-.17.63-22.21,82.87ZM437.13,166.25h273.46l21.84-81.5h-273.46l-21.84,81.5Z"/>
+    </g>
+    <g>
+      <path id="maps_SF41" data-name="maps SF41" class="cls-18" d="M359.27,175h-120l-14.37,53.63h120l14.37-53.63Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M345.28,229.12h-121.04l.17-.63,14.47-54h121.04l-.17.63-14.47,54ZM225.55,228.12h118.96l14.1-52.62h-118.96l-14.1,52.62Z"/>
+    </g>
+    <path class="cls-1" d="M278.65,175.5h-40.04l2.92-10.9h40.04l-2.92,10.9ZM239.92,174.5h37.96l2.39-8.9h-37.96l-2.39,8.9Z"/>
+    <g>
+      <path id="_パス" data-name="パス" class="cls-14" d="M114.43,528.93l7.96-29.7h-60l-7.96,29.7h60Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M114.82,529.42h-61.04l8.22-30.7h61.04l-8.22,30.7ZM55.08,528.42h58.96l7.69-28.7h-58.96l-7.69,28.7Z"/>
+    </g>
+    <g>
+      <path id="_パス-2" data-name="パス" class="cls-14" d="M106.47,558.63l7.96-29.7h-60l-7.96,29.7h60Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M106.86,559.12h-61.04l8.23-30.7h61.04l-8.23,30.7ZM47.13,558.12h58.96l7.69-28.7h-58.96l-7.69,28.7Z"/>
+    </g>
+    <g>
+      <path id="_パス-3" data-name="パス" class="cls-14" d="M84.81,639.48l21.66-80.85h-60l-21.66,80.85h60Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M85.2,639.97H24.16l.17-.63,21.76-81.22h61.04l-.17.63-21.76,81.22ZM25.46,638.97h58.96l21.4-79.85h-58.96l-21.4,79.85Z"/>
+    </g>
+    <g>
+      <path id="_パス-4" data-name="パス" class="cls-14" d="M70,694.75l14.81-55.28H24.88l-14.88,55.28h60Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M70.38,695.25H9.35l15.15-56.28h60.97l-.17.63-14.91,55.65ZM10.65,694.25h58.96l14.54-54.28H25.26l-14.61,54.28Z"/>
+    </g>
+    <g>
+      <path id="_パス-5" data-name="パス" class="cls-14" d="M122.39,499.23l6.63-24.75h-60l-6.63,24.75h60Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M122.77,499.73h-61.04l6.9-25.75h61.04l-6.9,25.75ZM63.04,498.73h58.96l6.36-23.75h-58.96l-6.36,23.75Z"/>
+    </g>
+    <g>
+      <path id="_パス-6" data-name="パス" class="cls-14" d="M209.27,175l-14.37,53.63h-60l14.37-53.63h60Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M195.28,229.12h-61.04l.17-.63,14.47-54h61.04l-.17.63-14.47,54ZM135.55,228.12h58.96l14.1-52.62h-58.96l-14.1,52.62Z"/>
+    </g>
+    <g>
+      <path id="Counseling_Room" data-name="Counseling Room" class="cls-14" d="M194.9,228.63l-15.25,56.92h-60l15.25-56.92h60Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M180.03,286.05h-61.04l.17-.63,15.35-57.3h61.04l-.17.63-15.35,57.3ZM120.3,285.05h58.96l14.98-55.92h-58.96l-14.98,55.92Z"/>
+    </g>
+    <g>
+      <path id="StairE" class="cls-14" d="M1330.79,76l17.68-66h-52.5l-17.68,66h52.5Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M1331.18,76.5h-53.54l.17-.63,17.78-66.37h53.54l-.17.63-17.78,66.37ZM1278.95,75.5h51.46l17.42-65h-51.46l-17.42,65Z"/>
+    </g>
+    <g>
+      <path id="Audiovisual_Preparation_Room" data-name="Audiovisual Preparation Room" class="cls-14" d="M1179.29,76l17.68-66h99l-17.68,66h-99Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M1278.68,76.5h-100.04l.17-.63,17.78-66.37h100.04l-.17.63-17.78,66.37ZM1179.95,75.5h97.96l17.42-65h-97.96l-17.42,65Z"/>
+    </g>
+    <g>
+      <path id="Student_Guidance_Office" data-name="Student Guidance Office" class="cls-14" d="M376.95,109h-15l-17.69,66h90l5.89-22,11.79-44h-75Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M434.65,175.5h-91.04l.17-.63,17.78-66.37h91.04l-17.95,67ZM344.92,174.5h88.96l17.42-65h-88.96l-17.42,65Z"/>
+    </g>
+    <g>
+      <path id="_パス-7" data-name="パス" class="cls-14" d="M226.63,670l-13.26,49.5h-52.5l13.26-49.5h52.5Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M213.75,720h-53.54l.17-.63,13.36-49.87h53.54l-.17.63-13.36,49.87ZM161.52,719h51.46l13-48.5h-51.46l-13,48.5Z"/>
+    </g>
+    <g>
+      <path id="_パス-8" data-name="パス" class="cls-14" d="M205.41,449.73h80.25l-6.63,24.75h-120l6.63-24.75h39.75Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M279.41,474.98h-121.04l6.9-25.75h121.04l-6.9,25.75ZM159.67,473.98h118.96l6.37-23.75h-118.96l-6.37,23.75Z"/>
+    </g>
+    <g>
+      <path id="_パス-9" data-name="パス" class="cls-14" d="M70,694.75l-6.63,24.75h-15l6.63-24.75h15Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M63.75,720h-16.04l6.9-25.75h16.04l-6.9,25.75ZM49.02,719h13.96l6.36-23.75h-13.96l-6.36,23.75Z"/>
+    </g>
+    <g>
+      <path id="H1_StaffRoom" data-name="H1 StaffRoom" class="cls-14" d="M1179.29,76h-46.5l17.68-66h46.5l-17.68,66Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M1179.68,76.5h-47.54l.17-.63,17.78-66.37h47.54l-.17.63-17.78,66.37ZM1133.45,75.5h45.46l17.42-65h-45.46l-17.42,65Z"/>
+    </g>
+    <g>
+      <path id="Interview_Room" data-name="Interview Room" class="cls-14" d="M469.64,43h-90l8.84-33h90l-8.84,33Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M470.02,43.5h-91.04l9.11-34h91.04l-9.11,34ZM380.29,42.5h88.96l8.57-32h-88.96l-8.57,32Z"/>
+    </g>
+    <polygon class="cls-1" points="371.28 76.13 370.31 75.87 387.83 10.5 313.86 10.5 296.28 76.13 295.31 75.87 313.09 9.5 389.13 9.5 388.96 10.13 371.28 76.13"/>
+    <g>
+      <path id="_パス-10" data-name="パス" class="cls-14" d="M279.02,474.48l-7.07,26.4h-120l7.07-26.4h120Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M272.33,501.38h-121.04l7.34-27.4h121.04l-7.34,27.4ZM152.6,500.38h118.96l6.81-25.4h-118.96l-6.81,25.4Z"/>
+    </g>
+    <g>
+      <path id="Path" class="cls-14" d="M106.63,670l-4.42,16.5h67.5l4.42-16.5h-67.5Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M170.09,687h-68.54l4.69-17.5h68.54l-4.69,17.5ZM102.86,686h66.46l4.15-15.5h-66.46l-4.15,15.5Z"/>
+    </g>
+    <g>
+      <path id="_パス-11" data-name="パス" class="cls-14" d="M63.37,719.5h97.5l8.84-33h-97.5l-8.84,33Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M161.25,720H62.72l9.11-34h98.54l-9.11,34ZM64.02,719h96.46l8.57-32h-96.46l-8.57,32Z"/>
+    </g>
+    <g>
+      <path id="_パス-12" data-name="パス" class="cls-21" d="M135.65,449.73h-60l16.14-60.22h60l-16.14,60.22Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M136.04,450.23h-61.04l.17-.63,16.24-60.6h61.04l-.17.63-16.24,60.6ZM76.31,449.23h58.96l15.87-59.23h-58.96l-15.87,59.23Z"/>
+    </g>
+    <g>
+      <path id="Toilet" class="cls-21" d="M835.79,76l17.68-66h48l-17.68,66h-48Z" vector-effect="non-scaling-stroke"/>
+      <path class="cls-1" d="M884.18,76.5h-49.04l.17-.63,17.78-66.37h49.04l-.17.63-17.78,66.37ZM836.45,75.5h46.96l17.42-65h-46.96l-17.42,65Z"/>
+    </g>
+    <polygon class="cls-1" points="152.18 390 91.14 390 100.15 356.37 101.12 356.63 92.44 389 151.41 389 160.15 356.37 161.12 356.63 152.18 390"/>
+    <polygon class="cls-1" points="842.91 51.38 841.94 51.12 852.83 10.5 748.86 10.5 737.91 51.38 736.94 51.12 748.09 9.5 854.13 9.5 842.91 51.38"/>
+    <polygon class="cls-1" points="154.11 381.34 94.11 381.34 94.11 380.34 123.9 380.34 123.74 380.3 130.15 356.37 131.12 356.63 130.4 359.3 159.75 359.3 159.75 360.3 130.13 360.3 129.07 364.25 158.42 364.25 158.42 365.25 128.81 365.25 127.97 368.38 157.32 368.38 157.32 369.38 127.7 369.38 126.86 372.5 156.21 372.5 156.21 373.5 126.6 373.5 125.76 376.62 155.11 376.62 155.11 377.62 125.49 377.62 124.76 380.34 154.11 380.34 154.11 381.34"/>
+    <polygon class="cls-1" points="125.49 377.62 95.11 377.62 95.11 376.62 124.72 376.62 125.56 373.5 95.56 373.5 96.93 368.38 126.93 368.38 127.77 365.25 97.77 365.25 99.37 359.3 129.75 359.3 129.75 360.3 100.13 360.3 99.07 364.25 129.07 364.25 127.7 369.38 97.7 369.38 96.86 372.5 126.86 372.5 125.49 377.62"/>
+    <polygon class="cls-1" points="375.21 60 337.06 60 338.44 54.88 375.94 54.88 376.77 51.75 339.27 51.75 340.65 46.62 378.15 46.62 378.99 43.5 341.49 43.5 342.86 38.38 380.36 38.38 381.2 35.25 343.7 35.25 345.07 30.12 382.57 30.12 383.4 27 346.56 27 346.56 26 384.71 26 383.34 31.12 345.84 31.12 345 34.25 382.5 34.25 381.13 39.38 343.63 39.38 342.79 42.5 380.29 42.5 378.91 47.62 341.41 47.62 340.58 50.75 378.08 50.75 376.7 55.88 339.2 55.88 338.36 59 375.21 59 375.21 60"/>
+    <path class="cls-1" d="M338.1,60h-38.54l1.37-5.12h37.5l.84-3.12h-37.5l1.37-5.12h37.5l.84-3.12h-37.5l1.37-5.12h37.5l.84-3.12h-37.5l1.37-5.12h37.5l.84-3.12h-36.85v-1h37.12l.78-2.93.97.26-2.93,10.92h0l-2.21,8.25h0l-4.69,17.5ZM300.86,59h36.46l.84-3.12h-36.46l-.84,3.12ZM303.08,50.75h36.46l.84-3.12h-36.46l-.84,3.12ZM305.29,42.5h36.46l.84-3.12h-36.46l-.84,3.12ZM307.5,34.25h36.46l.84-3.12h-36.46l-.84,3.12Z"/>
+    <rect class="cls-1" x="737.43" y="50.75" width="67.5" height="1"/>
+    <rect class="cls-1" x="772.95" y="30.12" width="51" height="1"/>
+    <path class="cls-1" d="M784.31,51.75h-7.04l5.53-20.62h-4.96l-5.53,20.62h-33.66l-1.32-2.07.06-.21,10.71-39.97h32.54l-5.53,20.62h4.96l5.53-20.62h7.04l-5.53,20.62h4.96l5.53-20.62h7.04l-5.53,20.62h4.96l5.53-20.62h7.04l-5.53,20.62h4.96l5.53-20.62h7.04l-5.47,20.43-.97-.26,5.14-19.17h-4.96l-5.53,20.62h-7.04l5.53-20.62h-4.96l-5.53,20.62h-7.04l5.53-20.62h-4.96l-5.26,19.62h3l-5.7,21.25-.97-.26,5.36-20h-4.96l-5.53,20.62ZM778.58,50.75h4.96l5.26-19.62h-3l5.53-20.62h-4.96l-5.26,19.62h3l-5.53,20.62ZM739.2,50.75h32.34l5.26-19.62h-3l5.53-20.62h-30.46l-10.45,39.02.79,1.23Z"/>
+    <text id="text_Music" data-name="text Music" class="cls-4" transform="translate(134.5 662.12)"><tspan x="0" y="0">音楽室</tspan></text>
+    <text id="text_Physics" data-name="text Physics" class="cls-4" transform="translate(138.17 579.62)"><tspan x="0" y="0">物理実験室</tspan></text>
+    <text id="text_M3A" data-name="text M3A" class="cls-4" transform="translate(181.17 441.62)"><tspan class="cls-7" x="0" y="0">中</tspan><tspan class="cls-16" x="18.73" y="0">３</tspan><tspan x="36.96" y="0">A教室</tspan></text>
+    <text id="text_M3D" data-name="text M3D" class="cls-4" transform="translate(211.01 332.12)"><tspan class="cls-7" x="0" y="0">中</tspan><tspan class="cls-16" x="18.73" y="0">３</tspan><tspan x="36.96" y="0">C教室</tspan></text>
+    <text id="text_M3D-2" data-name="text M3D" class="cls-4" transform="translate(224.92 277.5)"><tspan class="cls-7" x="0" y="0">中</tspan><tspan class="cls-16" x="18.73" y="0">３</tspan><tspan class="cls-8" x="36.96" y="0">D教室</tspan></text>
+    <text id="text_SF41" data-name="text SF41" class="cls-12" transform="translate(230.12 221.18)"><tspan class="cls-15" x="0" y="0">４</tspan><tspan x="17.45" y="0">階特別教室</tspan></text>
+    <text id="text_Lroom" data-name="text Lroom" class="cls-4" transform="translate(541 158.12)"><tspan x="0" y="0">大教室</tspan></text>
+    <text id="text_H3E" data-name="text H3E" class="cls-12" transform="translate(825.21 167)"><tspan class="cls-13" x="0" y="0">高</tspan><tspan class="cls-9" x="17.39" y="0">３</tspan><tspan x="34.32" y="0">E教室</tspan></text>
+    <text id="text_SNo2" data-name="text SNo2" class="cls-4" transform="translate(917.34 52.74)"><tspan x="0" y="0">特別</tspan></text>
+    <text id="text_SNo2-2" data-name="text SNo2" class="cls-4" transform="translate(896.34 72.29)"><tspan class="cls-17" x="0" y="0">第２</tspan><tspan x="36.96" y="0">教室</tspan></text>
+    <text id="text_SNo1" data-name="text SNo1" class="cls-4" transform="translate(1001.2382 68.1201)"><tspan x="0" y="0">特別</tspan><tspan class="cls-20" x="42" y="0">第</tspan><tspan class="cls-2" x="60.54" y="0">１</tspan><tspan x="78.96" y="0">教室</tspan></text>
+    <text id="text_H3D" data-name="text H3D" class="cls-12" transform="translate(920.59 167)"><tspan class="cls-13" x="0" y="0">高</tspan><tspan class="cls-9" x="17.39" y="0">３</tspan><tspan x="34.32" y="0">D教室</tspan></text>
+    <text id="text_H3C" data-name="text H3C" class="cls-12" transform="translate(1018.4631 167.0918)"><tspan class="cls-13" x="0" y="0">高</tspan><tspan class="cls-9" x="17.39" y="0">３</tspan><tspan x="34.32" y="0">C教室</tspan></text>
+    <text id="text_H3A" data-name="text H3A" class="cls-11" transform="translate(1213.6782 167.1201)"><tspan class="cls-3" x="0" y="0">高</tspan><tspan class="cls-10" x="18.89" y="0">３</tspan><tspan class="cls-3" x="35.82" y="0">A教室</tspan></text>
+    <text id="text_H3A-2" data-name="text H3A" class="cls-11" transform="translate(1115.5778 167.1201)"><tspan class="cls-3" x="0" y="0">高</tspan><tspan class="cls-10" x="18.89" y="0">３</tspan><tspan class="cls-3" x="35.82" y="0">B教室</tspan></text>
+    <text id="text_M3B" data-name="text M3B" class="cls-4" transform="translate(196.87 387.62)"><tspan class="cls-7" x="0" y="0">中</tspan><tspan class="cls-16" x="18.73" y="0">３</tspan><tspan x="36.96" y="0">B教室</tspan></text>
+    <path id="_複合パス" data-name="複合パス" class="cls-6" d="M106.14,413.3c.65-2.42,4.75-4.39,9.16-4.39s7.46,1.97,6.81,4.39c-.65,2.42-4.75,4.39-9.16,4.39s-7.46-1.97-6.81-4.39ZM108.95,429.78l-3.52-8.15c-.52-1.2.12-2.17,1.43-2.17h11.23c1.31,0,1.63.76.72,1.7l-8.57,8.86c-.46.47-1.03.36-1.29-.24Z"/>
+    <path id="_複合パス-2" data-name="複合パス" class="cls-6" d="M861.05,36.69c.65-2.42,4.75-4.39,9.16-4.39s7.46,1.97,6.81,4.39c-.65,2.42-4.75,4.39-9.16,4.39s-7.46-1.97-6.81-4.39ZM863.86,53.17l-3.52-8.15c-.52-1.2.12-2.17,1.43-2.17h11.23c1.31,0,1.63.76.72,1.7l-8.57,8.86c-.46.47-1.03.36-1.29-.24Z"/>
+  </g>
+  <g id="AED">
+    <g>
+      <path class="cls-19" d="M166.61,479.15c-2.81-2.99-7.52-3.04-10.4-.16-2.88-2.88-7.59-2.83-10.4.16s-2.43,7.5.37,10.3l8.32,8.32c.95.95,2.48.95,3.43,0l8.32-8.32c2.8-2.81,3.09-7.41.37-10.3Z"/>
+      <path class="cls-5" d="M159.4,487.34h-2.44l1.17-3.63c.12-.38-.35-.66-.62-.37l-4.75,5.11c-.22.24-.05.62.27.62h2.44l-1.17,3.63c-.12.38.35.66.62.37l4.75-5.11c.22-.24.05-.62-.27-.62Z"/>
+    </g>
+  </g>
+</svg>

@@ -15,7 +15,7 @@ Aoristos の公式サイトです。大阪星光学院スクールフェア（SF
 | トップの「部誌発売中」「Tシャツ発売中」などのお知らせとリンク | Google スプレッドシート（`type` = `news`） |
 | X・Instagram などの SNS リンク | `assets/config.js` の `fallbackLinks`（スプレッドシートに `type` = `link` の行があればそちらが優先） |
 | 企画一覧 | `assets/projects.csv` |
-| 他の企画（SF 全体の企画・ステージ） | `assets/others-data.json`（`npm run build` で `others.html` を生成） |
+| 他の企画（SF 全体の企画・ステージ・校内マップ） | `assets/others-data.json`（`npm run build` で `others.html`・`others-list.html` を生成） |
 | 企画の詳しい情報 | `assets/projects-details.json` |
 | タイムテーブル | `timetable.html` |
 | 開催日・時間・スプレッドシートの URL | `assets/config.js` |
@@ -179,7 +179,8 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 ├── projects.html           企画一覧（検索・絞り込み）
 ├── timetable.html          タイムテーブル（AorXC・制作体験の実施時間）
 ├── info.html               来場案内（概要・アクセス・注意事項・FAQ）
-├── others.html             他の企画（SF 全体の企画・ステージを図でまとめたページ。tools/build-others.js が生成）
+├── others.html             他の企画の概要（基本情報・図・ステージの時間割。tools/build-others.js が生成）
+├── others-list.html        他の企画の一覧（校内マップ・検索・絞り込み。同上）
 ├── blog.html               ブログ一覧
 ├── blog/post.html          ブログ記事（?id=記事ID）
 ├── projects/*.html         企画詳細（generate-pages.js で生成）
@@ -211,13 +212,17 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 
 ---
 
-## 他の企画（others.html）
+## 他の企画（others.html / others-list.html）
 
-SF 公式サイト（<https://seikosf.jp>）の企画・ステージ情報を、Aoristos のサイト向けにまとめ直したページです。
+SF 公式サイト（<https://seikosf.jp>）の企画・ステージ・校内マップの情報を、Aoristos のサイト向けにまとめ直したページです。
+`others.html` が概要（基本情報・図・ステージ）、`others-list.html` が企画一覧（校内マップ・検索・絞り込み）。
 データは `assets/others-data.json`（企画の説明は短く言い換え、個人的なコメントは除いています）。
 
 - `booths`：企画（`floor` 階 / `place` 場所 / `desc` 説明 / `price` 値段 / `tags` 種類 / `kana` 検索用の読み・別名）
+- `booths[].rooms`：部屋の ID（校内マップで色を付け、押すと絞り込む）
 - `stage.slots`：ステージの時間割（日・会場・開始・終了・出演）、`stage.acts`：出演者の紹介
+- `map.floors`：校内マップ（図面 `assets/sfmap/maps-0N.svg` と、部屋の形・名前。SF 公式サイトの校内マップより）
+- 一覧ページは `?floor=3`・`?tag=飲食`・`?room=sr3` で絞り込んだ状態で開けます
 - 書き換えたら `npm run build`。図（階ごとの企画数・種類別・1日の流れ・ステージ時間割）も自動で作り直されます
 - 時間や内容が変わったら公式サイトに合わせて直し、`retrieved`（取得日）も更新してください
 

@@ -1,5 +1,9 @@
 /*
-  others.js — 「他の企画」ページの絞り込み（検索・階・種類）
+  others.js — 「企画一覧」ページ（others-list.html）の動き
+    ・校内マップの階の切り替え（一覧の階の絞り込みと連動）
+    ・地図の部屋を押すと、その部屋の企画だけを表示
+    ・検索・階・種類の絞り込み
+    ・URL の ?floor=3 / ?tag=飲食 / ?room=sr3 で、最初から絞り込んだ状態にする（概要ページの図から来たとき）
   本文は tools/build-others.js が HTML に書き出し済み。ここでは表示・非表示を切り替えるだけ。
 */
 (function () {
@@ -12,9 +16,11 @@
     var count = document.getElementById('obCount');
     var empty = document.getElementById('obEmpty');
     var list = document.getElementById('list');
+    var roomBar = document.getElementById('obRoom');
     if (!cards.length || !search) return;
 
-    var state = { q: '', floor: '', tag: '' };
+    var params = new URLSearchParams(location.search);
+    var state = { q: '', floor: params.get('floor') || '', tag: params.get('tag') || '', room: params.get('room') || '', roomName: '' };
 
     function norm(s) {
       // ひらがな→カタカナ、全角英数→半角、小文字化（表記ゆれを吸収）
@@ -29,7 +35,8 @@
       var shown = 0;
       cards.forEach(function (c) {
         var ok = (!state.floor || c.getAttribute('data-floor') === state.floor) &&
-          (!state.tag || c.getAttribute('data-tags').split('|').indexOf(state.tag) !== -1);
+          (!state.tag || c.getAttribute('data-tags').split('|').indexOf(state.tag) !== -1) &&
+          (!state.room || c.getAttribute('data-rooms').split('|').indexOf(state.room) !== -1);
         if (ok && words.length) {
           var hay = norm(c.getAttribute('data-search'));
           ok = words.every(function (w) { return hay.indexOf(w) !== -1; });
@@ -37,22 +44,41 @@
         c.hidden = !ok;
         if (ok) shown++;
       });
-      groups.forEach(function (g) {
-        g.hidden = !g.querySelector('.ob-card:not([hidden])');
-      });
+      groups.forEach(function (g) { g.hidden = !g.querySelector('.ob-card:not([hidden])'); });
       count.textContent = shown + ' 企画';
       empty.hidden = shown !== 0;
+
+      if (roomBar) {
+        roomBar.hidden = !state.room;
+        if (state.room) roomBar.querySelector('span').textContent = (state.roomName || '選んだ部屋') + ' の企画を表示中';
+      }
+      document.querySelectorAll('.map-room[data-room]').forEach(function (r) {
+        r.classList.toggle('is-selected', r.getAttribute('data-room') === state.room);
+      });
       syncChips();
     }
 
     function syncChips() {
       document.querySelectorAll('#obFloors .chip').forEach(function (b) {
-        b.classList.toggle('is-active', b.getAttribute('data-floor') === state.floor);
-        b.setAttribute('aria-pressed', b.getAttribute('data-floor') === state.floor ? 'true' : 'false');
+        var on = b.getAttribute('data-floor') === state.floor;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
       });
       document.querySelectorAll('#obTags .chip').forEach(function (b) {
-        b.classList.toggle('is-active', b.getAttribute('data-tag') === state.tag);
-        b.setAttribute('aria-pressed', b.getAttribute('data-tag') === state.tag ? 'true' : 'false');
+        var on = b.getAttribute('data-tag') === state.tag;
+        b.classList.toggle('is-active', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+    }
+
+    /* ---------- 校内マップ ---------- */
+    function showMapFloor(f) {
+      if (!f) return;
+      document.querySelectorAll('.map-floor').forEach(function (m) { m.hidden = m.getAttribute('data-map-floor') !== f; });
+      document.querySelectorAll('.map-tab').forEach(function (t) {
+        var on = t.getAttribute('data-floor') === f;
+        t.classList.toggle('is-active', on);
+        t.setAttribute('aria-selected', on ? 'true' : 'false');
       });
     }
 
@@ -61,29 +87,48 @@
       list.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
     }
 
-    search.addEventListener('input', function () { state.q = search.value; apply(); });
+    var tabs = document.getElementById('mapTabs');
+    if (tabs) tabs.addEventListener('click', function (e) {
+      var t = e.target.closest('.map-tab'); if (!t) return;
+      state.floor = t.getAttribute('data-floor'); state.room = '';
+      showMapFloor(state.floor); apply();
+    });
 
+    function pickRoom(el) {
+      state.room = el.getAttribute('data-room');
+      state.roomName = el.getAttribute('data-room-name');
+      state.floor = el.closest('.map-floor').getAttribute('data-map-floor');
+      state.tag = ''; state.q = ''; search.value = '';
+      apply(); jumpToList();
+    }
+    document.querySelectorAll('.map-room[data-room]').forEach(function (r) {
+      r.addEventListener('click', function () { pickRoom(r); });
+      r.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pickRoom(r); }
+      });
+    });
+    var clear = document.getElementById('obRoomClear');
+    if (clear) clear.addEventListener('click', function () { state.room = ''; apply(); });
+
+    /* ---------- 一覧の絞り込み ---------- */
+    search.addEventListener('input', function () { state.q = search.value; apply(); });
     document.getElementById('obFloors').addEventListener('click', function (e) {
       var b = e.target.closest('.chip'); if (!b) return;
-      state.floor = b.getAttribute('data-floor'); apply();
+      state.floor = b.getAttribute('data-floor'); state.room = '';
+      showMapFloor(state.floor); apply();
     });
     document.getElementById('obTags').addEventListener('click', function (e) {
       var b = e.target.closest('.chip'); if (!b) return;
       state.tag = b.getAttribute('data-tag'); apply();
     });
 
-    // 図（建物図・種類別グラフ）から絞り込み
-    document.querySelectorAll('.bldg-floor').forEach(function (b) {
-      b.addEventListener('click', function () {
-        state.floor = b.getAttribute('data-floor'); state.tag = ''; apply(); jumpToList();
-      });
-    });
-    document.querySelectorAll('.tagchart-row').forEach(function (b) {
-      b.addEventListener('click', function () {
-        state.tag = b.getAttribute('data-tag'); state.floor = ''; apply(); jumpToList();
-      });
-    });
-
-    syncChips();
+    // URL の指定（概要ページの図から来たとき）
+    if (state.room) {
+      var el = document.querySelector('.map-room[data-room="' + state.room.replace(/[^\w-]/g, '') + '"]');
+      if (el) { state.roomName = el.getAttribute('data-room-name'); state.floor = el.closest('.map-floor').getAttribute('data-map-floor'); }
+      else state.room = '';
+    }
+    showMapFloor(state.floor);
+    apply();
   });
 })();
