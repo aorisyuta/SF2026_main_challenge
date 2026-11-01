@@ -93,6 +93,8 @@ function metaBlock(rel, html, cfg) {
   const lines = [];
 
   if (site && !noindex && rel !== '404.html') lines.push(`<link rel="canonical" href="${esc(site + publicPath(rel))}">`);
+  // Google の検索結果に出るアイコン用（48px の倍数の正方形 PNG を明示）
+  lines.push('<link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">');
   lines.push('<link rel="manifest" href="/site.webmanifest">');
   lines.push(`<meta property="og:site_name" content="${esc(cfg.siteName || 'Aoristos')}">`);
   lines.push('<meta property="og:locale" content="ja_JP">');
