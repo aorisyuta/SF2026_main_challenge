@@ -254,6 +254,20 @@
     setTimeout(() => { if (scr.play.hidden) return; newPuzzle(); }, 2200);
   }
 
+  /* ---------- 結果を X でポスト ---------- */
+  const SHARE_URL = 'https://aoristos.net/games/make-it';
+  function shareUrl(isBest) {
+    const M = MODES[S.mode];
+    const lines = [
+      `「数字をつくれ」${M.name}${S.practice ? '（練習）' : ''} で ${S.score} 点！`,
+      `${S.solved} 問クリア${S.practice ? '' : '（90 秒）'}${isBest ? '・ベスト更新' : ''}`,
+      '',
+      'あなたは何点とれる？',
+      '#星光SF2026 #Aoristos'
+    ];
+    return 'https://x.com/intent/post?text=' + encodeURIComponent(lines.join('\n')) + '&url=' + encodeURIComponent(SHARE_URL);
+  }
+
   function finish() {
     clearInterval(timerId);
     const isBest = !S.practice && S.score > S.best;
@@ -265,6 +279,7 @@
     $('#mkResMode').textContent = MODES[S.mode].name;
     const last = S.last && !P.done ? `最後の問題の答えの例：${S.last.sol} = ${fmt(S.last.target)}` : '';
     $('#mkResLast').textContent = last;
+    $('#mkShare').href = shareUrl(isBest);
     show('result');
     renderBests();
   }

@@ -21,6 +21,9 @@ html.game-page .ribbon { display: none !important; }
 @media (min-width: 560px) { .mk { border-left: 1px solid var(--line); border-right: 1px solid var(--line); } }
 .mk [hidden] { display: none !important; }
 .mk button { font: inherit; color: inherit; cursor: pointer; }
+.mk .btn { color: #fff; }
+.mk .btn-ghost { color: var(--link); }
+.mk .btn-ghost:hover { color: #fff; }
 .mk button:focus-visible { outline: 2px solid var(--m-blue); outline-offset: 2px; }
 .mk-screen { flex: 1; display: flex; flex-direction: column; padding: 28px 22px calc(28px + env(safe-area-inset-bottom, 0px)); }
 
@@ -143,7 +146,13 @@ html.game-page .ribbon { display: none !important; }
 .mk-res-stats dd { margin: 4px 0 0; font-size: 18px; font-weight: 700; }
 .mk-res-stats dd span { font-size: 24px; font-weight: 800; font-variant-numeric: tabular-nums; }
 .mk-res-last { margin-top: 18px; font-size: 13px; color: var(--ink-2); max-width: 360px; }
-.mk-res-actions { display: flex; gap: 10px; margin-top: 26px; flex-wrap: wrap; justify-content: center; }
+.mk-share {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px; margin-top: 22px; height: 46px; padding: 0 22px;
+  border-radius: 23px; background: var(--ink); color: #fff; font-size: 15px; font-weight: 700; transition: background-color .2s;
+}
+.mk-share:hover { background: #3a3a3c; color: #fff; text-decoration: none; }
+.mk-share svg { width: 17px; height: 17px; fill: currentColor; }
+.mk-res-actions { display: flex; gap: 10px; margin-top: 14px; flex-wrap: wrap; justify-content: center; }
 
 /* 背の低い画面（iPhone SE など）は全体を詰めて 1 画面に収める */
 @media (max-height: 720px) {
