@@ -878,58 +878,80 @@ a.tagchart-row:hover { text-decoration: none; }
   .gantt-wrap { display: none; }
   .tt-mini { margin-top: 4px; }
 
-  .ob-section#list { padding: 20px 14px 88px; }
+  .ob-section#list { padding: 0 14px 28px; }
   .ob-floor { margin-top: 20px; scroll-margin-top: calc(var(--nav-h) + 8px); }
   .ob-floor-title { font-size: 18px; padding-bottom: 8px; }
 }
 .map-hint { display: none; font-size: 12px; color: var(--ink-2); margin: 0 0 8px; }
 
-/* スマホ：画面下の「絞り込み」ボタン（一覧の途中で検索・絞り込みに戻る） */
-.ob-fab {
-  position: fixed; right: 16px; bottom: calc(16px + env(safe-area-inset-bottom)); z-index: 50;
-  display: none; align-items: center; gap: 8px; height: 48px; padding: 0 18px; border: 0; border-radius: 24px;
-  background: var(--ink); color: #fff; font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
-}
-.ob-fab svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
-.ob-fab b { font-variant-numeric: tabular-nums; font-weight: 700; background: rgba(255, 255, 255, .18); border-radius: 10px; padding: 1px 8px; font-size: 13px; }
-.ob-fab.is-visible { display: inline-flex; }
+
 #list, #map, .ob-controls { scroll-margin-top: calc(var(--nav-h) + 8px); }
 
-/* ---------- 他の企画：使いやすさ優先の表示（全幅共通） ---------- */
+/* ---------- 他の企画：企画一覧（全幅共通） ---------- */
+/* カード：種類（色のラベル＋左端の線）→ 企画名・値段 → 場所 → 団体 → 説明 */
 .ob-card {
-  padding: 12px 16px 13px; border-radius: 12px; border-left: 5px solid var(--k, var(--tag-other)); background: var(--bg-alt);
-  display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; align-items: baseline;
+  position: relative; padding: 14px 16px 15px 18px; border-radius: 14px; background: var(--bg-alt);
+  display: grid; grid-template-columns: minmax(0, 1fr) auto; column-gap: 12px; align-items: baseline; align-content: start;
+  transition: background-color .2s;
 }
+.ob-card::before { content: ""; position: absolute; left: 0; top: 14px; bottom: 14px; width: 4px; border-radius: 0 3px 3px 0; background: var(--k, var(--tag-other)); }
 .ob-card.k-food { --k: var(--tag-food); } .ob-card.k-game { --k: var(--tag-game); }
 .ob-card.k-exhibit { --k: var(--tag-exhibit); } .ob-card.k-zine { --k: var(--tag-zine); }
 .ob-card.k-shop { --k: var(--tag-shop); } .ob-card.k-try { --k: var(--tag-try); } .ob-card.k-ride { --k: var(--tag-ride); }
-.ob-card.is-aor { border-left-color: var(--cat-a); background: #fff3ef; box-shadow: none; }
+.ob-card.is-aor { background: #fff3ef; box-shadow: inset 0 0 0 1.5px rgba(194, 65, 12, .45); }
+.ob-card.is-aor::before { background: var(--cat-a); }
 .ob-top { display: contents; }
-.ob-tag { display: none; }
-.ob-title { grid-column: 1; grid-row: 1; margin: 0; font-size: 17px; line-height: 1.35; }
-.ob-price { grid-column: 2; grid-row: 1; font-size: 15px; justify-self: end; white-space: nowrap; }
-.ob-price.is-free { font-size: 12px; }
-.ob-place { grid-column: 1 / -1; grid-row: 2; margin: 4px 0 0; font-size: 14px; font-weight: 700; color: var(--ink); }
-.ob-place svg { width: 13px; height: 13px; }
-.ob-org { grid-column: 1 / -1; grid-row: 3; font-size: 13px; margin-top: 1px; color: var(--ink-2); }
-.ob-desc { grid-column: 1 / -1; grid-row: 4; font-size: 14px; margin-top: 5px; color: var(--ink); line-height: 1.6; }
-.ob-subtags { grid-column: 1 / -1; grid-row: 5; font-size: 12px; color: var(--ink-3); margin-top: 3px; }
-.ob-link { grid-column: 1 / -1; grid-row: 6; margin-top: 6px; }
+.ob-tag {
+  grid-column: 1; grid-row: 1; justify-self: start; display: inline-flex; align-items: center; gap: 5px;
+  font-size: 11px; font-weight: 700; letter-spacing: .02em; padding: 0; color: var(--k, var(--ink-2)); background: none !important;
+}
+.ob-tag::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--k, var(--tag-other)); }
+.ob-price { grid-column: 2; grid-row: 1 / span 2; align-self: start; justify-self: end; white-space: nowrap; font-size: 15px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.ob-price.is-free { font-size: 11px; font-weight: 400; color: var(--ink-3); }
+.ob-title { grid-column: 1; grid-row: 2; margin: 3px 0 0; font-size: 17px; line-height: 1.35; }
+.ob-place { grid-column: 1 / -1; grid-row: 3; margin: 6px 0 0; font-size: 14px; font-weight: 700; color: var(--ink); }
+.ob-place svg { width: 13px; height: 13px; color: var(--ink-2); }
+.ob-org { grid-column: 1 / -1; grid-row: 4; font-size: 12px; margin-top: 1px; color: var(--ink-2); }
+.ob-desc { grid-column: 1 / -1; grid-row: 5; font-size: 14px; margin-top: 7px; color: var(--ink); line-height: 1.65; }
+.ob-subtags { grid-column: 1 / -1; grid-row: 6; font-size: 11px; color: var(--ink-3); margin-top: 4px; }
+.ob-link { grid-column: 1 / -1; grid-row: 7; margin-top: 8px; font-size: 14px; }
 .ob-grid { grid-template-columns: repeat(2, 1fr); gap: 10px; margin-top: 12px; }
 .ob-flat { margin-top: 16px; }
-.ob-floor-title { position: sticky; top: var(--nav-h); z-index: 3; background: var(--bg); padding-top: 10px; }
-.ob-section#list { padding-top: 24px; }
+.ob-floor-title { position: sticky; top: calc(var(--nav-h) + var(--tb-h, 0px)); z-index: 3; background: var(--bg); padding-top: 12px; }
+.ob-section#list { padding-top: 0; overflow: visible; }
 
-/* 絞り込み */
-.ob-controls { border-bottom: 1px solid var(--line); }
+/* 上部に固定するツールバー（検索＋絞り込み） */
+.ob-toolbar { position: sticky; top: var(--nav-h); z-index: 6; background: var(--bg); margin: 0 -40px; padding: 14px 40px 10px; border-bottom: 1px solid var(--line); border-radius: var(--radius-l) var(--radius-l) 0 0; }
+.ob-toolbar-row { display: flex; gap: 8px; }
+.ob-searchbox { position: relative; flex: 1; }
+.ob-searchbox svg { position: absolute; left: 14px; top: 50%; width: 17px; height: 17px; transform: translateY(-50%); fill: none; stroke: var(--ink-2); stroke-width: 2; pointer-events: none; }
+.ob-searchbox .ob-search { padding-left: 40px; height: 46px; border-radius: 23px; background: var(--bg-alt); border-color: transparent; font-size: 16px; }
+.ob-searchbox .ob-search:focus { background: var(--bg); }
+.ob-filter-btn {
+  flex: none; display: inline-flex; align-items: center; gap: 6px; height: 46px; padding: 0 16px; border-radius: 23px;
+  border: 1px solid var(--line); background: var(--bg); color: var(--ink); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer;
+  transition: background-color .2s, color .2s, border-color .2s;
+}
+.ob-filter-btn svg { width: 18px; height: 18px; fill: none; stroke: currentColor; stroke-width: 2; }
+.ob-filter-btn:hover { border-color: var(--ink-3); }
+.ob-filter-btn.has-filter, .ob-filter-btn.is-open { background: var(--ink); color: #fff; border-color: var(--ink); }
+.ob-filter-btn b { min-width: 20px; height: 20px; padding: 0 6px; border-radius: 10px; background: var(--shu); color: #fff; font-size: 12px; line-height: 20px; text-align: center; }
+.ob-panel { padding: 6px 0 4px; max-height: calc(100vh - var(--nav-h) - 160px); overflow-y: auto; overscroll-behavior: contain; }
+.ob-panel-label { font-size: 12px; font-weight: 700; color: var(--ink-2); margin: 12px 0 6px; }
+.ob-panel .ob-chips { flex-wrap: wrap; overflow: visible; margin-top: 0; }
+.ob-panel-foot { position: sticky; bottom: 0; display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-top: 16px; padding: 12px 0 6px; border-top: 1px solid var(--line); background: var(--bg); }
+.ob-apply { padding: 10px 22px; }
+.ob-status { display: flex; align-items: center; gap: 8px 12px; flex-wrap: wrap; margin-top: 10px; min-height: 28px; }
+.ob-status .ob-count { margin: 0; font-size: 13px; color: var(--ink-2); }
+.ob-active { display: flex; flex-wrap: wrap; gap: 6px; }
+.ob-pill { display: inline-flex; align-items: center; gap: 6px; height: 28px; padding: 0 10px 0 12px; border: 0; border-radius: 14px; background: var(--ink); color: #fff; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; }
+.ob-pill span { font-size: 15px; line-height: 1; opacity: .7; }
+.ob-pill:hover span { opacity: 1; }
+.chip .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
 .ob-chips .chip small { font-size: 11px; color: var(--ink-3); margin-left: 2px; }
 .ob-chips .chip.is-active small { color: var(--on-dark-2); }
-.chip .dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; vertical-align: 0; }
-.ob-bar { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; margin-top: 10px; }
-.ob-bar .ob-count { margin: 0; font-size: 14px; color: var(--ink); font-weight: 600; flex: 1; }
-.ob-sort { font-size: 13px; color: var(--ink-2); display: flex; align-items: center; gap: 6px; }
-.ob-sort select { font: inherit; font-size: 14px; color: var(--ink); padding: 6px 28px 6px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); }
-.empty .text-btn { margin-left: 8px; }
+.ob-empty { text-align: center; padding: 48px 0; }
+.ob-empty p { margin-bottom: 14px; color: var(--ink-2); }
 
 /* 校内マップ（開閉式） */
 .ob-mapbox { margin: 14px 0 6px; border: 1px solid var(--line); border-radius: var(--radius-m); padding: 0 14px; }
@@ -969,10 +991,14 @@ a.tagchart-row:hover { text-decoration: none; }
 
 @media (max-width: 833px) {
   .ob-grid { grid-template-columns: 1fr; gap: 8px; }
-  .ob-card { padding: 11px 14px 12px; }
+  .ob-card { padding: 12px 14px 13px 16px; }
   .ob-title { font-size: 16px; }
-  .ob-desc { font-size: 13px; }
+  .ob-desc { font-size: 13px; margin-top: 5px; }
   .ob-subtags { display: none; }
+  .ob-toolbar { margin: 0 -14px; padding: 10px 14px 8px; border-radius: var(--radius-m) var(--radius-m) 0 0; }
+  .ob-searchbox .ob-search, .ob-filter-btn { height: 44px; }
+  .ob-filter-btn { padding: 0 14px; }
+  .ob-panel { max-height: calc(100vh - var(--nav-h) - 140px); }
   .ob-quick { grid-template-columns: repeat(3, 1fr); gap: 6px; margin-top: 20px; }
   .ob-quick .ob-quick-main { grid-column: 1 / -1; }
   .ob-quick a:not(.ob-quick-main) { font-size: 13px; padding: 8px 10px; min-height: 52px; text-align: center; align-items: center; }
@@ -982,7 +1008,6 @@ a.tagchart-row:hover { text-decoration: none; }
   .ob-now-list li { grid-template-columns: 4em 1fr; }
   .ob-now-next { grid-column: 2; }
   .ob-mapbox { padding: 0 10px; }
-  .ob-bar { gap: 10px; }
 }
 @media (min-width: 834px) {
   .ob-hero { padding: 48px 0 28px; }

@@ -366,30 +366,44 @@ const listHtml = `${head({
 
   <div class="container ob-wrap">
     <section class="ob-section ob-finder" id="list" aria-label="企画を探す">
-      <div class="ob-controls">
-        <input class="ob-search" id="obSearch" type="search" placeholder="企画名・食べ物などで探す（例：やきそば）" aria-label="企画を検索" autocomplete="off">
-        <div class="ob-chips" id="obFloors" role="group" aria-label="階で絞り込む">
-          <button type="button" class="chip is-active" data-floor="">すべての階</button>
-${[1, 2, 3, 4, 5].map(f => `          <button type="button" class="chip" data-floor="${f}">${f === 1 ? '1F・屋外' : f + 'F'} <small>${byFloor(f).length}</small></button>`).join('\n')}
-        </div>
-        <div class="ob-chips" id="obTags" role="group" aria-label="種類で絞り込む">
-          <button type="button" class="chip is-active" data-tag="">すべての種類</button>
-${TAGS.map(([t, k]) => `          <button type="button" class="chip chip-${k}" data-tag="${esc(t)}"><span class="dot tag-${k}"></span>${esc(t)}</button>`).join('\n')}
-        </div>
-        <div class="ob-bar">
-          <p class="ob-count" id="obCount" aria-live="polite">${booths.length} 企画</p>
-          <label class="ob-sort">並び順
-            <select id="obSort">
-              <option value="place">場所順</option>
-              <option value="cheap">安い順</option>
-              <option value="expensive">高い順</option>
-              <option value="name">名前順</option>
-            </select>
+      <div class="ob-toolbar" id="obToolbar">
+        <div class="ob-toolbar-row">
+          <label class="ob-searchbox">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4.5 4.5"/></svg>
+            <input class="ob-search" id="obSearch" type="search" placeholder="企画名・食べ物で探す" aria-label="企画を検索" autocomplete="off" enterkeyhint="search">
           </label>
-          <button type="button" class="text-btn" id="obReset" hidden>条件をリセット</button>
+          <button type="button" class="ob-filter-btn" id="obFilterBtn" aria-expanded="false" aria-controls="obPanel">
+            <svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M9 15h2"/></svg><span>絞り込み</span><b id="obBadge" hidden>0</b>
+          </button>
+        </div>
+        <div class="ob-panel" id="obPanel" hidden>
+          <p class="ob-panel-label">階</p>
+          <div class="ob-chips" id="obFloors" role="group" aria-label="階で絞り込む">
+            <button type="button" class="chip is-active" data-floor="">すべて</button>
+${[1, 2, 3, 4, 5].map(f => `            <button type="button" class="chip" data-floor="${f}">${f === 1 ? '1F・屋外' : f + 'F'} <small>${byFloor(f).length}</small></button>`).join('\n')}
+          </div>
+          <p class="ob-panel-label">種類</p>
+          <div class="ob-chips" id="obTags" role="group" aria-label="種類で絞り込む">
+            <button type="button" class="chip is-active" data-tag="">すべて</button>
+${TAGS.map(([t, k]) => `            <button type="button" class="chip chip-${k}" data-tag="${esc(t)}"><span class="dot tag-${k}"></span>${esc(t)}</button>`).join('\n')}
+          </div>
+          <p class="ob-panel-label">並び順</p>
+          <div class="ob-chips" id="obSorts" role="group" aria-label="並び順">
+            <button type="button" class="chip is-active" data-sort="place">場所順</button>
+            <button type="button" class="chip" data-sort="cheap">安い順</button>
+            <button type="button" class="chip" data-sort="expensive">高い順</button>
+            <button type="button" class="chip" data-sort="name">名前順</button>
+          </div>
+          <div class="ob-panel-foot">
+            <button type="button" class="text-btn" id="obReset">条件をリセット</button>
+            <button type="button" class="btn ob-apply" id="obApply"><span id="obApplyCount">${booths.length}</span> 件を表示</button>
+          </div>
+        </div>
+        <div class="ob-status">
+          <p class="ob-count" id="obCount" aria-live="polite">${booths.length} 企画</p>
+          <ul class="ob-active" id="obActive" aria-label="選択中の条件"></ul>
         </div>
       </div>
-      <p class="ob-room-filter" id="obRoom" hidden><span></span><button type="button" class="text-btn" id="obRoomClear">部屋の絞り込みを解除</button></p>
 
       <details class="ob-mapbox" id="map" open>
         <summary><span>校内マップ</span><small id="mapLabel">3F を表示中・階を選ぶと切り替わります</small></summary>
@@ -408,8 +422,7 @@ ${campusMap()}
 
 ${boothList()}
       <ul class="ob-grid ob-flat" id="obFlat" hidden></ul>
-      <p class="empty" id="obEmpty" hidden>条件に合う企画がありません。<button type="button" class="text-btn" id="obReset2">条件をリセット</button></p>
-      <button type="button" class="ob-fab" id="obFab" aria-label="検索・絞り込みに戻る"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M3 5h14M6 10h8M9 15h2"/></svg>絞り込み<b id="obFabCount">${booths.length}</b></button>
+      <div class="empty ob-empty" id="obEmpty" hidden><p>条件に合う企画がありません。</p><button type="button" class="btn btn-ghost" id="obReset2">条件をリセット</button></div>
     </section>
 
     ${SOURCE_NOTE}
