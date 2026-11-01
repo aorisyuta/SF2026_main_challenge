@@ -180,7 +180,7 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 ├── info.html               来場案内（概要・アクセス・注意事項・FAQ）
 ├── others.html             他の企画の概要（基本情報・図・ステージの時間割。tools/build-others.js が生成）
 ├── others-list.html        他の企画の一覧（校内マップ・検索・絞り込み。同上）
-├── games/                  ゲーム（index.html＝一覧、integral-reels.html＝積分リール）
+├── games/                  ゲーム（index.html＝一覧、integral-reels.html＝積分リール、make-it.html＝数字をつくれ）
 ├── blog.html               ブログ一覧
 ├── blog/post.html          ブログ記事（?id=記事ID）
 ├── projects/*.html         企画詳細（generate-pages.js で生成）
@@ -232,7 +232,7 @@ SF 公式サイト（<https://seikosf.jp>）の企画・ステージ・校内マ
 
 ## ゲーム（games/）
 
-ナビの「ゲーム」から。`games/index.html` が一覧、`games/integral-reels.html` が「積分リール」。
+ナビの「ゲーム」から。`games/index.html` が一覧、`games/integral-reels.html` が「積分リール」、`games/make-it.html` が「数字をつくれ」（`assets/games/make-it.js` / `make-it.css`）。
 
 | ファイル | 内容 |
 | --- | --- |

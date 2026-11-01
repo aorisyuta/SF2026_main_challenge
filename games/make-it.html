@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ja" class="game-page">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>数字をつくれ（ゲーム）｜Aoristos — 星光 SF2026</title>
+  <meta name="description" content="Aoristos の数学ゲーム「数字をつくれ」。4〜5枚の数字カードを ＋ − × ÷ で組み合わせて、10 や 24 などの目標の数をつくるパズル。90 秒で何問解けるか挑戦しよう。小学生から大人まで。">
+  <meta name="author" content="Aoristos">
+  <meta name="theme-color" content="#ffffff">
+  <!-- site-meta:start -->
+  <link rel="canonical" href="https://aoristos.net/games/make-it">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta property="og:site_name" content="Aoristos">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="数字をつくれ（ゲーム）｜Aoristos — 星光 SF2026">
+  <meta property="og:description" content="Aoristos の数学ゲーム「数字をつくれ」。4〜5枚の数字カードを ＋ − × ÷ で組み合わせて、10 や 24 などの目標の数をつくるパズル。90 秒で何問解けるか挑戦しよう。小学生から大人まで。">
+  <meta property="og:url" content="https://aoristos.net/games/make-it">
+  <meta property="og:image" content="https://aoristos.net/assets/og-image.jpg">
+  <meta property="og:image:secure_url" content="https://aoristos.net/assets/og-image.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="数字をつくれ（ゲーム）｜Aoristos — 星光 SF2026">
+  <meta name="twitter:description" content="Aoristos の数学ゲーム「数字をつくれ」。4〜5枚の数字カードを ＋ − × ÷ で組み合わせて、10 や 24 などの目標の数をつくるパズル。90 秒で何問解けるか挑戦しよう。小学生から大人まで。">
+  <meta name="twitter:image" content="https://aoristos.net/assets/og-image.jpg">
+  <meta name="twitter:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">
+  <!-- site-meta:end -->
+  <link rel="icon" href="../favicon.ico?v=23e911113c" sizes="any">
+  <link rel="icon" href="../assets/favicon.svg?v=18f7d0c58a" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=ff38aa79bb">
+  <link rel="stylesheet" href="../assets/style.css?v=cb2dfb153c">
+  <link rel="stylesheet" href="../assets/games/make-it.css?v=0ada322742">
+  <script>
+    window.pageConfig = { currentPage: 'games', basePath: '../', hideRibbon: true, noFooter: true };
+  </script>
+  <script src="../assets/config.js?v=ff30474010"></script>
+  <script src="../assets/sheet.js?v=355b41c473" defer></script>
+  <script src="../assets/header.js?v=97e4f6dc19" defer></script>
+  <script src="../assets/games/make-it.js?v=c27421ef3c" defer></script>
+</head>
+<body>
+
+<main id="main" class="mk-stage">
+  <div id="mk" class="mk" data-screen="start">
+
+    <!-- スタート -->
+    <section class="mk-screen mk-start" id="mkStart" aria-labelledby="mkTitle">
+      <p class="mk-eyebrow"><a href="index.html">ゲーム</a></p>
+      <h1 class="mk-title" id="mkTitle"><span class="mk-eq">＝</span>数字をつくれ</h1>
+      <p class="mk-lead">数字カードを ＋ − × ÷ で組み合わせて、目標の数をつくろう。<br>90 秒で何問解けるか挑戦！</p>
+      <ol class="mk-how" aria-label="遊び方">
+        <li><span>1</span>カードを選ぶ</li>
+        <li><span>2</span>記号を選ぶ</li>
+        <li><span>3</span>もう1枚のカードを選ぶ</li>
+      </ol>
+      <p class="mk-how-note">2枚が計算されて1枚になります。最後の1枚が目標の数になればクリア。</p>
+      <div class="mk-modes">
+        <button type="button" class="mk-mode" data-mode="ten">
+          <span class="mk-mode-num">10</span>
+          <span class="mk-mode-body"><b>10 をつくれ</b><small>4枚・1〜9・小学生から</small><em data-best="ten"></em></span>
+        </button>
+        <button type="button" class="mk-mode" data-mode="t24">
+          <span class="mk-mode-num">24</span>
+          <span class="mk-mode-body"><b>24 をつくれ</b><small>4枚・1〜13・中高生から</small><em data-best="t24"></em></span>
+        </button>
+        <button type="button" class="mk-mode" data-mode="chal">
+          <span class="mk-mode-num">?</span>
+          <span class="mk-mode-body"><b>チャレンジ</b><small>5枚・目標は毎回ちがう</small><em data-best="chal"></em></span>
+        </button>
+      </div>
+      <label class="mk-check"><input type="checkbox" id="mkPractice"> 時間制限なし（練習）</label>
+    </section>
+
+    <!-- プレイ -->
+    <section class="mk-screen mk-play" id="mkPlay" aria-label="プレイ中" hidden>
+      <header class="mk-hud">
+        <div class="mk-hud-row">
+          <span class="mk-mode-name" id="mkModeName"></span>
+          <button type="button" class="mk-quit" data-act="quit">終了</button>
+        </div>
+        <div class="mk-timer" aria-label="残り時間"><span class="mk-bar"><i id="mkBar"></i></span><b id="mkTime">90</b><small>秒</small></div>
+        <dl class="mk-stats">
+          <div><dt>得点</dt><dd id="mkScore">0</dd></div>
+          <div><dt>連続</dt><dd id="mkStreak">0</dd></div>
+          <div><dt>クリア</dt><dd id="mkSolved">0</dd></div>
+        </dl>
+      </header>
+
+      <div class="mk-board">
+        <p class="mk-goal"><span>目標</span><b id="mkTarget">10</b><span>をつくれ</span></p>
+        <div class="mk-cards" id="mkCards" aria-label="数字カード"></div>
+        <div class="mk-ops" id="mkOps" role="group" aria-label="記号">
+          <button type="button" class="mk-op" data-op="+" aria-label="たす">＋</button>
+          <button type="button" class="mk-op" data-op="−" aria-label="ひく">−</button>
+          <button type="button" class="mk-op" data-op="×" aria-label="かける">×</button>
+          <button type="button" class="mk-op" data-op="÷" aria-label="わる">÷</button>
+        </div>
+        <p class="mk-msg" id="mkMsg" aria-live="polite"></p>
+        <div class="mk-tools">
+          <button type="button" data-act="undo" id="mkUndo">戻す</button>
+          <button type="button" data-act="reset">最初から</button>
+          <button type="button" data-act="hint">ヒント</button>
+          <button type="button" data-act="skip">スキップ</button>
+        </div>
+        <div class="mk-stamp" id="mkStamp" aria-hidden="true"></div>
+      </div>
+    </section>
+
+    <!-- 結果 -->
+    <section class="mk-screen mk-result" id="mkResult" aria-labelledby="mkResTitle" hidden>
+      <p class="mk-eyebrow" id="mkResMode"></p>
+      <h2 class="mk-res-title" id="mkResTitle">タイムアップ</h2>
+      <p class="mk-res-score"><b id="mkResScore">0</b><span>点</span></p>
+      <p class="mk-res-new" id="mkResNew" hidden>ベスト更新！</p>
+      <dl class="mk-res-stats">
+        <div><dt>クリア</dt><dd><span id="mkResSolved">0</span> 問</dd></div>
+        <div><dt>ベスト</dt><dd><span id="mkResBest">0</span> 点</dd></div>
+      </dl>
+      <p class="mk-res-last" id="mkResLast"></p>
+      <div class="mk-res-actions">
+        <button type="button" class="btn" data-act="again">もう一度</button>
+        <button type="button" class="btn btn-ghost" data-act="menu">モードを選ぶ</button>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+</body>
+</html>
