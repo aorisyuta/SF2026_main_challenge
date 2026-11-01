@@ -31,8 +31,8 @@ window.SF_CONFIG = {
     open / close は「開催中」の判定用。timeLabel が画面に出る表記。
   */
   days: [
-    { date: '2026-11-07', label: '11月7日', weekday: '土', open: '12:00', close: '15:30', timeLabel: '午後のみ（15:30 頃まで）' },
-    { date: '2026-11-08', label: '11月8日', weekday: '日', open: '09:00', close: '15:30', timeLabel: '9:00 〜 15:30 頃' }
+    { date: '2026-11-07', label: '11月7日', weekday: '土', open: '12:30', close: '16:00', timeLabel: '12:30 〜 16:00' },
+    { date: '2026-11-08', label: '11月8日', weekday: '日', open: '09:00', close: '15:30', timeLabel: '9:00 〜 15:30' }
   ],
 
   /*

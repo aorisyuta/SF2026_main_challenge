@@ -6,7 +6,7 @@
   "main": "generate-pages.js",
   "scripts": {
     "generate": "node generate-pages.js",
-    "build": "node generate-pages.js && node build-site.js",
+    "build": "node generate-pages.js && node tools/build-others.js && node build-site.js",
     "start": "python3 -m http.server 8000",
     "preview": "npm run build && python3 -m http.server 8000 --directory dist"
   },

@@ -18,6 +18,7 @@
     { key: 'projects', href: 'projects.html', label: '企画' },
     { key: 'timetable', href: 'timetable.html', label: 'タイムテーブル' },
     { key: 'blog', href: 'blog.html', label: 'ブログ' },
+    { key: 'others', href: 'others.html', label: '他の企画' },
     { key: 'info', href: 'info.html', label: '来場案内' },
     { key: 'archive', href: 'archive/index.html', label: 'アーカイブ' }
   ];
