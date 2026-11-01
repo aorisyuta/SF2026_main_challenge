@@ -262,15 +262,18 @@ function inlineScriptHashes(pages) {
   return [...hashes].sort();
 }
 
+const CF_ANALYTICS = { script: 'https://static.cloudflareinsights.com', connect: 'https://cloudflareinsights.com' };
+
 function buildHeaders(pages) {
   const csp = [
     "default-src 'self'",
-    `script-src 'self' ${inlineScriptHashes(pages).join(' ')}`,
+    // Cloudflare Web Analytics（Pages の設定で有効にすると beacon.min.js が自動で差し込まれる）
+    `script-src 'self' ${CF_ANALYTICS.script} ${inlineScriptHashes(pages).join(' ')}`,
     "style-src 'self' 'unsafe-inline'",
     // スプレッドシートの画像（Google ドライブ等）は任意の https URL を許可
     "img-src 'self' data: https:",
     // 公開 CSV は docs.google.com から *.googleusercontent.com へリダイレクトされる
-    "connect-src 'self' https://docs.google.com https://*.googleusercontent.com",
+    `connect-src 'self' https://docs.google.com https://*.googleusercontent.com ${CF_ANALYTICS.connect}`,
     // 来場案内の Google マップと、部誌 PDF の埋め込み
     "frame-src 'self' https://www.google.com",
     "font-src 'self'",
@@ -283,10 +286,10 @@ function buildHeaders(pages) {
 
   const archiveCsp = [
     "default-src 'self'",
-    "script-src 'self' 'unsafe-inline'",
+    `script-src 'self' 'unsafe-inline' ${CF_ANALYTICS.script}`,
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob:",
-    "connect-src 'self'",
+    `connect-src 'self' ${CF_ANALYTICS.connect}`,
     "frame-src https://www.google.com",
     "font-src 'self' data:",
     "object-src 'none'",
