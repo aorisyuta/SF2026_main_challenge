@@ -110,10 +110,11 @@ URL の末尾に `?data=local` を付けると、スプレッドシートの代�
 
 ---
 
-## 公開（Cloudflare Pages）
+## 公開（Cloudflare Workers）
 
 本番の URL は **<https://aoristos.net>**（`assets/config.js` の `siteUrl`）。
-リポジトリの `main` に push すると Cloudflare Pages が自動でデプロイします。
+Cloudflare Workers の静的アセット機能で公開しています（プロジェクト名 `sf2026-main-challenge`、設定は `wrangler.jsonc`）。
+リポジトリの `main` に push すると Workers Builds が自動でデプロイします（`npx wrangler deploy`）。
 
 ### push する前に
 
@@ -127,28 +128,34 @@ npm run build
 
 | 出力 | 内容 |
 | --- | --- |
-| 各 HTML の `<!-- site-meta:start -->` 〜 `end` | canonical・OGP（`assets/og-image.jpg`、1200×630）・Twitter カード。**この間は手で書かない** |
+| 各 HTML の `<!-- site-meta:start -->` 〜 `end` | canonical・OGP・Twitter カード・構造化データ（トップのみ）。**この間は手で書かない** |
+| CSS・JS の `?v=...` | 中身のハッシュ。更新したら URL が変わり、古いキャッシュが使われない |
 | `robots.txt` / `sitemap.xml` | 検索エンジン向け。`noindex` のページ・404・`blog/post.html` は sitemap に入れない |
 | `_headers` | セキュリティヘッダー（CSP・HSTS など）とキャッシュ設定。CSP で許可するインラインスクリプトは HTML から自動計算 |
-| `dist/` | 公開するファイルだけのコピー（`.assetsignore` に書いたものを除外）。git には入れない |
+| `dist/` | 公開されるファイルだけのコピー（`npm run preview` での確認用）。git には入れない |
 
 > インラインの `<script>` を書き換えたのに `npm run build` を忘れると、CSP によってそのスクリプトが動かなくなります。
 
-### Cloudflare Pages の設定（推奨）
+### 公開されるファイル
 
-ダッシュボードの「設定 → ビルド」で次のようにすると、`readme.md`・`templates/`・スクリプトなどの内部ファイルが公開されなくなります。
+リポジトリ直下（`wrangler.jsonc` の `assets.directory`）がそのまま公開されます。
+`readme.md`・`templates/`・`tools/`・ビルド用スクリプトなど、公開しないものは `.assetsignore` に書きます。
 
-| 項目 | 値 |
-| --- | --- |
-| ビルドコマンド | `npm run build` |
-| ビルド出力ディレクトリ | `dist` |
-
-（出力ディレクトリがリポジトリ直下のままでも `_headers` などは効きますが、内部ファイルも公開されます。）
-
-- 存在しない URL には `404.html` を表示します
+- 存在しない URL には `404.html` を表示します（`not_found_handling: "404-page"`）
 - `projects.html` のような URL は Cloudflare が `/projects` に転送するため、canonical・sitemap は拡張子なしで書いています
-- `wrangler.jsonc` / `.assetsignore` は Cloudflare Workers で公開する場合の設定です（`.assetsignore` は `dist/` の除外リストとしても使います）
+- `_headers` は Workers の静的アセットでもそのまま使われます
 - `?data=local`（サンプル CSV の表示）は localhost でだけ有効です
+
+### Cloudflare のダッシュボードで設定するもの
+
+| 内容 | 場所 |
+| --- | --- |
+| 旧 URL `sf.aoristos.net` → `aoristos.net` の転送（301） | aoristos.net のドメイン → ルール → リダイレクトルール |
+| アクセス解析（訪問者数・ページ別・流入元） | Analytics & Logs → Web Analytics → サイトを追加（CSP は許可済み） |
+| 検索エンジン | Google Search Console・Bing Webmaster Tools（サイトマップ `https://aoristos.net/sitemap.xml`） |
+
+転送を Worker のコードで書くこともできますが、全リクエストで Worker が動いて無料枠（1日10万回）を使い、
+超えるとサイトが止まるため、制限のないリダイレクトルールを使います。
 
 ## ローカルで動かす
 
@@ -179,6 +186,7 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 ├── archive/                アーカイブ一覧・閲覧ページ（view.html）・過去のサイト（sf25/ = SF 2025）
 ├── tools/rebase_sf25.py    アーカイブ取り込み時のパス書き換え
 ├── _headers / robots.txt / sitemap.xml   build-site.js が生成
+├── apple-touch-icon*.png   iPhone などがルートに取りに来るアイコン（assets/ のコピー）
 ├── templates/
 │   ├── site-data-template.csv   スプレッドシートのひな形
 │   └── site-data-template.xlsx  同（書式つき）

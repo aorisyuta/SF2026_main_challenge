@@ -9,9 +9,8 @@
     2. robots.txt・sitemap.xml を作る
     3. Cloudflare 用の _headers（セキュリティヘッダー・CSP・キャッシュ）を作る
        CSP のインラインスクリプト許可は、HTML 内の <script> の SHA-256 から自動で計算する
-    4. 公開するファイルだけを dist/ にコピーする（.assetsignore に書いたものは除外）
-       Cloudflare Pages のビルド出力ディレクトリを dist にすると、readme や
-       テンプレートなどの内部ファイルが公開されなくなる
+    4. 公開されるファイルだけを dist/ にコピーする（.assetsignore に書いたものは除外）
+       Workers が公開するのと同じ構成を `npm run preview` で確認するため
 
   公開 URL は assets/config.js の siteUrl。空欄なら canonical・og:url・og:image・
   sitemap.xml は出力しない（相対 URL の OGP 画像は SNS で表示されないため）。
@@ -267,7 +266,7 @@ const CF_ANALYTICS = { script: 'https://static.cloudflareinsights.com', connect:
 function buildHeaders(pages) {
   const csp = [
     "default-src 'self'",
-    // Cloudflare Web Analytics（Pages の設定で有効にすると beacon.min.js が自動で差し込まれる）
+    // Cloudflare Web Analytics（ダッシュボードで自動設定にすると beacon.min.js が差し込まれる）
     `script-src 'self' ${CF_ANALYTICS.script} ${inlineScriptHashes(pages).join(' ')}`,
     "style-src 'self' 'unsafe-inline'",
     // スプレッドシートの画像（Google ドライブ等）は任意の https URL を許可
@@ -300,7 +299,7 @@ function buildHeaders(pages) {
   ].join('; ');
 
   return `# このファイルは build-site.js が生成します。直接編集せず \`npm run build\` を実行してください。
-# Cloudflare（Pages / Workers 静的アセット）が各レスポンスにヘッダーを付けます。
+# Cloudflare Workers の静的アセットが各レスポンスにヘッダーを付けます。
 
 /*
   Content-Security-Policy: ${csp}
