@@ -13,7 +13,7 @@ Aoristos の公式サイトです。大阪星光学院スクールフェア（SF
 | --- | --- |
 | ブログ記事 | Google スプレッドシート（`type` = `post`） |
 | トップの「部誌発売中」「Tシャツ発売中」などのお知らせとリンク | Google スプレッドシート（`type` = `news`） |
-| X・Instagram などの SNS リンク | Google スプレッドシート（`type` = `link`） |
+| X・Instagram などの SNS リンク | `assets/config.js` の `fallbackLinks`（スプレッドシートに `type` = `link` の行があればそちらが優先） |
 | 企画一覧 | `assets/projects.csv` |
 | 企画の詳しい情報 | `assets/projects-details.json` |
 | タイムテーブル | `timetable.html` |
@@ -248,7 +248,6 @@ rm -rf archive/sf25 && cp -r /tmp/sf25-out archive/sf25 && python3 tools/rebase_
 
 ## 未対応・TODO
 
-- **SNS のアカウント**：スプレッドシートの `link` 行に本物の URL を入れてください
 - **部誌・Tシャツの購入リンク**：スプレッドシートの `news` 行の `url` を本物に差し替えてください
 - **校内マップ PDF**：用意できたら `info.html` の `#map` にリンクを追加
 - **タイムテーブル**：内容は暫定。確定次第 `timetable.html` を更新

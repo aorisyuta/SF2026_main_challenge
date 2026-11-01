@@ -12,10 +12,19 @@
     return e;
   }
 
-  function specRow(label, value) {
+  function specRow(label, value, url, linkLabel) {
     var row = el('div', 'spec-row');
     row.appendChild(el('dt', null, label));
-    row.appendChild(el('dd', null, value));
+    var dd = el('dd', null, value);
+    if (url && /^https?:\/\//.test(url)) {
+      var link = el('a', 'more-link', linkLabel || url);
+      link.href = url;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      dd.appendChild(document.createElement('br'));
+      dd.appendChild(link);
+    }
+    row.appendChild(dd);
     return row;
   }
 
@@ -57,7 +66,7 @@
     if (p.location) dl.appendChild(specRow('場所', p.location));
     if (p.schedule) dl.appendChild(specRow('時間', p.schedule));
     if (p.duration) dl.appendChild(specRow('所要時間', p.duration));
-    (p.details || []).forEach(function (d) { dl.appendChild(specRow(d.label, d.content)); });
+    (p.details || []).forEach(function (d) { dl.appendChild(specRow(d.label, d.content, d.url, d.linkLabel)); });
     dl.appendChild(specRow('イベント', '星光 SF2026（大阪星光学院 スクールフェア 2026「融合」）'));
     specs.appendChild(dl);
     body.appendChild(specs);

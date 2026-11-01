@@ -53,6 +53,12 @@
       "duration": "時間制限なし",
       "details": [
         {
+          "label": "これまでの活動",
+          "content": "Aoristos のこれまでの活動（外部サイト）。ほかの記録も現在追加中です。",
+          "url": "https://reabiz.jp/?page_id=208",
+          "linkLabel": "これまでの活動を見る"
+        },
+        {
           "label": "参加方法",
           "content": "自由にご覧いただけます。"
         },

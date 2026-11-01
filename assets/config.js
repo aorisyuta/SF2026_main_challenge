@@ -72,8 +72,17 @@ window.SF_CONFIG = {
     }
   ],
 
-  // シートが読めなかったときだけ使う SNS リンク（シートに type=link の行があればそちらが優先）
-  fallbackLinks: []
+  /*
+    SNS リンクの初期値。シートに type=link の行が1つもないとき（またはシートが読めないとき）に表示。
+    シートに link 行を書けば、そちらが優先されます。構造化データ（検索エンジン向け）にも使います。
+  */
+  fallbackLinks: [
+    { title: 'X', text: '@Team_Aoristos', url: 'https://x.com/Team_Aoristos' },
+    { title: 'Instagram', text: '@team_aoristos', url: 'https://www.instagram.com/team_aoristos/' }
+  ],
+
+  // これまでの活動（外部サイト）
+  pastActivitiesUrl: 'https://reabiz.jp/?page_id=208'
 };
 
 // JS が動く環境の目印（スクロール演出などに使用）

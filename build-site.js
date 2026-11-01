@@ -137,6 +137,9 @@ function structuredData(cfg, site) {
     logo: site + '/assets/apple-touch-icon.png',
     image: site + '/' + OG_IMAGE
   };
+  // 公式 SNS（config.js の fallbackLinks）。検索結果でサイトとアカウントを結び付ける
+  const sameAs = (cfg.fallbackLinks || []).map(l => l.url).filter(u => /^https:\/\//.test(u));
+  if (sameAs.length) org.sameAs = sameAs;
   const graph = [
     {
       '@type': 'WebSite',

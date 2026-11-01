@@ -75,6 +75,16 @@
     return d.map(function (x) { return x.label + '（' + x.weekday + '）'; }).join('・');
   }
 
+  /* フッターの SNS（シートの読み込み前は config.js の初期値を表示） */
+  function socialItems(list) {
+    if (!list.length) return '<li class="footer-muted">準備中</li>';
+    return list.map(function (l) {
+      var ic = window.SFSheet ? window.SFSheet.iconFor(l) : { key: 'link', svg: '' };
+      return '<li><a href="' + esc(l.url) + '" target="_blank" rel="noopener noreferrer" class="social-' + ic.key + '">' +
+        ic.svg + '<span>' + esc(l.title) + (l.text ? ' <small>' + esc(l.text) + '</small>' : '') + '</span></a></li>';
+    }).join('');
+  }
+
   function buildFooter() {
     var footer = document.createElement('footer');
     footer.className = 'site-footer';
@@ -92,7 +102,7 @@
               NAV.map(function (n) { return '<li><a href="' + base + n.href + '">' + n.label + '</a></li>'; }).join('') +
             '</ul></div>' +
             (CFG.officialUrl ? '<div><h2>SF2026</h2><ul><li><a href="' + esc(CFG.officialUrl) + '" target="_blank" rel="noopener noreferrer">SF 公式サイト</a></li></ul></div>' : '') +
-            '<div><h2>フォロー</h2><ul class="footer-social" id="footerSocial"><li class="footer-muted">準備中</li></ul></div>' +
+            '<div><h2>フォロー</h2><ul class="footer-social" id="footerSocial">' + socialItems(CFG.fallbackLinks || []) + '</ul></div>' +
           '</div>' +
         '</div>' +
         '<div class="footer-bottom">' +
@@ -121,13 +131,7 @@
       }
 
       var social = document.getElementById('footerSocial');
-      if (social && data.links.length) {
-        social.innerHTML = data.links.map(function (l) {
-          var ic = window.SFSheet.iconFor(l);
-          return '<li><a href="' + E(l.url) + '" target="_blank" rel="noopener noreferrer" class="social-' + ic.key + '">' +
-            ic.svg + '<span>' + E(l.title) + (l.text ? ' <small>' + E(l.text) + '</small>' : '') + '</span></a></li>';
-        }).join('');
-      }
+      if (social && data.links.length) social.innerHTML = socialItems(data.links);
     }).catch(function (err) { console.warn(err); });
   }
 
