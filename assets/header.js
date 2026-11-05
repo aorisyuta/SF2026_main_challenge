@@ -25,9 +25,9 @@
   ];
   // 「SF2026」の中のページ（SF の活動はここにまとめる）
   var SF_NAV = [
-    { key: 'sf', href: 'sf.html', label: 'SF2026 トップ' },
-    { key: 'projects', href: 'projects.html', label: 'Aoristos の企画' },
-    { key: 'timetable', href: 'timetable.html', label: 'タイムテーブル' },
+    { key: 'sf', href: 'sf.html', label: 'SF2026 トップ', short: 'SF トップ' },
+    { key: 'projects', href: 'projects.html', label: 'Aoristos の企画', short: '企画' },
+    { key: 'timetable', href: 'timetable.html', label: 'タイムテーブル', short: '時間割' },
     { key: 'others', href: 'others.html', label: '他の企画' },
     { key: 'info', href: 'info.html', label: '来場案内' }
   ];
@@ -44,7 +44,7 @@
         '<a class="subnav-title" href="' + base + 'sf.html">SF2026<small>「' + esc(CFG.theme || '') + '」</small></a>' +
         '<ul>' + SF_NAV.map(function (n) {
           var cur = page.currentPage === n.key;
-          return '<li><a href="' + base + n.href + '"' + (cur ? ' aria-current="page"' : '') + '>' + n.label + '</a></li>';
+          return '<li><a href="' + base + n.href + '"' + (cur ? ' aria-current="page"' : '') + '><span class="sn-l">' + n.label + '</span><span class="sn-s">' + (n.short || n.label) + '</span></a></li>';
         }).join('') + '</ul>' +
       '</div>' +
     '</nav>';
