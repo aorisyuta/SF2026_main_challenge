@@ -25,6 +25,7 @@
     img.alt = '';
     img.loading = 'lazy';
     img.decoding = 'async';
+    img.onerror = function () { img.remove(); };
     var play = document.createElement('span');
     play.className = 'sf-video-play';
     play.setAttribute('aria-hidden', 'true');

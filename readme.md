@@ -241,6 +241,15 @@ SF 公式サイト（<https://seikosf.jp>）の企画・ステージ・校内マ
 
 ---
 
+## SF2026 トップの動画
+
+`sf.html` のヒーロー（タイトル・リンクの下）に YouTube 動画を載せる枠があります。設定は `assets/config.js` の `sfVideo`。
+
+- `show: false` のあいだは表示されません。`true` にして `npm run build` → push で公開
+- 公開前の確認は `sf.html?video=preview`
+- 最初はサムネイルだけを表示し、押したときに YouTube（プライバシー強化モード `youtube-nocookie.com`）を読み込みます
+- 動画を差し替えるときは `id`（URL の `watch?v=` の後ろ）を変更
+
 ## ゲーム（games/）
 
 ナビの「ゲーム」から。`games/index.html` が一覧、`games/integral-reels.html` が「積分リール」、`games/make-it.html` が「数字をつくれ」（`assets/games/make-it.js` / `make-it.css`）。
