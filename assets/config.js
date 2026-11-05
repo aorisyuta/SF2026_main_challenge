@@ -82,7 +82,19 @@ window.SF_CONFIG = {
   ],
 
   // これまでの活動（外部サイト）
-  pastActivitiesUrl: 'https://reabiz.jp/?page_id=208'
+  pastActivitiesUrl: 'https://reabiz.jp/?page_id=208',
+
+  /*
+    SF2026 トップ（sf.html）の上部に載せる YouTube 動画。
+    sfVideo.show を true にすると公開されます（false のあいだは表示されません）。
+    公開前の確認は sf.html?video=preview で表示できます。
+    id は動画 URL の「watch?v=」の後ろの部分。
+  */
+  sfVideo: {
+    show: false,
+    id: '-_S8f226zYQ',
+    title: 'Aoristos SF2026 紹介動画'
+  }
 };
 
 // JS が動く環境の目印（スクロール演出などに使用）

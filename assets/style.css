@@ -1092,3 +1092,15 @@ a.tagchart-row:hover { text-decoration: none; }
   .steps3 { grid-template-columns: 1fr; gap: 10px; }
   .sf-now { grid-template-columns: 1fr; padding: 26px 22px; gap: 20px; }
 }
+
+/* SF2026 トップの動画（16:9。押すまではサムネイルのみ） */
+.sf-video { position: relative; max-width: 860px; margin: 40px auto 0; aspect-ratio: 16 / 9; border-radius: var(--radius-m); overflow: hidden; background: var(--ink); }
+.sf-video[hidden] { display: none; }
+.sf-video iframe, .sf-video-poster { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.sf-video-poster { padding: 0; cursor: pointer; background: var(--ink); }
+.sf-video-poster img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.sf-video-play { position: absolute; left: 50%; top: 50%; width: 72px; height: 72px; margin: -36px 0 0 -36px; border-radius: 50%; background: rgba(29, 29, 31, .82); transition: background .2s; }
+.sf-video-play::after { content: ""; position: absolute; left: 29px; top: 23px; border-style: solid; border-width: 13px 0 13px 21px; border-color: transparent transparent transparent #fff; }
+.sf-video-poster:hover .sf-video-play, .sf-video-poster:focus-visible .sf-video-play { background: var(--shu); }
+.sf-video-poster:focus-visible { outline: 3px solid var(--shu); outline-offset: -3px; }
+@media (max-width: 599px) { .sf-video { margin-top: 28px; border-radius: 12px; } }

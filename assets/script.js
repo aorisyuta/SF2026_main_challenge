@@ -7,6 +7,43 @@
 
   var CFG = window.SF_CONFIG || {};
 
+  /* ---------- 動画（SF2026 トップ） ----------
+     最初はサムネイルだけを出し、押したときに YouTube を読み込む（ページを軽く保つ） */
+  (function sfVideo() {
+    var box = document.querySelector('[data-sf-video]');
+    var v = CFG.sfVideo;
+    if (!box || !v || !/^[\w-]{11}$/.test(v.id || '')) return;
+    var preview = /[?&]video=preview(&|$)/.test(location.search);
+    if (!v.show && !preview) return;
+    var title = v.title || '動画';
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'sf-video-poster';
+    btn.setAttribute('aria-label', title + 'を再生');
+    var img = document.createElement('img');
+    img.src = 'https://i.ytimg.com/vi/' + v.id + '/hqdefault.jpg';
+    img.alt = '';
+    img.loading = 'lazy';
+    img.decoding = 'async';
+    var play = document.createElement('span');
+    play.className = 'sf-video-play';
+    play.setAttribute('aria-hidden', 'true');
+    btn.appendChild(img);
+    btn.appendChild(play);
+    btn.addEventListener('click', function () {
+      var f = document.createElement('iframe');
+      f.src = 'https://www.youtube-nocookie.com/embed/' + v.id + '?autoplay=1&rel=0&playsinline=1';
+      f.title = title;
+      f.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen';
+      f.allowFullscreen = true;
+      f.referrerPolicy = 'strict-origin-when-cross-origin';
+      box.replaceChild(f, btn);
+      f.focus();
+    });
+    box.appendChild(btn);
+    box.hidden = false;
+  })();
+
   /* ---------- 開催状況 ---------- */
   function jst(dateStr, time) { return new Date(dateStr + 'T' + (time || '00:00') + ':00+09:00'); }
 

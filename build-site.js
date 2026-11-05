@@ -283,8 +283,8 @@ function buildHeaders(pages) {
     "img-src 'self' data: https:",
     // 公開 CSV は docs.google.com から *.googleusercontent.com へリダイレクトされる
     `connect-src 'self' https://docs.google.com https://*.googleusercontent.com ${CF_ANALYTICS.connect}`,
-    // 来場案内の Google マップと、部誌 PDF の埋め込み
-    "frame-src 'self' https://www.google.com",
+    // 来場案内の Google マップ、部誌 PDF、SF2026 トップの YouTube 動画（プライバシー強化モード）の埋め込み
+    "frame-src 'self' https://www.google.com https://www.youtube-nocookie.com",
     "font-src 'self'",
     "object-src 'none'",
     "base-uri 'self'",
