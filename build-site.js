@@ -136,6 +136,7 @@ function structuredData(cfg, site) {
     '@type': 'Organization',
     '@id': site + '/#organization',
     name: cfg.siteName || 'Aoristos',
+    description: '大阪星光学院の生徒による探究団体。メンバーそれぞれが自分の探究課題を見つけて活動している。',
     url: site + '/',
     logo: site + '/assets/apple-touch-icon.png',
     image: site + '/' + OG_IMAGE
@@ -148,7 +149,7 @@ function structuredData(cfg, site) {
       '@type': 'WebSite',
       '@id': site + '/#website',
       name: cfg.siteName || 'Aoristos',
-      alternateName: ['Aoristos 公式サイト', 'Aoristos 星光 SF2026', 'Aoristos SF2026'],
+      alternateName: ['Aoristos 公式サイト', 'Aoristos 大阪星光学院', 'Aoristos 星光 SF2026', 'Aoristos SF2026'],
       url: site + '/',
       inLanguage: 'ja',
       publisher: { '@id': org['@id'] }

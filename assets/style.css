@@ -1038,3 +1038,48 @@ a.tagchart-row:hover { text-decoration: none; }
 .sf-all strong::after { content: " ›"; color: var(--link); }
 .sf-all span { font-size: 13px; color: var(--ink-2); }
 @media (max-width: 833px) { .sf-all { grid-template-columns: 1fr; gap: 8px; } }
+
+/* SF2026 の中のページのサブメニュー（ヘッダーの下） */
+.subnav { background: var(--bg); border-bottom: 1px solid var(--line); }
+.subnav-inner { max-width: calc(var(--w) + var(--gutter) * 2); margin: 0 auto; padding: 0 var(--gutter); display: flex; align-items: center; gap: 28px; height: 44px; }
+.subnav-title { flex: none; font-size: 15px; font-weight: 700; color: var(--ink); }
+.subnav-title small { font-size: 12px; font-weight: 400; color: var(--ink-2); margin-left: 2px; }
+.subnav-title:hover { text-decoration: none; }
+.subnav ul { display: flex; gap: 24px; margin-left: auto; overflow-x: auto; scrollbar-width: none; }
+.subnav ul::-webkit-scrollbar { display: none; }
+.subnav a { white-space: nowrap; }
+.subnav li a { font-size: 12px; color: var(--ink); opacity: .8; }
+.subnav li a:hover { opacity: 1; text-decoration: none; }
+.subnav li a[aria-current="page"] { opacity: 1; font-weight: 600; color: var(--shu); }
+@media (max-width: 833px) {
+  .subnav-inner { gap: 16px; height: 42px; padding-right: 0; }
+  .subnav ul { margin-left: 0; gap: 18px; padding-right: var(--gutter); }
+  .subnav-title small { display: none; }
+}
+
+/* SF2026 の入口ページ・Aoristos とは・トップの活動紹介 */
+.sf-title { font-size: clamp(44px, 9vw, 104px); letter-spacing: .01em; margin-top: 10px; }
+.sf-hero-lead { max-width: 34em; margin: 22px auto 0; color: var(--ink-2); font-size: clamp(15px, 1.8vw, 18px); }
+.hero-lead { max-width: 30em; margin: 16px auto 0; color: var(--ink-2); font-size: clamp(16px, 2vw, 19px); line-height: 1.7; }
+.steps3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 24px; }
+.steps3 li { background: var(--bg); border-radius: var(--radius-m); padding: 24px 22px; }
+.band:not(.band-alt) .steps3 li { background: var(--bg-alt); }
+.steps3 b { display: inline-grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; background: var(--ink); color: #fff; font-size: 14px; margin-bottom: 12px; }
+.steps3 h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+.steps3 p { font-size: 14px; color: var(--ink-2); }
+.sf-now { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: center; background: var(--bg); border-radius: var(--radius-l); padding: 36px 40px; }
+.sf-now .eyebrow { color: var(--shu); }
+.sf-now h2 { font-size: clamp(26px, 3.6vw, 36px); font-weight: 700; line-height: 1.2; }
+.sf-now p { color: var(--ink-2); margin-top: 10px; }
+.sf-now .hero-dates { justify-content: flex-start; margin-top: 18px; font-size: clamp(20px, 2.6vw, 26px); }
+.sf-now .hero-dates small, .sf-now .hero-dates .sep, .sf-now .hero-count { color: var(--ink-2); }
+.sf-now .hero-count { font-size: 14px; margin-top: 6px; text-align: left; }
+.sf-now-links { display: grid; gap: 8px; }
+.sf-now-links a { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 18px; border-radius: 12px; background: var(--bg-alt); color: var(--ink); font-weight: 600; }
+.sf-now-links a::after { content: "›"; color: var(--link); font-size: 20px; line-height: 1; }
+.sf-now-links a:hover { text-decoration: none; background: #e8e8ed; }
+.sf-now-links a small { font-weight: 400; color: var(--ink-2); font-size: 12px; margin-left: 8px; }
+@media (max-width: 833px) {
+  .steps3 { grid-template-columns: 1fr; gap: 10px; }
+  .sf-now { grid-template-columns: 1fr; padding: 26px 22px; gap: 20px; }
+}

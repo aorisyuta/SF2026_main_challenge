@@ -1,7 +1,8 @@
 /*
   header.js — 共通のナビゲーション・お知らせリボン・フッターを生成する
   各ページで window.pageConfig を定義してから defer で読み込む。
-    currentPage: index / projects / timetable / info / blog / archive
+    currentPage: index / about / sf / projects / timetable / others / info / blog / games / archive
+                 （sf・projects・timetable・others・info は「SF2026」の中のページ。上部にサブメニューが出る）
     basePath:    サブフォルダのページは '../'
     title:       タブに出るタイトル（省略時は既存の <title>）
     hideRibbon:  true でお知らせリボンを出さない
@@ -14,25 +15,46 @@
   var page = window.pageConfig || {};
   var base = page.basePath || '';
 
+  // サイト全体（Aoristos 公式サイト）のメニュー
   var NAV = [
-    { key: 'projects', href: 'projects.html', label: '企画' },
-    { key: 'timetable', href: 'timetable.html', label: 'タイムテーブル' },
+    { key: 'about', href: 'about.html', label: 'Aoristos とは' },
+    { key: 'sf', href: 'sf.html', label: 'SF2026' },
     { key: 'blog', href: 'blog.html', label: 'ブログ' },
-    { key: 'others', href: 'others.html', label: '他の企画' },
-    { key: 'info', href: 'info.html', label: '来場案内' },
     { key: 'games', href: 'games/index.html', label: 'ゲーム' },
     { key: 'archive', href: 'archive/index.html', label: 'アーカイブ' }
   ];
+  // 「SF2026」の中のページ（SF の活動はここにまとめる）
+  var SF_NAV = [
+    { key: 'sf', href: 'sf.html', label: 'SF2026 トップ' },
+    { key: 'projects', href: 'projects.html', label: 'Aoristos の企画' },
+    { key: 'timetable', href: 'timetable.html', label: 'タイムテーブル' },
+    { key: 'others', href: 'others.html', label: '他の企画' },
+    { key: 'info', href: 'info.html', label: '来場案内' }
+  ];
+  var inSF = SF_NAV.some(function (n) { return n.key === page.currentPage; });
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  /* SF2026 の中のページに出すサブメニュー */
+  function subNav() {
+    return '<nav class="subnav" aria-label="SF2026">' +
+      '<div class="subnav-inner">' +
+        '<a class="subnav-title" href="' + base + 'sf.html">SF2026<small>「' + esc(CFG.theme || '') + '」</small></a>' +
+        '<ul>' + SF_NAV.map(function (n) {
+          var cur = page.currentPage === n.key;
+          return '<li><a href="' + base + n.href + '"' + (cur ? ' aria-current="page"' : '') + '>' + n.label + '</a></li>';
+        }).join('') + '</ul>' +
+      '</div>' +
+    '</nav>';
   }
 
   function buildHeader() {
     if (page.title) document.title = page.title;
 
     var links = NAV.map(function (n) {
-      var cur = page.currentPage === n.key;
+      var cur = page.currentPage === n.key || (n.key === 'sf' && inSF);
       return '<li><a href="' + base + n.href + '"' + (cur ? ' aria-current="page"' : '') + '>' + n.label + '</a></li>';
     }).join('');
 
@@ -42,7 +64,7 @@
         '<div class="gnav-inner">' +
           '<a class="gnav-brand" href="' + base + 'index.html" aria-label="Aoristos ホーム">' +
             '<img class="gnav-logo" src="' + base + 'assets/aoristos-mark.svg" alt="" width="39" height="20">' +
-            '<span class="gnav-brand-text">Aoristos<span class="gnav-year">SF2026</span></span>' +
+            '<span class="gnav-brand-text">Aoristos<span class="gnav-year">大阪星光学院</span></span>' +
           '</a>' +
           '<nav class="gnav-nav" id="gnavNav" aria-label="メイン">' +
             '<ul>' + links + '</ul>' +
@@ -52,6 +74,7 @@
           '</button>' +
         '</div>' +
       '</header>' +
+      (inSF && !page.noFooter ? subNav() : '') +
       '<div class="ribbon" id="ribbon" hidden></div>';
 
     document.body.insertAdjacentHTML('afterbegin', html);
@@ -96,20 +119,23 @@
           '<div class="footer-brand">' +
             '<img class="footer-logo" src="' + base + 'assets/aoristos-mark.svg" alt="" width="54" height="28">' +
             '<div><p class="footer-theme">Aoristos</p>' +
-            '<p class="footer-event">' + esc(CFG.eventName) + '「' + esc(CFG.theme) + '」出展<br>' + esc(dateLine()) + '</p></div>' +
+            '<p class="footer-event">大阪星光学院の生徒による探究団体<br>' + esc(CFG.eventName) + '「' + esc(CFG.theme) + '」出展：' + esc(dateLine()) + '</p></div>' +
           '</div>' +
           '<div class="footer-cols">' +
             '<div><h2>サイト</h2><ul>' +
               '<li><a href="' + base + 'index.html">ホーム</a></li>' +
               NAV.map(function (n) { return '<li><a href="' + base + n.href + '">' + n.label + '</a></li>'; }).join('') +
             '</ul></div>' +
-            (CFG.officialUrl ? '<div><h2>SF2026</h2><ul><li><a href="' + esc(CFG.officialUrl) + '" target="_blank" rel="noopener noreferrer">SF 公式サイト</a></li></ul></div>' : '') +
+            '<div><h2>SF2026</h2><ul>' +
+              SF_NAV.map(function (n) { return '<li><a href="' + base + n.href + '">' + n.label + '</a></li>'; }).join('') +
+              (CFG.officialUrl ? '<li><a href="' + esc(CFG.officialUrl) + '" target="_blank" rel="noopener noreferrer">SF 公式サイト</a></li>' : '') +
+            '</ul></div>' +
             '<div><h2>フォロー</h2><ul class="footer-social" id="footerSocial">' + socialItems(CFG.fallbackLinks || []) + '</ul></div>' +
           '</div>' +
         '</div>' +
         '<div class="footer-bottom">' +
           '<p>Copyright © 2026 ' + esc(CFG.producer) + '.</p>' +
-          '<p>Aoristos 公式サイト。SF2026 の Aoristos 出展企画をご案内しています（大阪星光学院および SF 全体の公式サイトではありません）。' +
+          '<p>Aoristos 公式サイト。大阪星光学院の生徒による探究団体 Aoristos の活動をお知らせしています（大阪星光学院および SF 全体の公式サイトではありません）。' +
             (CFG.officialUrl ? 'SF 全体の情報は <a href="' + esc(CFG.officialUrl) + '" target="_blank" rel="noopener noreferrer">SF 公式サイト</a> をご覧ください。' : '') + '</p>' +
         '</div>' +
       '</div>';

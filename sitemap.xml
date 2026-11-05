@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://aoristos.net/about</loc>
+    <lastmod>2026-11-05</lastmod>
+  </url>
+  <url>
     <loc>https://aoristos.net/archive/</loc>
     <lastmod>2026-11-01</lastmod>
   </url>
@@ -71,6 +75,10 @@
   <url>
     <loc>https://aoristos.net/projects/kagaku-koshien</loc>
     <lastmod>2026-11-01</lastmod>
+  </url>
+  <url>
+    <loc>https://aoristos.net/sf</loc>
+    <lastmod>2026-11-05</lastmod>
   </url>
   <url>
     <loc>https://aoristos.net/timetable</loc>
