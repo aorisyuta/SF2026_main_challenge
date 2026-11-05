@@ -5,7 +5,7 @@ Aoristos の公式サイトです。Aoristos は大阪星光学院の生徒に�
 ### サイトの構成
 
 - **全体ナビ**（`assets/header.js` の `NAV`）：Aoristos とは（`about.html`）／ SF2026（`sf.html`）／ ブログ ／ ゲーム ／ アーカイブ
-- **SF2026 のサブナビ**（同 `SF_NAV`）：SF2026 トップ（`sf.html`）／ Aoristos の企画（`projects.html`）／ タイムテーブル ／ 他の企画 ／ 来場案内。`pageConfig.currentPage` が `SF_NAV` のどれかのページ（企画の詳細ページ＝`projects` を含む）では、ヘッダーの下にサブナビが出て、全体ナビの「SF2026」が選択状態になる
+- **SF2026 のサブナビ**（同 `SF_NAV`）：SF2026 トップ（`sf.html`）／ Aoristos の企画（`projects.html`）／ タイムテーブル ／ 来場案内。`pageConfig.currentPage` が `SF_NAV` のどれかのページ（企画の詳細ページ＝`projects` を含む）では、ヘッダーの下にサブナビが出て、全体ナビの「SF2026」が選択状態になる
 - URL は以前のまま（SEO のため変更しない）
 
 SF2026 開催日：**2026年11月7日（土）午後のみ・8日（日）**（両日 15:30 頃まで） ／ SF のテーマ：**融合**
@@ -222,6 +222,8 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 ---
 
 ## 他の企画（others.html / others-list.html）
+
+**サイト内のどこからもリンクしていません**（URL を直接入力したときだけ見られる）。`noindex` を付けているので検索結果やサイトマップにも出ません。リンクを戻すときは `assets/header.js` の `SF_NAV` に追加し、`tools/build-others.js` の `noindex` を外します。
 
 SF 公式サイト（<https://seikosf.jp>）の企画・ステージ・校内マップの情報を、Aoristos のサイト向けにまとめ直したページです。
 `others.html` が概要（基本情報・図・ステージ）、`others-list.html` が企画一覧（校内マップ・検索・絞り込み）。

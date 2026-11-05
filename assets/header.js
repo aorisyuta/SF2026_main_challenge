@@ -2,7 +2,7 @@
   header.js — 共通のナビゲーション・お知らせリボン・フッターを生成する
   各ページで window.pageConfig を定義してから defer で読み込む。
     currentPage: index / about / sf / projects / timetable / others / info / blog / games / archive
-                 （sf・projects・timetable・others・info は「SF2026」の中のページ。上部にサブメニューが出る）
+                 （sf・projects・timetable・others・info は「SF2026」の中のページ。上部にサブメニューが出る。others はメニューに載せない）
     basePath:    サブフォルダのページは '../'
     title:       タブに出るタイトル（省略時は既存の <title>）
     hideRibbon:  true でお知らせリボンを出さない
@@ -28,10 +28,10 @@
     { key: 'sf', href: 'sf.html', label: 'SF2026 トップ', short: 'SF トップ' },
     { key: 'projects', href: 'projects.html', label: 'Aoristos の企画', short: '企画' },
     { key: 'timetable', href: 'timetable.html', label: 'タイムテーブル', short: '時間割' },
-    { key: 'others', href: 'others.html', label: '他の企画' },
     { key: 'info', href: 'info.html', label: '来場案内' }
   ];
-  var inSF = SF_NAV.some(function (n) { return n.key === page.currentPage; });
+  // 「他の企画」（others）はメニューからリンクしない（URL を直接入力したときだけ見られる）が、SF2026 の中のページとして扱う
+  var inSF = page.currentPage === 'others' || SF_NAV.some(function (n) { return n.key === page.currentPage; });
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
