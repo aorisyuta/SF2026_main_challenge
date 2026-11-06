@@ -91,7 +91,7 @@ window.SF_CONFIG = {
     id は動画 URL の「watch?v=」の後ろの部分。
   */
   sfVideo: {
-    show: false,
+    show: true,
     id: '-_S8f226zYQ',
     title: 'Aoristos SF2026 紹介動画'
   }
