@@ -16,7 +16,7 @@
     var row = el('div', 'spec-row');
     row.appendChild(el('dt', null, label));
     var dd = el('dd', null, value);
-    if (url && /^https?:\/\//.test(url)) {
+    if (url && /^(https?:\/\/|\/[^/])/.test(url)) {   // 外部 URL か、サイト内の絶対パス（/assets/docs/… など）
       var link = el('a', 'more-link', linkLabel || url);
       link.href = url;
       link.target = '_blank';

@@ -97,7 +97,7 @@ function detailBody(project, d) {
     </header>`;
   }
   const cat = d.category ? (CATEGORY_CLASS[d.category] || 'cat-x') : '';
-  const link = (url, label) => url && /^https?:\/\//.test(url)
+  const link = (url, label) => url && /^(https?:\/\/|\/[^/])/.test(url)
     ? `<br><a class="more-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(label || url)}</a>` : '';
   const row = (label, value, url, linkLabel) => value ? `\n          <div class="spec-row"><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(value)}${link(url, linkLabel)}</dd></div>` : '';
   const rows = row('場所', d.location) + row('時間', d.schedule) + row('所要時間', d.duration) +
