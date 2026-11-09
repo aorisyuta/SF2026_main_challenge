@@ -152,42 +152,48 @@
     document.body.appendChild(footer);
   }
 
-  /* シート連動：お知らせリボン（pin = TRUE の news）とフッターの SNS */
+  /* シート連動：グッズの枠（type = news）とフッターの SNS */
   function fillFromSheet() {
     if (!window.SFSheet) return;
     window.SFSheet.load().then(function (data) {
       var E = window.SFSheet.esc;
 
-      var pinned = data.news.filter(function (n) { return n.pin; });
-      if (pinned.length && !page.hideRibbon) showPromo(pinned[0], E);
+      if (data.news.length && !page.hideRibbon) showPromo(data.news, E);
 
       var social = document.getElementById('footerSocial');
       if (social && data.links.length) social.innerHTML = socialItems(data.links);
     }).catch(function (err) { console.warn(err); });
   }
 
-  /* お知らせ（pin = TRUE の news の先頭）
+  /* グッズ（部誌・Tシャツなど。シートの type = news をまとめて「グッズ」として出す）
      広い画面（1480px 以上）：本文の右の余白に、広告のような縦長のカードで固定
      それより狭い画面：少しスクロールしたら画面の下に細いバーで固定（本文に重ならない）
-     × で閉じると、同じお知らせは次から出さない（内容が変われば再び出る） */
-  function showPromo(n, E) {
+     × で閉じると、同じ内容は次から出さない（グッズが変われば再び出る） */
+  var ART_NAME = { pdf: '部誌', tshirt: 'Tシャツ' };
+  function showPromo(list, E) {
     var KEY = 'aoristos-promo-closed';
-    var id = n.title + '|' + (n.url || '');
+    var id = list.map(function (n) { return n.title; }).join('|');
     try { if (localStorage.getItem(KEY) === id) return; } catch (e) {}
-    var url = n.url ? (/^(https?:|\/|#)/.test(n.url) ? n.url : base + n.url) : '';
-    var ext = /^https?:/.test(url) ? ' target="_blank" rel="noopener noreferrer"' : '';
-    var art = /^(pdf|tshirt)$/.test(n.art || '') ? '<img class="promo-art" src="' + base + 'assets/art/' + n.art + '.svg" alt="" width="160" height="120">' : '';
+    var goods = base + 'index.html#goods';
+    function href(u) { return u || goods; }   // n.url は sheet.js の safeUrl で basePath 付きになっている
+    var items = list.map(function (n) {
+      var url = href(n.url);
+      var ext = /^https?:/.test(url) ? ' target="_blank" rel="noopener noreferrer"' : '';
+      var art = /^(pdf|tshirt)$/.test(n.art || '') ? '<img class="promo-art promo-art-' + n.art + '" src="' + base + 'assets/art/' + n.art + '.svg" alt="" width="48" height="36">' : '';
+      return '<li><a href="' + E(url) + '"' + ext + '>' + art +
+        '<span class="promo-name">' + E(n.name || ART_NAME[n.art] || n.title) + '</span>' +
+        (n.note ? '<span class="promo-note">' + E(n.note) + '</span>' : '') + '</a></li>';
+    }).join('');
     var box = document.createElement('aside');
     box.className = 'promo';
-    box.setAttribute('aria-label', 'お知らせ');
+    box.setAttribute('aria-label', 'グッズ');
     box.innerHTML =
-      (url ? '<a class="promo-body" href="' + E(url) + '"' + ext + '>' : '<div class="promo-body">') +
-        '<span class="promo-eyebrow">お知らせ</span>' + art +
-        '<span class="promo-text"><strong>' + E(n.title) + '</strong>' +
-        (n.text ? '<span class="promo-sub">' + E(n.text) + '</span>' : '') +
-        (url ? '<span class="promo-more">' + E(n.linkLabel || '詳しく見る') + '</span>' : '') + '</span>' +
-      (url ? '</a>' : '</div>') +
-      '<button class="promo-close" type="button" aria-label="お知らせを閉じる">×</button>';
+      '<div class="promo-body">' +
+        '<a class="promo-head" href="' + E(goods) + '"><span class="promo-eyebrow">グッズ</span><strong>Aoristos グッズ</strong></a>' +
+        '<ul class="promo-items">' + items + '</ul>' +
+        '<a class="promo-more" href="' + E(goods) + '">グッズを見る</a>' +
+      '</div>' +
+      '<button class="promo-close" type="button" aria-label="グッズの案内を閉じる">×</button>';
     document.body.appendChild(box);
     document.documentElement.classList.add('has-promo');
 

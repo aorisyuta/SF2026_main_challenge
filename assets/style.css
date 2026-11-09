@@ -158,7 +158,7 @@ a:hover { text-decoration: underline; }
   .gnav-nav a[aria-current="page"] { color: var(--ink-2); }
 }
 
-/* ---------- お知らせ（シートの pin=TRUE の news） ----------
+/* ---------- グッズの枠（シートの type = news：部誌・Tシャツなど） ----------
    1480px 未満：画面の下に細いバーで固定（スクロールしてから出す）
    1480px 以上：本文（980px）の右の余白の中央に、縦長のカードで固定（広告枠のように本文に重ならない） */
 .promo { position: fixed; z-index: 90; left: 0; right: 0; bottom: 0; display: flex; align-items: center;
@@ -166,26 +166,31 @@ a:hover { text-decoration: underline; }
   padding-bottom: env(safe-area-inset-bottom);
   opacity: 0; transform: translateY(100%); pointer-events: none; transition: opacity .3s, transform .3s; }
 .promo.is-shown { opacity: 1; transform: none; pointer-events: auto; }
-.promo-body { flex: 1; min-width: 0; display: flex; gap: 12px; align-items: center; max-width: var(--w); margin: 0 auto;
-  padding: 10px 4px 10px var(--gutter); color: inherit; }
-.promo-body:hover { text-decoration: none; }
-.promo-body:hover .promo-more { text-decoration: underline; }
-.promo-eyebrow { display: none; }
-.promo-art { flex: none; width: 34px; height: 34px; object-fit: contain; }
-.promo-text { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 10px; min-width: 0; }
-.promo-text strong { font-size: 14px; font-weight: 700; line-height: 1.4; }
-.promo-sub { font-size: 13px; color: var(--ink-2); line-height: 1.5; }
-.promo-more { font-size: 13px; color: var(--link); white-space: nowrap; }
+.promo a { color: inherit; }
+.promo a:hover { text-decoration: none; }
+.promo-body { flex: 1; min-width: 0; display: flex; align-items: center; gap: 16px; max-width: var(--w); margin: 0 auto; padding: 8px 4px 8px var(--gutter); }
+.promo-head { flex: none; display: flex; flex-direction: column; line-height: 1.3; }
+.promo-eyebrow { font-size: 11px; font-weight: 600; letter-spacing: .06em; color: var(--shu); }
+.promo-head strong { font-size: 14px; font-weight: 700; }
+.promo-items { flex: 1; min-width: 0; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; }
+.promo-items::-webkit-scrollbar { display: none; }
+.promo-items a { display: flex; align-items: center; gap: 8px; padding: 6px 12px 6px 6px; border-radius: 12px; background: var(--bg-alt); white-space: nowrap; }
+.promo-items a:hover { background: #ebebef; }
+.promo-art { flex: none; width: 32px; height: 26px; object-fit: contain; }
+.promo-name { font-size: 13px; font-weight: 700; }
+.promo-note { font-size: 12px; color: var(--ink-2); }
+.promo-more { flex: none; font-size: 13px; color: var(--link) !important; white-space: nowrap; }
 .promo-more::after { content: " ›"; }
+.promo-more:hover { text-decoration: underline !important; }
 .promo-close { flex: none; width: 36px; height: 36px; margin-right: 8px; border: 0; border-radius: 50%; background: transparent;
   color: var(--ink-2); font-size: 18px; line-height: 1; cursor: pointer; }
 .promo-close:hover { background: var(--bg-alt); color: var(--ink); }
 /* ページの最後（フッター）がバーに隠れないように */
 html.has-promo .site-footer { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
 @media (max-width: 599px) {
-  .promo-sub { display: none; }
-  .promo-art { width: 30px; height: 30px; }
-  .promo-text strong { font-size: 13px; }
+  .promo-body { gap: 10px; padding-left: 12px; }
+  .promo-head strong, .promo-more, .promo-note { display: none; }
+  .promo-items a { padding: 5px 10px 5px 5px; }
   .promo-close { margin-right: 4px; }
 }
 @media (min-width: 1480px) {
@@ -193,18 +198,22 @@ html.has-promo .site-footer { padding-bottom: calc(64px + env(safe-area-inset-bo
     flex-direction: column; align-items: stretch; border: 1px solid var(--line); border-radius: var(--radius-m);
     padding-bottom: 0; transform: translateY(-50%); }
   .promo.is-shown { transform: translateY(-50%); }
-  .promo-body { flex-direction: column; align-items: stretch; gap: 12px; margin: 0; padding: 18px 18px 20px; text-align: left; }
-  .promo-eyebrow { display: block; font-size: 11px; font-weight: 600; letter-spacing: .06em; color: var(--ink-2); }
-  .promo-art { width: 100%; height: 110px; background: var(--bg-alt); border-radius: 12px; padding: 14px; box-sizing: border-box; }
-  .promo-text { flex-direction: column; align-items: stretch; gap: 6px; }
-  .promo-text strong { font-size: 16px; line-height: 1.45; }
-  .promo-more { display: block; margin-top: 8px; padding: 9px 0; text-align: center; border-radius: 980px; background: var(--btn, #0071e3); color: #fff; font-size: 13px; font-weight: 600; }
+  .promo-body { flex-direction: column; align-items: stretch; gap: 14px; margin: 0; padding: 18px 16px 18px; }
+  .promo-head strong { font-size: 17px; margin-top: 2px; }
+  .promo-items { flex-direction: column; overflow: visible; }
+  .promo-items a { flex-direction: column; align-items: flex-start; gap: 4px; padding: 12px; white-space: normal; }
+  .promo-art { width: 100%; height: 64px; margin-bottom: 6px; }
+  .promo-name { font-size: 14px; }
+  .promo-more { display: block; padding: 9px 0; text-align: center; border-radius: 980px; background: var(--btn); color: #fff !important; font-size: 13px; font-weight: 600; }
   .promo-more::after { content: ""; }
-  .promo-body:hover .promo-more { text-decoration: none; opacity: .9; }
+  .promo-more:hover { text-decoration: none !important; opacity: .9; }
   .promo-close { position: absolute; top: 8px; right: 8px; width: 30px; height: 30px; margin: 0; font-size: 16px; }
   html.has-promo .site-footer { padding-bottom: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .promo { transition: none; } }
+/* トップのグッズ見出し */
+.goods-head { padding-top: 36px; padding-bottom: 16px; }
+.goods-lead { margin-top: 4px; font-size: 14px; color: var(--ink-2); }
 
 /* =========================================================
    Sections
@@ -1158,3 +1167,4 @@ a.tagchart-row:hover { text-decoration: none; }
 .archive-sublinks { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 18px; font-size: 14px; }
 .archive-sublinks a { color: var(--link, #0066cc); }
 @media (max-width: 599px) { .subnav-title { display: none; } }
+.promo-art-tshirt { background: var(--ink); border-radius: 8px; padding: 3px; box-sizing: border-box; }

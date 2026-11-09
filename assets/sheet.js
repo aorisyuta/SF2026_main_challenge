@@ -221,6 +221,8 @@
         body: r.body || '',
         url: safeUrl(r.url),
         linkLabel: r.link_label || '',
+        name: r.name || '',                                      // グッズの短い名前（右側・下部のグッズ枠用。省略可）
+        note: r.note || '',                                      // グッズの一言（例：PDF 版 発売中。省略可）
         image: art ? '' : imageUrl(r.image),
         art: art,
         tags: String(r.tags || '').split(/[,、，]/).map(function (t) { return t.trim(); }).filter(Boolean),
@@ -265,7 +267,7 @@
     return (CFG.defaultNews || []).map(function (n, i) {
       return {
         id: '', title: n.title || '', text: n.text || '', body: '',
-        url: safeUrl(n.url), linkLabel: n.linkLabel || '', image: n.image ? imageUrl(n.image) : '',
+        url: safeUrl(n.url), linkLabel: n.linkLabel || '', name: n.name || '', note: n.note || '', image: n.image ? imageUrl(n.image) : '',
         art: n.art || '', tags: [], author: '', style: n.style || '', pin: !!n.pin,
         date: null, dateLabel: '', order: i
       };

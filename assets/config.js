@@ -50,9 +50,12 @@ window.SF_CONFIG = {
     シートに type=news の行が1つもないとき（またはシートが読めないとき）にだけ表示されます。
     シートに news 行を書けば、そちらが優先されます。
     art: 'pdf' / 'tshirt' で内蔵のイラストを表示。
+    name / note は、ページの右側（広い画面）・下部に出る「グッズ」枠での短い名前と一言。
   */
   defaultNews: [
     {
+      name: '部誌',
+      note: 'PDF 版 発売中',
       title: 'Aoristos 部誌、PDF 版 発売中。',
       text: 'オンラインで PDF 版をお求めいただけます。',
       url: 'projects/aoristos-bushi.html',
@@ -62,6 +65,8 @@ window.SF_CONFIG = {
       pin: true
     },
     {
+      name: 'Tシャツ',
+      note: '発売中',
       title: 'Aoristos Tシャツ、発売中。',
       text: '購入方法はこのページでお知らせします。',
       url: '',
