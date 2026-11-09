@@ -167,7 +167,8 @@
   }
 
   /* お知らせ（pin = TRUE の news の先頭）
-     パソコン：画面の右下に小さなカード／スマホ：少しスクロールしたら画面の下に細く固定
+     広い画面（1480px 以上）：本文の右の余白に、広告のような縦長のカードで固定
+     それより狭い画面：少しスクロールしたら画面の下に細いバーで固定（本文に重ならない）
      × で閉じると、同じお知らせは次から出さない（内容が変われば再び出る） */
   function showPromo(n, E) {
     var KEY = 'aoristos-promo-closed';
@@ -175,13 +176,13 @@
     try { if (localStorage.getItem(KEY) === id) return; } catch (e) {}
     var url = n.url ? (/^(https?:|\/|#)/.test(n.url) ? n.url : base + n.url) : '';
     var ext = /^https?:/.test(url) ? ' target="_blank" rel="noopener noreferrer"' : '';
-    var art = /^(pdf|tshirt)$/.test(n.art || '') ? '<img class="promo-art" src="' + base + 'assets/art/' + n.art + '.svg" alt="" width="40" height="40">' : '';
+    var art = /^(pdf|tshirt)$/.test(n.art || '') ? '<img class="promo-art" src="' + base + 'assets/art/' + n.art + '.svg" alt="" width="160" height="120">' : '';
     var box = document.createElement('aside');
     box.className = 'promo';
     box.setAttribute('aria-label', 'お知らせ');
     box.innerHTML =
       (url ? '<a class="promo-body" href="' + E(url) + '"' + ext + '>' : '<div class="promo-body">') +
-        art +
+        '<span class="promo-eyebrow">お知らせ</span>' + art +
         '<span class="promo-text"><strong>' + E(n.title) + '</strong>' +
         (n.text ? '<span class="promo-sub">' + E(n.text) + '</span>' : '') +
         (url ? '<span class="promo-more">' + E(n.linkLabel || '詳しく見る') + '</span>' : '') + '</span>' +
@@ -190,7 +191,7 @@
     document.body.appendChild(box);
     document.documentElement.classList.add('has-promo');
 
-    var mobile = window.matchMedia('(max-width: 833px)');
+    var mobile = window.matchMedia('(max-width: 1479px)');
     function update() {
       var on = !mobile.matches || window.scrollY > 160;
       box.classList.toggle('is-shown', on);
