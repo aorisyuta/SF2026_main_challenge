@@ -2,7 +2,7 @@
   header.js — 共通のナビゲーション・お知らせリボン・フッターを生成する
   各ページで window.pageConfig を定義してから defer で読み込む。
     currentPage: index / about / sf / projects / timetable / others / info / blog / games / archive
-                 （sf・projects・timetable・others・info は「SF2026」の中のページ。上部にサブメニューが出る。others はメニューに載せない）
+                 （sf・projects・timetable・others・info は SF2026 のページ。アーカイブの中として扱い、上部にサブメニューが出る）
     basePath:    サブフォルダのページは '../'
     title:       タブに出るタイトル（省略時は既存の <title>）
     hideRibbon:  true でお知らせリボンを出さない
@@ -18,20 +18,19 @@
   // サイト全体（Aoristos 公式サイト）のメニュー
   var NAV = [
     { key: 'about', href: 'about.html', label: 'Aoristos とは' },
-    { key: 'sf', href: 'sf.html', label: 'SF2026' },
     { key: 'blog', href: 'blog.html', label: 'ブログ' },
     { key: 'games', href: 'games/index.html', label: 'ゲーム' },
     { key: 'archive', href: 'archive/index.html', label: 'アーカイブ' }
   ];
-  // 「SF2026」の中のページ（SF の活動はここにまとめる）
+  // SF2026 のページ（開催後は「アーカイブ」の中のページとして扱う）
   var SF_NAV = [
     { key: 'sf', href: 'sf.html', label: 'SF2026 トップ', short: 'SF トップ' },
     { key: 'projects', href: 'projects.html', label: 'Aoristos の企画', short: '企画' },
     { key: 'timetable', href: 'timetable.html', label: 'タイムテーブル', short: '時間割' },
+    { key: 'others', href: 'others.html', label: '他の企画' },
     { key: 'info', href: 'info.html', label: '来場案内' }
   ];
-  // 「他の企画」（others）はメニューからリンクしない（URL を直接入力したときだけ見られる）が、SF2026 の中のページとして扱う
-  var inSF = page.currentPage === 'others' || SF_NAV.some(function (n) { return n.key === page.currentPage; });
+  var inSF = SF_NAV.some(function (n) { return n.key === page.currentPage; });
 
   function esc(s) {
     return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
@@ -41,7 +40,7 @@
   function subNav() {
     return '<nav class="subnav" aria-label="SF2026">' +
       '<div class="subnav-inner">' +
-        '<a class="subnav-title" href="' + base + 'sf.html">SF2026<small>「' + esc(CFG.theme || '') + '」</small></a>' +
+        '<p class="subnav-title"><a class="subnav-arch" href="' + base + 'archive/index.html">アーカイブ</a><span class="subnav-sep" aria-hidden="true">/</span><a href="' + base + 'sf.html">SF2026<small>「' + esc(CFG.theme || '') + '」</small></a></p>' +
         '<ul>' + SF_NAV.map(function (n) {
           var cur = page.currentPage === n.key;
           return '<li><a href="' + base + n.href + '"' + (cur ? ' aria-current="page"' : '') + '><span class="sn-l">' + n.label + '</span><span class="sn-s">' + (n.short || n.label) + '</span></a></li>';
@@ -59,14 +58,14 @@
   }
   function endedNote() {
     if (!sfEnded()) return '';
-    return '<p class="sf-ended"><span>SF2026「' + esc(CFG.theme || '') + '」は終了しました。ご来場いただいた皆さま、ありがとうございました。</span></p>';
+    return '<p class="sf-ended"><span>SF2026「' + esc(CFG.theme || '') + '」（' + esc(dateLine()) + '）のアーカイブです。ご来場いただいた皆さま、ありがとうございました。</span></p>';
   }
 
   function buildHeader() {
     if (page.title) document.title = page.title;
 
     var links = NAV.map(function (n) {
-      var cur = page.currentPage === n.key || (n.key === 'sf' && inSF);
+      var cur = page.currentPage === n.key || (n.key === 'archive' && inSF);
       return '<li><a href="' + base + n.href + '"' + (cur ? ' aria-current="page"' : '') + '>' + n.label + '</a></li>';
     }).join('');
 
@@ -138,7 +137,7 @@
               '<li><a href="' + base + 'index.html">ホーム</a></li>' +
               NAV.map(function (n) { return '<li><a href="' + base + n.href + '">' + n.label + '</a></li>'; }).join('') +
             '</ul></div>' +
-            '<div><h2>SF2026</h2><ul>' +
+            '<div><h2>SF2026（アーカイブ）</h2><ul>' +
               SF_NAV.map(function (n) { return '<li><a href="' + base + n.href + '">' + n.label + '</a></li>'; }).join('') +
               (CFG.officialUrl ? '<li><a href="' + esc(CFG.officialUrl) + '" target="_blank" rel="noopener noreferrer">SF 公式サイト</a></li>' : '') +
             '</ul></div>' +

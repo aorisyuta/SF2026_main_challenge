@@ -221,7 +221,6 @@ function head(o) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${o.title}｜Aoristos — 星光 SF2026</title>
   <meta name="description" content="${esc(o.desc)}">
-  <meta name="robots" content="noindex">
   <meta name="author" content="Aoristos">
   <meta name="theme-color" content="#ffffff">
   <link rel="icon" href="favicon.ico" sizes="any">

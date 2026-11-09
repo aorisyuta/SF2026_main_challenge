@@ -1107,3 +1107,13 @@ a.tagchart-row:hover { text-decoration: none; }
 
 /* SF2026 終了のお知らせ（SF のページのサブメニュー直下） */
 .sf-ended { background: var(--ink); color: #fff; text-align: center; font-size: 13px; line-height: 1.6; padding: 10px var(--gutter); }
+
+/* サブメニューの「アーカイブ / SF2026」 */
+.subnav-title { display: flex; align-items: baseline; gap: 8px; margin: 0; }
+.subnav-title a { color: var(--ink); }
+.subnav-title a:hover { text-decoration: none; opacity: .7; }
+.subnav-title .subnav-arch { font-size: 13px; font-weight: 500; color: var(--ink-2); }
+.subnav-sep { font-size: 13px; font-weight: 400; color: var(--line); }
+.archive-sublinks { display: flex; flex-wrap: wrap; gap: 8px 18px; margin-top: 18px; font-size: 14px; }
+.archive-sublinks a { color: var(--link, #0066cc); }
+@media (max-width: 599px) { .subnav-title { display: none; } }
