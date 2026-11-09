@@ -1104,3 +1104,6 @@ a.tagchart-row:hover { text-decoration: none; }
 .sf-video-poster:hover .sf-video-play, .sf-video-poster:focus-visible .sf-video-play { background: var(--shu); }
 .sf-video-poster:focus-visible { outline: 3px solid var(--shu); outline-offset: -3px; }
 @media (max-width: 599px) { .sf-video { margin-top: 28px; border-radius: 12px; } }
+
+/* SF2026 終了のお知らせ（SF のページのサブメニュー直下） */
+.sf-ended { background: var(--ink); color: #fff; text-align: center; font-size: 13px; line-height: 1.6; padding: 10px var(--gutter); }

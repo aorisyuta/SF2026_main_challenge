@@ -54,7 +54,7 @@ window.SF_CONFIG = {
   defaultNews: [
     {
       title: 'Aoristos 部誌、PDF 版 発売中。',
-      text: 'SF 当日は、会場で冊子版も販売します。',
+      text: 'オンラインで PDF 版をお求めいただけます。',
       url: 'projects/aoristos-bushi.html',
       linkLabel: '詳しく見る',
       art: 'pdf',

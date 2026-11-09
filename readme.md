@@ -7,6 +7,7 @@ Aoristos の公式サイトです。Aoristos は大阪星光学院の生徒に�
 - **全体ナビ**（`assets/header.js` の `NAV`）：Aoristos とは（`about.html`）／ SF2026（`sf.html`）／ ブログ ／ ゲーム ／ アーカイブ
 - **SF2026 のサブナビ**（同 `SF_NAV`）：SF2026 トップ（`sf.html`）／ Aoristos の企画（`projects.html`）／ タイムテーブル ／ 来場案内。`pageConfig.currentPage` が `SF_NAV` のどれかのページ（企画の詳細ページ＝`projects` を含む）では、ヘッダーの下にサブナビが出て、全体ナビの「SF2026」が選択状態になる
 - URL は以前のまま（SEO のため変更しない）
+- SF2026 は 2026年11月8日に終了。SF のページ（サブナビのあるページ）には、`assets/config.js` の `days` の最終日の終了時刻を過ぎると「SF2026「融合」は終了しました」の帯が自動で出る（`assets/header.js` の `endedNote()`）。トップの SF の帯は「これまでの活動」、アーカイブ（`archive/index.html`）に SF 2026 のカードを追加済み
 
 SF2026 開催日：**2026年11月7日（土）午後のみ・8日（日）**（両日 15:30 頃まで） ／ SF のテーマ：**融合**
 

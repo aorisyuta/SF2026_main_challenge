@@ -47,7 +47,19 @@
           return '<li><a href="' + base + n.href + '"' + (cur ? ' aria-current="page"' : '') + '><span class="sn-l">' + n.label + '</span><span class="sn-s">' + (n.short || n.label) + '</span></a></li>';
         }).join('') + '</ul>' +
       '</div>' +
-    '</nav>';
+    '</nav>' + endedNote();
+  }
+
+  /* SF2026 の最終日の終了時刻を過ぎたら、SF のページの上部に「終了しました」を出す */
+  function sfEnded() {
+    var d = CFG.days || [];
+    if (!d.length) return false;
+    var last = d[d.length - 1];
+    return Date.now() > Date.parse(last.date + 'T' + (last.close || '23:59') + ':00+09:00');
+  }
+  function endedNote() {
+    if (!sfEnded()) return '';
+    return '<p class="sf-ended"><span>SF2026「' + esc(CFG.theme || '') + '」は終了しました。ご来場いただいた皆さま、ありがとうございました。</span></p>';
   }
 
   function buildHeader() {
