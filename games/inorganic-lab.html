@@ -33,14 +33,14 @@
   <link rel="icon" href="../assets/favicon.svg?v=18f7d0c58a" type="image/svg+xml">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=ff38aa79bb">
   <link rel="stylesheet" href="../assets/style.css?v=52f4c44e47">
-  <link rel="stylesheet" href="../assets/games/inorganic-lab.css?v=65b059d130">
+  <link rel="stylesheet" href="../assets/games/inorganic-lab.css?v=fb6773d118">
   <script>
     window.pageConfig = { currentPage: 'games', basePath: '../', hideRibbon: true };
   </script>
   <script src="../assets/config.js?v=ee9bac1a7b"></script>
   <script src="../assets/sheet.js?v=4678074353" defer></script>
   <script src="../assets/header.js?v=3283166e6e" defer></script>
-  <script src="../assets/games/inorganic-lab.js?v=3de180792f" defer></script>
+  <script src="../assets/games/inorganic-lab.js?v=afb38e9964" defer></script>
 </head>
 <body>
 
@@ -60,10 +60,13 @@
     <span class="ik-lbl">難易度</span>
     <span id="diffs" class="ik-bar"></span>
     <span class="ik-spacer"></span>
+    <button class="ik-btn" id="ptBtn" aria-haspopup="dialog">周期表</button>
     <label class="ik-toggle" for="obsMode"><input type="checkbox" id="obsMode"> 観察モード</label>
     <button class="ik-lv" id="freeBtn">自由実験</button>
     <button class="ik-btn ik-primary" id="newBtn">新しい問題</button>
   </div>
+
+  <div class="ik-nowbar" id="nowbar" aria-hidden="true"></div>
 
   <div class="ik-grid">
     <section class="ik-card" aria-label="ビーカー">
@@ -126,6 +129,7 @@
         <button class="ik-btn" id="giveup">解答を見る</button>
       </div>
       <p class="ik-flash" id="flash" role="status"></p>
+      <div class="ik-last" id="last" aria-live="polite"></div>
     </section>
 
     <section class="ik-card" aria-label="目標と試薬">
@@ -135,12 +139,23 @@
       <div class="ik-shelf-h"><p class="ik-eyebrow" style="margin:0">試薬棚</p><span class="ik-par" id="shelfNote"></span></div>
       <div class="ik-shelf" id="shelf"></div>
     </section>
+
+    <section class="ik-card ik-log" aria-label="実験ノート">
+      <p class="ik-eyebrow">実験ノート<span>新しい順</span></p>
+      <ol id="log"></ol>
+    </section>
   </div>
 
-  <section class="ik-card ik-log" aria-label="実験ノート">
-    <p class="ik-eyebrow">実験ノート</p>
-    <ol id="log"></ol>
-  </section>
+  <!-- 周期表（「周期表」ボタンで開く） -->
+  <dialog class="ik-pt" id="ptDlg" aria-labelledby="ptTitle">
+    <div class="ik-pt-head">
+      <h2 id="ptTitle">周期表</h2>
+      <button class="ik-pt-close" id="ptClose" type="button" aria-label="周期表を閉じる">×</button>
+    </div>
+    <p class="ik-pt-info" id="ptInfo">元素を押すと、名前・周期・族が表示されます。</p>
+    <div class="ik-pt-scroll"><div class="ik-pt-grid" id="ptGrid"></div></div>
+    <p class="ik-pt-legend"><span class="ik-pt-key ik-pt-key-game"></span>このゲームで扱う元素　<span class="ik-pt-key ik-pt-key-cur"></span>いまの問題の元素　<span class="ik-pt-key ik-pt-key-tr"></span>遷移元素（3〜12族）</p>
+  </dialog>
 </div>
 </main>
 

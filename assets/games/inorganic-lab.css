@@ -171,3 +171,109 @@
   .ik-tile { width: calc((100% - 6px * 4) / 5); min-width: 52px; }
   .ik-score { width: 100%; }
 }
+
+/* ---- 直前の結果（ビーカーの下） ---- */
+.ik-last { margin-top: 14px; padding: 12px 14px; border-radius: var(--radius-s); background: var(--bg-alt); font-size: 14px; }
+.ik-last-h { display: flex; justify-content: space-between; font-size: 12px; font-weight: 700; letter-spacing: .06em; color: var(--ink-2); margin-bottom: 4px; }
+.ik-last-h span { font-family: var(--f-mono); font-weight: 500; color: var(--ink-3); }
+.ik-last .ik-what { font-weight: 700; }
+.ik-last .ik-obs { color: var(--ink-2); }
+.ik-last .ik-eq { font-family: var(--f-fx); font-size: 15px; overflow-x: auto; white-space: nowrap; }
+.ik-last .ik-eq sub, .ik-last .ik-eq sup { font-size: .68em; line-height: 0; }
+.ik-eyebrow span { font-weight: 500; letter-spacing: 0; margin-left: 8px; color: var(--ink-3); }
+
+/* ---- スマホ：いまの状態と直前の結果を上に固定 ---- */
+.ik-nowbar { display: none; }
+@media (max-width: 759px) {
+  .ik-nowbar { position: sticky; top: calc(var(--nav-h) + 6px); z-index: 5; display: flex; align-items: center; gap: 10px;
+    padding: 10px 12px; border-radius: 14px; background: var(--bg); border: 1px solid var(--line); }
+  .ik-sw { flex: none; width: 30px; height: 30px; border-radius: 50%; border: 1px solid var(--pptline); }
+  .ik-now-main { flex: 1; min-width: 0; }
+  .ik-now-fx { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .ik-now-fx .ik-fx { font-size: 19px; }
+  .ik-now-fx small { font-size: 12px; color: var(--ink-2); }
+  .ik-now-obs { font-size: 12.5px; color: var(--ink-2); line-height: 1.45; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+  .ik-now-goal { flex: none; font-size: 11px; color: var(--shu); font-weight: 700; text-align: right; }
+  .ik-now-goal .ik-fx { display: block; font-size: 15px; font-weight: 500; }
+}
+
+/* ---- 中くらいの画面：ビーカーと目標を横に並べ、ノートは下で中だけスクロール ---- */
+@media (min-width: 760px) and (max-width: 1099px) {
+  .ik-log { grid-column: 1 / -1; max-height: 340px; overflow-y: auto; }
+}
+
+/* ---- 広い画面：画面の高さに収め、ページをスクロールせずに遊べる ---- */
+@media (min-width: 1100px) and (min-height: 620px) {
+  .ik-stage { padding: 16px var(--gutter) 20px; }
+  .ik-wrap { max-width: 1440px; height: calc(100vh - var(--nav-h) - 36px); height: calc(100dvh - var(--nav-h) - 36px); gap: 12px; }
+  .ik-head { margin-bottom: 0; align-items: center; }
+  .ik-head > div:first-child { display: flex; align-items: baseline; gap: 6px 16px; flex-wrap: wrap; }
+  .ik-crumb { width: 100%; }
+  .ik-title { font-size: 30px; margin-top: 0; }
+  .ik-lede { margin-top: 0; font-size: 13.5px; }
+  .ik-tile { width: 54px; height: 54px; }
+  .ik-tile .ik-sym { font-size: 19px; }
+  .ik-grid { flex: 1; min-height: 0; grid-template-columns: minmax(270px, .85fr) minmax(0, 1.35fr) minmax(280px, .95fr); align-items: stretch; }
+  .ik-card { min-height: 0; overflow-y: auto; padding: 18px 20px; }
+  .ik-beaker { width: auto; height: clamp(140px, 28vh, 300px); }
+  .ik-state-fx { font-size: 26px; min-height: 38px; }
+  .ik-shelf-h { margin-top: 16px; }
+}
+
+/* ---- 周期表 ---- */
+.ik-pt { border: 0; border-radius: var(--radius-m); padding: 20px 22px 18px; width: min(1040px, 96vw); max-height: 92vh; max-height: 92dvh;
+  background: var(--bg); color: var(--ink); overflow: auto; }
+.ik-pt::backdrop { background: rgba(0, 0, 0, .45); }
+.ik-pt-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ik-pt-head h2 { font-size: 22px; font-weight: 700; }
+.ik-pt-close { width: 36px; height: 36px; border: 0; border-radius: 50%; background: var(--bg-alt); font-size: 18px !important; line-height: 1; }
+.ik-pt-close:hover { background: #e8e8ed; }
+.ik-pt-info { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; min-height: 40px; margin: 8px 0 12px; padding: 8px 12px; border-radius: var(--radius-s); background: var(--bg-alt); font-size: 14px; }
+.ik-pt-sym { font-family: var(--f-fx); font-size: 26px; font-weight: 600; line-height: 1; }
+.ik-pt-game { font-size: 12px; font-weight: 700; color: var(--btn); }
+.ik-pt-scroll { overflow-x: auto; padding-bottom: 4px; }
+.ik-pt-grid { display: grid; grid-template-columns: 18px repeat(18, minmax(42px, 1fr)); grid-template-rows: 16px repeat(7, auto) 10px auto auto; gap: 3px; min-width: 800px; }
+.ik-pt-gl, .ik-pt-pl { font-size: 10px; color: var(--ink-3); display: flex; align-items: center; justify-content: center; }
+.ik-pt-el { position: relative; min-height: 48px; padding: 3px 2px 2px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; line-height: 1.1; min-width: 0; }
+.ik-pt-el small { position: absolute; top: 2px; left: 4px; font-size: 8.5px; color: var(--ink-3); }
+.ik-pt-el b { font-family: var(--f-fx); font-size: 16px; font-weight: 600; margin-top: 4px; }
+.ik-pt-el i { font-style: normal; font-size: 8px; color: var(--ink-2); max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.ik-pt-el.ik-pt-tr { background: var(--bg-alt); }
+.ik-pt-el.ik-pt-in { border-color: var(--btn); background: var(--accent-soft); }
+.ik-pt-el.ik-pt-cur { border-color: var(--shu); background: var(--shu); color: #fff; }
+.ik-pt-el.ik-pt-cur small, .ik-pt-el.ik-pt-cur i { color: #fff; }
+.ik-pt-el:hover { border-color: var(--ink-2); }
+.ik-pt-ph { display: flex; align-items: center; justify-content: center; font-size: 9px; color: var(--ink-3); border: 1px dashed var(--line); border-radius: 6px; }
+.ik-pt-fl { display: flex; align-items: center; justify-content: flex-end; padding-right: 4px; font-size: 10px; color: var(--ink-2); }
+.ik-pt-legend { margin-top: 10px; font-size: 12px; color: var(--ink-2); display: flex; flex-wrap: wrap; align-items: center; gap: 4px; }
+.ik-pt-key { display: inline-block; width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--line); margin: 0 4px 0 10px; vertical-align: -1px; }
+.ik-pt-key:first-child { margin-left: 0; }
+.ik-pt-key-game { border-color: var(--btn); background: var(--accent-soft); }
+.ik-pt-key-cur { border-color: var(--shu); background: var(--shu); }
+.ik-pt-key-tr { background: var(--bg-alt); }
+@media (max-width: 599px) { .ik-pt { padding: 16px 14px; } .ik-pt-head h2 { font-size: 19px; } }
+
+/* 広い画面では右の実験ノートが新しい順に並ぶので「直前の結果」は省く。ビーカーと操作ボタンを小さめに */
+@media (min-width: 1100px) and (min-height: 620px) {
+  .ik-last { display: none; }
+  .ik-beaker { height: clamp(120px, 24vh, 260px); }
+  .ik-ctrls { gap: 6px; margin-top: 10px; }
+  .ik-ctrls .ik-btn { padding: 6px 12px; font-size: 13px !important; }
+}
+/* スマホ：目標と試薬棚を先に出す（結果は上のバーで見える）。ビーカーは小さめに */
+@media (max-width: 759px) {
+  .ik-grid > .ik-card:first-child { order: 1; }
+  .ik-grid > .ik-log { order: 2; }
+  .ik-beaker { max-width: 180px; }
+}
+/* スマホの周期表：マスを小さくし、名前は上の欄に出す */
+@media (max-width: 599px) {
+  .ik-pt-grid { grid-template-columns: 14px repeat(18, 31px); grid-template-rows: 14px repeat(7, 34px) 8px 34px 34px; gap: 2px; min-width: 0; width: max-content; }
+  .ik-pt-el { min-height: 0; padding: 0; border-radius: 4px; }
+  .ik-pt-el small { font-size: 7px; top: 1px; left: 2px; }
+  .ik-pt-el b { font-size: 13px; margin-top: 5px; }
+  .ik-pt-el i { display: none; }
+  .ik-pt-ph { font-size: 6.5px; }
+  .ik-pt-fl { font-size: 8px; writing-mode: horizontal-tb; }
+}

@@ -640,9 +640,18 @@ function render(){
   $("shelf").innerHTML=ORDER.filter(r=>c.shelf.includes(r)).map(r=>{const x=R[r];
     return '<button class="ik-rg" data-r="'+r+'">'+(x.f?'<span class="ik-fx">'+f(x.f)+'</span>':'<span class="ik-heatsym">'+esc(x.t)+'</span>')+'<small>'+esc(x.s)+'</small></button>'}).join("");
 
-  $("log").innerHTML=S.log.length?S.log.map((e,i)=>'<li class="'+(e.to?"":"ik-nochg")+'"><span class="ik-n">'+String(i+1).padStart(2,"0")+'</span><div><div class="ik-what">'+rFull(e.r)+'</div>'+
-      ((e.eq&&!(obs&&!done))?'<div class="ik-eq">'+f(e.eq)+'</div>':"")+'<div class="ik-obs">'+rich(e.obs)+'</div>'+((e.to&&!(obs&&!done))?'<div class="ik-prod">'+fxBlock(e.to,e.al).replace('<div class="ik-fxwrap">','<div class="ik-fxwrap"><span class="ik-nm" style="color:var(--muted)">→</span>')+'</div>':"")+'</div></li>').join(""):
+  // 実験ノート（新しい順）と、ビーカーの下の「直前の結果」・スマホ上部のバー
+  const hide=obs&&!done;
+  const entry=(e,i)=>'<li class="'+(e.to?"":"ik-nochg")+'"><span class="ik-n">'+String(i+1).padStart(2,"0")+'</span><div><div class="ik-what">'+rFull(e.r)+'</div>'+
+      ((e.eq&&!hide)?'<div class="ik-eq">'+f(e.eq)+'</div>':"")+'<div class="ik-obs">'+rich(e.obs)+'</div>'+((e.to&&!hide)?'<div class="ik-prod">'+fxBlock(e.to,e.al).replace('<div class="ik-fxwrap">','<div class="ik-fxwrap"><span class="ik-nm" style="color:var(--muted)">→</span>')+'</div>':"")+'</div></li>';
+  $("log").innerHTML=S.log.length?S.log.map(entry).reverse().join(""):
     '<p class="ik-empty">試薬を加えると、ここに観察結果と反応式が記録される．</p>';
+  const last=S.log[S.log.length-1];
+  $("last").innerHTML=last?
+    '<p class="ik-last-h">直前の結果<span>'+String(S.log.length).padStart(2,"0")+'</span></p><div class="ik-what">'+rFull(last.r)+'</div><div class="ik-obs">'+rich(last.obs)+'</div>'+((last.eq&&!hide)?'<div class="ik-eq">'+f(last.eq)+'</div>':""):
+    '<p class="ik-last-h">直前の結果</p><p class="ik-empty">試薬を加えると、結果がここに出る．</p>';
+  $("nowbar").innerHTML='<span class="ik-sw" style="background:'+(fm.col||"var(--water)")+'"></span><div class="ik-now-main"><div class="ik-now-fx">'+(hide?'<span class="ik-fx">？</span>':'<span class="ik-fx">'+f(fm.f)+'</span>')+'<small>'+esc(fm.look)+'</small></div>'+
+    (last?'<div class="ik-now-obs">'+rich(last.obs)+'</div>':'')+'</div>'+(S.free?'':'<span class="ik-now-goal">目標 <span class="ik-fx">'+f(F[S.target].f)+'</span></span>');
 }
 
 function add(r){
@@ -666,12 +675,60 @@ document.addEventListener("click",e=>{
   else if(b.id==="hint"){if(S.free||S.won||S.gave)return;
     const p=path(cur(),S.target,shelf());
     $("flash").innerHTML=p?'次の一手の候補：'+rFull(p[0][1])+'　残り最少 '+p.length+'手':"この状態からは目標に戻れない．「1手戻す」を使おう"}
+  else if(b.id==="ptBtn"){openPT()}
+  else if(b.id==="ptClose"){closePT()}
+  else if(b.dataset.z){$("ptInfo").innerHTML=ptInfo(+b.dataset.z)}
   else if(b.id==="giveup"){if(S.free||S.won)return;S.gave=true;$("flash").textContent="";render()}
 });
 document.addEventListener("change",e=>{
   if(e.target.id==="obsMode")render();
   if(e.target.id==="freeChap")freeLab(null,+e.target.value);
   if(e.target.id==="freeStart")freeLab(e.target.value,S.ci)});
+
+
+// ---------- 周期表（「周期表」ボタンで開く）
+const PT_NAMES="水素 ヘリウム リチウム ベリリウム ホウ素 炭素 窒素 酸素 フッ素 ネオン ナトリウム マグネシウム アルミニウム ケイ素 リン 硫黄 塩素 アルゴン カリウム カルシウム スカンジウム チタン バナジウム クロム マンガン 鉄 コバルト ニッケル 銅 亜鉛 ガリウム ゲルマニウム ヒ素 セレン 臭素 クリプトン ルビジウム ストロンチウム イットリウム ジルコニウム ニオブ モリブデン テクネチウム ルテニウム ロジウム パラジウム 銀 カドミウム インジウム スズ アンチモン テルル ヨウ素 キセノン セシウム バリウム ランタン セリウム プラセオジム ネオジム プロメチウム サマリウム ユウロピウム ガドリニウム テルビウム ジスプロシウム ホルミウム エルビウム ツリウム イッテルビウム ルテチウム ハフニウム タンタル タングステン レニウム オスミウム イリジウム 白金 金 水銀 タリウム 鉛 ビスマス ポロニウム アスタチン ラドン フランシウム ラジウム アクチニウム トリウム プロトアクチニウム ウラン ネプツニウム プルトニウム アメリシウム キュリウム バークリウム カリホルニウム アインスタイニウム フェルミウム メンデレビウム ノーベリウム ローレンシウム ラザホージウム ドブニウム シーボーギウム ボーリウム ハッシウム マイトネリウム ダームスタチウム レントゲニウム コペルニシウム ニホニウム フレロビウム モスコビウム リバモリウム テネシン オガネソン".split(" ");
+const PT_SYM="H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Db Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og".split(" ");
+// 周期・族（ランタノイド・アクチノイドは族 3、表の下の 2 段に置く）
+function ptPos(z){
+  const P=[[1,2],[3,10],[11,18],[19,36],[37,54],[55,86],[87,118]];
+  const per=P.findIndex(([a,b])=>z>=a&&z<=b)+1,[a,b]=P[per-1],k=z-a;
+  if(per===1)return {per,grp:z===1?1:18};
+  if(per<=3)return {per,grp:k<2?k+1:k+11};
+  if(per<=5)return {per,grp:k+1};
+  if(k<2)return {per,grp:k+1};
+  if(k<=16)return {per,grp:3,f:k-2};               // ランタノイド・アクチノイド（f は 0〜14）
+  return {per,grp:k-13};
+}
+const PT_GAME={Cu:"Cu",Ag:"Ag",Zn:"Zn",Al:"Al",Fe:"Fe",Pb:"Pb",Ni:"Ni",Cr:"Cr",Mn:"Mn",Ca:"Ca",Ba:"Ba",X:["Cl","Br","I"],S:"S"};
+const ptGameSet=new Set(Object.values(PT_GAME).flat());
+function ptInfo(z){
+  const p=ptPos(z),sym=PT_SYM[z-1],tr=p.grp>=3&&p.grp<=12;
+  const extra=p.f!=null?(p.per===6?"（ランタノイド）":"（アクチノイド）"):"";
+  return '<b class="ik-pt-sym">'+sym+'</b><span>原子番号 '+z+'　'+esc(PT_NAMES[z-1])+extra+'</span><span>第'+p.per+'周期・'+p.grp+'族・'+(tr?'遷移元素':'典型元素')+'</span>'+
+    (ptGameSet.has(sym)?'<span class="ik-pt-game">このゲームで扱う</span>':'');
+}
+function buildPT(){
+  const cur=[PT_GAME[CH[S.ci].id]].flat();
+  let h='';
+  for(let g=1;g<=18;g++)h+='<span class="ik-pt-gl" style="grid-column:'+(g+1)+';grid-row:1">'+g+'</span>';
+  for(let p=1;p<=7;p++)h+='<span class="ik-pt-pl" style="grid-column:1;grid-row:'+(p+1)+'">'+p+'</span>';
+  h+='<span class="ik-pt-ph" style="grid-column:4;grid-row:7">57–71</span><span class="ik-pt-ph" style="grid-column:4;grid-row:8">89–103</span>';
+  for(let z=1;z<=118;z++){const p=ptPos(z),sym=PT_SYM[z-1];
+    const col=p.f!=null?p.f+4:p.grp+1,row=p.f!=null?(p.per===6?10:11):p.per+1;
+    const cls=['ik-pt-el'];if(p.grp>=3&&p.grp<=12)cls.push('ik-pt-tr');if(ptGameSet.has(sym))cls.push('ik-pt-in');if(cur.includes(sym))cls.push('ik-pt-cur');
+    h+='<button type="button" class="'+cls.join(' ')+'" data-z="'+z+'" style="grid-column:'+col+';grid-row:'+row+'" aria-label="'+z+' '+sym+' '+esc(PT_NAMES[z-1])+'"><small>'+z+'</small><b>'+sym+'</b><i>'+esc(PT_NAMES[z-1])+'</i></button>';}
+  h+='<span class="ik-pt-fl" style="grid-column:2 / span 2;grid-row:10">ランタノイド</span><span class="ik-pt-fl" style="grid-column:2 / span 2;grid-row:11">アクチノイド</span>';
+  $("ptGrid").innerHTML=h;
+}
+function openPT(){
+  buildPT();
+  const c=[PT_GAME[CH[S.ci].id]].flat()[0],z=PT_SYM.indexOf(c)+1;
+  $("ptInfo").innerHTML=ptInfo(z);
+  const d=$("ptDlg");if(d.showModal)d.showModal();else d.setAttribute("open","");
+}
+function closePT(){const d=$("ptDlg");if(d.close)d.close();else d.removeAttribute("open");$("ptBtn").focus()}
+$("ptDlg").addEventListener("click",e=>{if(e.target===e.currentTarget)closePT()});
 
 newProblem();
 })();
