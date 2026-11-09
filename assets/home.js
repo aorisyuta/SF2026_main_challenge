@@ -1,6 +1,6 @@
 /*
   home.js — トップページのシート連動部分
-  - お知らせタイル（type = news）：部誌 PDF 版、Tシャツ など（シートに無ければ config.js の初期値）
+  - グッズのタイル（type = news）：部誌 PDF 版、Tシャツ など（goods.html）（シートに無ければ config.js の初期値）
   - 最新のブログ記事 3 件（type = post）
   - SNS リンク（type = link）
 */

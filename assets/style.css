@@ -211,9 +211,9 @@ html.has-promo .site-footer { padding-bottom: calc(64px + env(safe-area-inset-bo
   html.has-promo .site-footer { padding-bottom: 0; }
 }
 @media (prefers-reduced-motion: reduce) { .promo { transition: none; } }
-/* トップのグッズ見出し */
-.goods-head { padding-top: 36px; padding-bottom: 16px; }
-.goods-lead { margin-top: 4px; font-size: 14px; color: var(--ink-2); }
+/* グッズのページ */
+.goods-band { padding-bottom: 12px; }
+.goods-foot { padding-top: 28px; padding-bottom: 100px; text-align: center; }
 
 /* =========================================================
    Sections
