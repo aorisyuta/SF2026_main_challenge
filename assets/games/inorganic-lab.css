@@ -39,7 +39,7 @@
 .ik-crumb { font-size: 13px; font-weight: 600; color: var(--ink-2); }
 .ik-crumb a { color: var(--ink-2); }
 .ik-title { font-size: clamp(32px, 6vw, 48px); font-weight: 700; line-height: 1.15; margin-top: 4px; letter-spacing: .01em; }
-.ik-title span { color: var(--shu); margin-right: 8px; font-weight: 400; }
+.ik-title span { color: var(--shu); margin-right: 8px; font-weight: 400; font-family: var(--f-fx); }
 .ik-lede { margin-top: 10px; color: var(--ink-2); max-width: 40em; font-size: 16px; }
 .ik-score { display: flex; gap: 20px; font-size: 13px; color: var(--ink-2); }
 .ik-score b { font-size: 22px; font-weight: 700; color: var(--ink); margin-left: 4px; font-variant-numeric: tabular-nums; }
