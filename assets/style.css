@@ -158,12 +158,37 @@ a:hover { text-decoration: underline; }
   .gnav-nav a[aria-current="page"] { color: var(--ink-2); }
 }
 
-/* ---------- ribbon（シートの pin=TRUE のお知らせ） ---------- */
-.ribbon { background: var(--bg-alt); text-align: center; font-size: 14px; color: var(--ink); }
-.ribbon-inner { max-width: var(--w); margin: 0 auto; padding: 12px var(--gutter); }
-.ribbon p + p { margin-top: 4px; }
-.ribbon a { white-space: nowrap; margin-left: .4em; }
-.ribbon a::after { content: " ›"; }
+/* ---------- お知らせ（シートの pin=TRUE の news）：パソコンは右下のカード、スマホは下に固定 ---------- */
+.promo { position: fixed; z-index: 90; right: 24px; bottom: 24px; width: 272px; display: flex; align-items: flex-start;
+  background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-m); color: var(--ink);
+  opacity: 0; transform: translateY(12px); pointer-events: none; transition: opacity .3s, transform .3s; }
+.promo.is-shown { opacity: 1; transform: none; pointer-events: auto; }
+.promo-body { flex: 1; min-width: 0; display: flex; gap: 12px; align-items: center; padding: 14px 4px 14px 16px; color: inherit; }
+.promo-body:hover { text-decoration: none; }
+.promo-body:hover .promo-more { text-decoration: underline; }
+.promo-art { flex: none; width: 40px; height: 40px; }
+.promo-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.promo-text strong { font-size: 14px; font-weight: 700; line-height: 1.4; }
+.promo-sub { font-size: 12px; color: var(--ink-2); line-height: 1.5; }
+.promo-more { font-size: 12px; color: var(--link); margin-top: 2px; }
+.promo-more::after { content: " ›"; }
+.promo-close { flex: none; width: 36px; height: 36px; margin: 4px 4px 0 0; border: 0; border-radius: 50%; background: transparent;
+  color: var(--ink-2); font-size: 18px; line-height: 1; cursor: pointer; }
+.promo-close:hover { background: var(--bg-alt); color: var(--ink); }
+@media (max-width: 833px) {
+  .promo { left: 0; right: 0; bottom: 0; width: auto; border-radius: 0; border-width: 1px 0 0; align-items: center;
+    padding-bottom: env(safe-area-inset-bottom); transform: translateY(100%); }
+  .promo-body { padding: 10px 4px 10px var(--gutter); gap: 10px; }
+  .promo-art { width: 30px; height: 30px; }
+  .promo-sub { display: none; }
+  .promo-text { flex-direction: row; flex-wrap: wrap; align-items: baseline; column-gap: 8px; }
+  .promo-text strong { font-size: 13px; }
+  .promo-more { margin-top: 0; }
+  .promo-close { margin: 0 6px 0 0; }
+  /* ページの最後（フッター）がバーに隠れないように */
+  html.has-promo .site-footer { padding-bottom: calc(64px + env(safe-area-inset-bottom)); }
+}
+@media (prefers-reduced-motion: reduce) { .promo { transition: none; } }
 
 /* =========================================================
    Sections
@@ -569,7 +594,7 @@ a:hover { text-decoration: underline; }
 
 /* ---------- 印刷（タイムテーブル） ---------- */
 @media print {
-  .gnav, .ribbon, .site-footer, .tt-switch, .tt-actions, .skip-link { display: none !important; }
+  .gnav, .promo, .site-footer, .tt-switch, .tt-actions, .skip-link { display: none !important; }
   .band, .band-alt { background: #fff; padding: 0; }
   .tt-panel[hidden] { display: block !important; }
   .tt-day { grid-template-columns: 1fr 1fr; }

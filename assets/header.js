@@ -5,7 +5,7 @@
                  （sf・projects・timetable・others・info は SF2026 のページ。アーカイブの中として扱い、上部にサブメニューが出る）
     basePath:    サブフォルダのページは '../'
     title:       タブに出るタイトル（省略時は既存の <title>）
-    hideRibbon:  true でお知らせリボンを出さない
+    hideRibbon:  true でお知らせ（販売中など）を出さない
     noFooter:    true でフッターを出さない（アーカイブの閲覧ページなど）
 */
 (function () {
@@ -85,8 +85,7 @@
           '</button>' +
         '</div>' +
       '</header>' +
-      (inSF && !page.noFooter ? subNav() : '') +
-      '<div class="ribbon" id="ribbon" hidden></div>';
+      (inSF && !page.noFooter ? subNav() : '');
 
     document.body.insertAdjacentHTML('afterbegin', html);
 
@@ -160,18 +159,56 @@
       var E = window.SFSheet.esc;
 
       var pinned = data.news.filter(function (n) { return n.pin; });
-      var ribbon = document.getElementById('ribbon');
-      if (ribbon && pinned.length && !page.hideRibbon) {
-        ribbon.innerHTML = '<div class="ribbon-inner">' + pinned.map(function (n) {
-          var link = n.url ? ' <a href="' + E(n.url) + '"' + (/^https?:/.test(n.url) ? ' target="_blank" rel="noopener noreferrer"' : '') + '>' + E(n.linkLabel || '詳しく見る') + '</a>' : '';
-          return '<p><span>' + E(n.title) + (n.text ? '　' + E(n.text) : '') + '</span>' + link + '</p>';
-        }).join('') + '</div>';
-        ribbon.hidden = false;
-      }
+      if (pinned.length && !page.hideRibbon) showPromo(pinned[0], E);
 
       var social = document.getElementById('footerSocial');
       if (social && data.links.length) social.innerHTML = socialItems(data.links);
     }).catch(function (err) { console.warn(err); });
+  }
+
+  /* お知らせ（pin = TRUE の news の先頭）
+     パソコン：画面の右下に小さなカード／スマホ：少しスクロールしたら画面の下に細く固定
+     × で閉じると、同じお知らせは次から出さない（内容が変われば再び出る） */
+  function showPromo(n, E) {
+    var KEY = 'aoristos-promo-closed';
+    var id = n.title + '|' + (n.url || '');
+    try { if (localStorage.getItem(KEY) === id) return; } catch (e) {}
+    var url = n.url ? (/^(https?:|\/|#)/.test(n.url) ? n.url : base + n.url) : '';
+    var ext = /^https?:/.test(url) ? ' target="_blank" rel="noopener noreferrer"' : '';
+    var art = /^(pdf|tshirt)$/.test(n.art || '') ? '<img class="promo-art" src="' + base + 'assets/art/' + n.art + '.svg" alt="" width="40" height="40">' : '';
+    var box = document.createElement('aside');
+    box.className = 'promo';
+    box.setAttribute('aria-label', 'お知らせ');
+    box.innerHTML =
+      (url ? '<a class="promo-body" href="' + E(url) + '"' + ext + '>' : '<div class="promo-body">') +
+        art +
+        '<span class="promo-text"><strong>' + E(n.title) + '</strong>' +
+        (n.text ? '<span class="promo-sub">' + E(n.text) + '</span>' : '') +
+        (url ? '<span class="promo-more">' + E(n.linkLabel || '詳しく見る') + '</span>' : '') + '</span>' +
+      (url ? '</a>' : '</div>') +
+      '<button class="promo-close" type="button" aria-label="お知らせを閉じる">×</button>';
+    document.body.appendChild(box);
+    document.documentElement.classList.add('has-promo');
+
+    var mobile = window.matchMedia('(max-width: 833px)');
+    function update() {
+      var on = !mobile.matches || window.scrollY > 160;
+      box.classList.toggle('is-shown', on);
+    }
+    var ticking = false;
+    window.addEventListener('scroll', function () {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function () { ticking = false; update(); });
+    }, { passive: true });
+    mobile.addEventListener('change', update);
+    update();
+
+    box.querySelector('.promo-close').addEventListener('click', function () {
+      box.remove();
+      document.documentElement.classList.remove('has-promo');
+      try { localStorage.setItem(KEY, id); } catch (e) {}
+    });
   }
 
   document.addEventListener('DOMContentLoaded', function () {
