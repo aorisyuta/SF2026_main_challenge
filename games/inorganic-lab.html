@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>無機変換ラボ（ゲーム）｜Aoristos</title>
+  <meta name="description" content="Aoristos の化学ゲーム「無機変換ラボ」。出発物質と目標物質がランダムに出題される、高校無機化学の変換パズル。試薬を加えて、沈殿・錯イオン・酸化還元の反応を学ぼう。">
+  <meta name="author" content="Aoristos">
+  <meta name="theme-color" content="#ffffff">
+  <!-- site-meta:start -->
+  <link rel="canonical" href="https://aoristos.net/games/inorganic-lab">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta property="og:site_name" content="Aoristos">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="無機変換ラボ（ゲーム）｜Aoristos">
+  <meta property="og:description" content="Aoristos の化学ゲーム「無機変換ラボ」。出発物質と目標物質がランダムに出題される、高校無機化学の変換パズル。試薬を加えて、沈殿・錯イオン・酸化還元の反応を学ぼう。">
+  <meta property="og:url" content="https://aoristos.net/games/inorganic-lab">
+  <meta property="og:image" content="https://aoristos.net/assets/og-image.jpg">
+  <meta property="og:image:secure_url" content="https://aoristos.net/assets/og-image.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="無機変換ラボ（ゲーム）｜Aoristos">
+  <meta name="twitter:description" content="Aoristos の化学ゲーム「無機変換ラボ」。出発物質と目標物質がランダムに出題される、高校無機化学の変換パズル。試薬を加えて、沈殿・錯イオン・酸化還元の反応を学ぼう。">
+  <meta name="twitter:image" content="https://aoristos.net/assets/og-image.jpg">
+  <meta name="twitter:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">
+  <!-- site-meta:end -->
+  <link rel="icon" href="../favicon.ico?v=23e911113c" sizes="any">
+  <link rel="icon" href="../assets/favicon.svg?v=18f7d0c58a" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=ff38aa79bb">
+  <link rel="stylesheet" href="../assets/style.css?v=90738e466d">
+  <link rel="stylesheet" href="../assets/games/inorganic-lab.css?v=d460417c6b">
+  <script>
+    window.pageConfig = { currentPage: 'games', basePath: '../', hideRibbon: true };
+  </script>
+  <script src="../assets/config.js?v=ee9bac1a7b"></script>
+  <script src="../assets/sheet.js?v=4678074353" defer></script>
+  <script src="../assets/header.js?v=26b9394a3e" defer></script>
+  <script src="../assets/games/inorganic-lab.js?v=3de180792f" defer></script>
+</head>
+<body>
+
+<main id="main" class="ik-stage">
+<div class="ik-wrap">
+  <header class="ik-head">
+    <div>
+      <p class="ik-crumb"><a href="index.html">ゲーム</a></p>
+      <h1 class="ik-title"><span aria-hidden="true">⚗</span>無機変換ラボ</h1>
+      <p class="ik-lede">出発物質と目標物質がランダムに出題される．試薬を加えて、ビーカーの中身を目標に変えよう．少ない手数ほど星が増える．</p>
+    </div>
+    <div class="ik-score"><span>解いた問題 <b id="sSolved">0</b></span><span>獲得した星 <b id="sStars">0</b></span></div>
+  </header>
+
+  <nav class="ik-tiles" id="tiles" aria-label="出題範囲"></nav>
+  <div class="ik-bar">
+    <span class="ik-lbl">難易度</span>
+    <span id="diffs" class="ik-bar"></span>
+    <span class="ik-spacer"></span>
+    <label class="ik-toggle" for="obsMode"><input type="checkbox" id="obsMode"> 観察モード</label>
+    <button class="ik-lv" id="freeBtn">自由実験</button>
+    <button class="ik-btn ik-primary" id="newBtn">新しい問題</button>
+  </div>
+
+  <div class="ik-grid">
+    <section class="ik-card" aria-label="ビーカー">
+      <p class="ik-eyebrow">ビーカーの中</p>
+      <div class="ik-state-fx" id="curFx"></div>
+      <p class="ik-look" id="curLook"></p>
+      <svg class="ik-beaker" id="beaker" viewBox="0 -60 200 350" aria-hidden="true">
+        <defs><clipPath id="inside"><path d="M44 30 L44 192 Q44 206 58 206 L142 206 Q156 206 156 192 L156 30 Z"/></clipPath></defs>
+        <g id="rays">
+          <polygon class="ik-ray" points="14,14 26,6 168,170 132,214" fill="var(--ray)"/>
+          <polygon class="ik-ray" points="10,22 20,26 96,216 56,212" fill="var(--ray)" style="animation-delay:.08s"/>
+          <polygon class="ik-ray" points="24,6 32,14 190,120 176,150" fill="var(--ray)" style="animation-delay:.16s"/>
+          <circle class="ik-lamp" cx="16" cy="14" r="11" fill="var(--ray-core)"/>
+        </g>
+        <g id="pipette">
+          <ellipse cx="100" cy="-50" rx="9" ry="8" fill="var(--glass)"/>
+          <path d="M96 -43 L96 -8 L100 2 L104 -8 L104 -43 Z" fill="none" stroke="var(--glass)" stroke-width="2" stroke-linejoin="round"/>
+          <circle class="ik-dp" cx="100" cy="6" r="4" fill="var(--stream)"/>
+          <circle class="ik-dp" cx="100" cy="6" r="4" fill="var(--stream)" style="animation-delay:.35s"/>
+        </g>
+        <g id="pour">
+          <g class="ik-bottle">
+            <rect x="145" y="-40" width="30" height="40" rx="5" fill="var(--panel)" stroke="var(--glass)" stroke-width="2.5"/>
+            <rect x="147" y="-24" width="26" height="22" rx="3" fill="var(--stream)"/>
+            <rect x="152" y="-52" width="16" height="13" rx="2" fill="var(--panel)" stroke="var(--glass)" stroke-width="2.5"/>
+            <rect x="149" y="-34" width="22" height="8" fill="var(--panel)" stroke="var(--glass)" stroke-width="1"/>
+          </g>
+          <path class="ik-stream" d="M131 -29 Q117 -4 113 84" fill="none" stroke="var(--stream)" stroke-width="4.5" stroke-linecap="round"/>
+          <ellipse class="ik-splash" cx="113" cy="84" rx="14" ry="3" fill="none" stroke="var(--stream)" stroke-width="2"/>
+        </g>
+        <g clip-path="url(#inside)">
+          <rect id="liq" x="40" y="82" width="120" height="130" fill="var(--water)"/>
+          <g id="ppt"></g>
+          <g fill="none" stroke="var(--glass)" stroke-width="1.2">
+            <circle class="ik-hb" cx="62" cy="200" r="3" style="animation-delay:0s"/><circle class="ik-hb" cx="80" cy="202" r="2.2" style="animation-delay:.35s"/>
+            <circle class="ik-hb" cx="98" cy="199" r="3.4" style="animation-delay:.6s"/><circle class="ik-hb" cx="116" cy="202" r="2.4" style="animation-delay:.15s"/>
+            <circle class="ik-hb" cx="132" cy="200" r="3" style="animation-delay:.5s"/><circle class="ik-hb" cx="72" cy="201" r="2" style="animation-delay:.8s"/>
+            <circle class="ik-hb" cx="124" cy="199" r="2.6" style="animation-delay:.7s"/><circle class="ik-hb" cx="106" cy="203" r="2" style="animation-delay:.25s"/>
+            <circle class="ik-gb" cx="100" cy="184" r="3.2" style="animation-delay:0s"/><circle class="ik-gb" cx="103" cy="184" r="2.4" style="animation-delay:.25s"/>
+            <circle class="ik-gb" cx="97" cy="184" r="2.8" style="animation-delay:.5s"/><circle class="ik-gb" cx="101" cy="184" r="2" style="animation-delay:.75s"/>
+          </g>
+        </g>
+        <g id="tube"><path d="M100 -50 L100 186" stroke="var(--glass)" stroke-width="6" stroke-linecap="round"/><path d="M100 -50 L100 184" stroke="var(--panel)" stroke-width="2.4" stroke-linecap="round"/></g>
+        <g id="burner">
+          <rect x="34" y="208" width="132" height="4" rx="1" fill="var(--metal)"/>
+          <g stroke="var(--metal)" stroke-width="3" stroke-linecap="round"><line x1="46" y1="212" x2="36" y2="286"/><line x1="154" y1="212" x2="164" y2="286"/></g>
+          <path class="ik-flame" d="M100 214 C86 230 88 246 100 250 C112 246 114 230 100 214 Z" fill="var(--flame)"/>
+          <path class="ik-flame" d="M100 226 C93 234 94 244 100 248 C106 244 107 234 100 226 Z" fill="var(--flame-core)" style="animation-delay:.08s"/>
+          <rect x="90" y="250" width="20" height="30" rx="2" fill="var(--metal)"/>
+          <rect x="76" y="280" width="48" height="8" rx="2" fill="var(--metal)"/>
+        </g>
+        <path d="M34 22 L44 30 L44 192 Q44 206 58 206 L142 206 Q156 206 156 192 L156 30 L166 22" fill="none" stroke="var(--glass)" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+        <g stroke="var(--glass)" stroke-width="1.5" opacity=".7"><line x1="146" y1="80" x2="156" y2="80"/><line x1="150" y1="110" x2="156" y2="110"/><line x1="146" y1="140" x2="156" y2="140"/><line x1="150" y1="170" x2="156" y2="170"/></g>
+      </svg>
+      <div class="ik-meter"><span>手数 <b id="moves">0</b></span><span id="parBox">最少 <b id="par">–</b></span></div>
+      <div class="ik-ctrls">
+        <button class="ik-btn" id="undo">1手戻す</button>
+        <button class="ik-btn" id="reset">最初から</button>
+        <button class="ik-btn" id="hint">ヒント</button>
+        <button class="ik-btn" id="giveup">解答を見る</button>
+      </div>
+      <p class="ik-flash" id="flash" role="status"></p>
+    </section>
+
+    <section class="ik-card" aria-label="目標と試薬">
+      <p class="ik-eyebrow" id="goalEb">目標</p>
+      <div class="ik-goal" id="goal"></div>
+      <div id="win"></div>
+      <div class="ik-shelf-h"><p class="ik-eyebrow" style="margin:0">試薬棚</p><span class="ik-par" id="shelfNote"></span></div>
+      <div class="ik-shelf" id="shelf"></div>
+    </section>
+  </div>
+
+  <section class="ik-card ik-log" aria-label="実験ノート">
+    <p class="ik-eyebrow">実験ノート</p>
+    <ol id="log"></ol>
+  </section>
+</div>
+</main>
+
+</body>
+</html>

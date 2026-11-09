@@ -300,3 +300,11 @@ html.game-page .ribbon { display: none !important; }
 .game-art-mk .g-cards i:nth-child(2) { border-color: #0071e3; background: #eaf3ff; color: #0071e3; }
 .game-art-mk .g-goal { position: absolute; right: 22px; bottom: 16px; font-size: 34px; font-weight: 800; color: var(--shu); }
 @media (max-width: 833px) { .game-art-mk .g-cards i { width: 46px; height: 62px; font-size: 24px; } }
+
+/* ゲーム一覧：無機変換ラボのカード */
+.game-art-ik { background: hsl(190 40% 96%); }
+.game-art-ik .g-flask { position: relative; width: 110px; height: 120px; border: 3px solid #8a99a3; border-top: 0; border-radius: 0 0 22px 22px; overflow: hidden; }
+.game-art-ik .g-liq { position: absolute; left: 0; right: 0; bottom: 0; height: 62%; background: #1a3cb0; opacity: .78; }
+.game-art-ik .g-rx { position: absolute; left: 0; right: 0; bottom: 16px; text-align: center; font-family: "Times New Roman", serif; font-size: 22px; color: var(--ink); }
+.game-art-ik .g-rx sub, .game-art-ik .g-rx sup { font-size: .65em; }
+@media (max-width: 833px) { .game-art-ik .g-flask { width: 84px; height: 92px; } .game-art-ik .g-rx { font-size: 18px; bottom: 12px; } }
