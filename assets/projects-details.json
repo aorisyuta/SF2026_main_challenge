@@ -74,7 +74,7 @@
       "title": "AorXC",
       "description": "小学生の部／中学・高校の部／大人・教員の部の3部構成。黒板に書かれた問題に、その場で挑戦できます。",
       "thumb": "",
-      "fullDescription": "Aoristos が作成したオリジナル問題を、会場の黒板で出題しました。小学生の部、中学・高校の部、大人・教員の部の3つに分け、どなたでもご自分に合った問題に挑戦していただけるようにしました。問題の PDF は、このページで公開しています（解答は後日公開します）。",
+      "fullDescription": "Aoristos が作成したオリジナル問題を、会場の黒板で出題しました。小学生の部、中学・高校の部、大人・教員の部の3つに分け、どなたでもご自分に合った問題に挑戦していただけるようにしました。問題の PDF と、数学（ジュニア部門・一般）の模範解答を、このページで公開しています。",
       "location": "高校棟3階 特別第3教室(SF企画の部屋)",
       "schedule": "1日目 11月7日（土）　13:00〜14:00\n2日目 11月8日（日）　11:00〜12:00、13:00〜14:00",
       "duration": "",
@@ -106,8 +106,16 @@
           "linkLabel": "問題の PDF を開く"
         },
         {
-          "label": "解答",
-          "content": "後日、このページで PDF を公開します。"
+          "label": "模範解答（数学・ジュニア部門）",
+          "content": "Aoristos Math Contest 2026 ジュニア部門",
+          "url": "/assets/docs/aorxc2026-math-junior-answer.pdf",
+          "linkLabel": "模範解答の PDF を開く"
+        },
+        {
+          "label": "模範解答（数学）",
+          "content": "Aoristos Math Contest 2026",
+          "url": "/assets/docs/aorxc2026-math-answer.pdf",
+          "linkLabel": "模範解答の PDF を開く"
         },
         {
           "label": "料金",
