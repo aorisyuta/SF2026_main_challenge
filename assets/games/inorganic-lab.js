@@ -509,6 +509,153 @@ const CH=[
  {id:"X",z:"17族",nm:"ハロゲン",shelf:["Cl2","Br2","I2","KBr","KI","AgNO3","NH3x","S2O3","SO2","H2O2","MnO2a","starch","light"],forms:["cl1","cl2x","agclx","br1","br2","agbrx","i1","i2","istarch","agix"]},
  {id:"S",z:"16",nm:"硫黄",shelf:["SO2","H2Sa","H2O2","I2","Cl2","KMnO4","CuSO4","BaCl2","HNO3"],forms:["h2s","s0","so2","so4","baso4s","cuss"]}
 ];
+// ---------- 追加：金属（単体）・イオン化傾向・不動態・炎色反応・Na／Mg／Sn／Hg
+(function(){
+  // 試薬
+  Object.assign(R,{
+    cHNO3:{f:"HNO3",s:"濃硝酸"}, cH2SO4:{f:"H2SO4",s:"熱濃硫酸"},
+    Znp:{f:"Zn",s:"亜鉛板を入れる"}, Cuw:{f:"Cu",s:"銅線を入れる"}, Fen:{f:"Fe",s:"鉄くぎを入れる"},
+    FeCl3:{f:"FeCl3",s:"塩化鉄(III)"},
+    flame:{f:null,t:"炎",s:"炎色反応を見る"}
+  });
+  ["cHNO3","cH2SO4","Znp","Cuw","Fen","FeCl3","flame"].forEach(k=>{if(!ORDER.includes(k))ORDER.push(k)});
+  // 物質
+  const NF={
+    cu_m:{f:"Cu",ph:"s",col:"#b5653a",look:"赤色の金属（銅）",nm:"銅"},
+    zn_m:{f:"Zn",ph:"s",col:"#9ea6ab",look:"銀白色の金属（亜鉛）",nm:"亜鉛"},
+    al_m:{f:"Al",ph:"s",col:"#cdd2d6",look:"銀白色の金属（アルミニウム）",nm:"アルミニウム"},
+    al2o3:{f:"Al2O3",ph:"s",col:"#f4f4f2",look:"白色の固体",nm:"酸化アルミニウム",al:"アルミナ"},
+    fe_m:{f:"Fe",ph:"s",col:"#6b6e72",look:"灰色の金属（鉄）",nm:"鉄"},
+    fe2o3:{f:"Fe2O3",ph:"s",col:"#8b2e16",look:"赤褐色の固体",nm:"酸化鉄(III)",al:"ベンガラ（赤さび）"},
+    pb_m:{f:"Pb",ph:"s",col:"#5c6066",look:"灰色の金属（鉛）",nm:"鉛"},
+    mg_m:{f:"Mg",ph:"s",col:"#bfc4c8",look:"銀白色の金属（マグネシウム）",nm:"マグネシウム"},
+    mg2:{f:"Mg^{2+}",ph:"aq",col:W,look:"無色の溶液",nm:"マグネシウムイオン"},
+    mgoh:{f:"Mg(OH)2",ph:"s",col:"#f6f6f4",look:"白色の沈殿",nm:"水酸化マグネシウム"},
+    mgo:{f:"MgO",ph:"s",col:"#f4f4f2",look:"白色の固体",nm:"酸化マグネシウム",al:"マグネシア"},
+    mgco3:{f:"MgCO3",ph:"s",col:"#f6f6f4",look:"白色の沈殿",nm:"炭酸マグネシウム"},
+    sn2:{f:"Sn^{2+}",ph:"aq",col:W,look:"無色の溶液",nm:"スズ(II)イオン"},
+    snoh2:{f:"Sn(OH)2",ph:"s",col:"#f6f6f4",look:"白色の沈殿",nm:"水酸化スズ(II)"},
+    snoh4:{f:"[Sn(OH)4]^{2-}",ph:"aq",col:W,look:"無色の溶液",nm:"テトラヒドロキシドスズ(II)酸イオン"},
+    sns:{f:"SnS",ph:"s",col:"#6b4a2b",look:"褐色の沈殿",nm:"硫化スズ(II)"},
+    sn4:{f:"Sn^{4+}",ph:"aq",col:W,look:"無色の溶液",nm:"スズ(IV)イオン"},
+    hg2:{f:"Hg^{2+}",ph:"aq",col:W,look:"無色の溶液",nm:"水銀(II)イオン"},
+    hgo:{f:"HgO",ph:"s",col:"#e8b51c",look:"黄色の沈殿",nm:"酸化水銀(II)"},
+    hgs:{f:"HgS",ph:"s",col:"#151515",look:"黒色の沈殿",nm:"硫化水銀(II)",al:"辰砂（朱）"},
+    hgi2:{f:"HgI2",ph:"s",col:"#d9361e",look:"赤色の沈殿",nm:"ヨウ化水銀(II)"},
+    hgi4:{f:"[HgI4]^{2-}",ph:"aq",col:W,look:"無色の溶液",nm:"テトラヨージド水銀(II)酸イオン",al:"ネスラー試薬の成分"},
+    naoh:{f:"NaOH",ph:"aq",col:W,look:"無色の溶液（強塩基）",nm:"水酸化ナトリウム",al:"苛性ソーダ"},
+    na2co3:{f:"Na2CO3",ph:"aq",col:W,look:"無色の溶液",nm:"炭酸ナトリウム",al:"ソーダ灰"},
+    nahco3:{f:"NaHCO3",ph:"aq",col:W,look:"無色の溶液",nm:"炭酸水素ナトリウム",al:"重曹"},
+    nacl:{f:"NaCl",ph:"aq",col:W,look:"無色の溶液",nm:"塩化ナトリウム"}
+  };
+  for(const k in NF){F[k]=Object.assign({al:null},NF[k])}
+  Object.assign(PAL,{"ag1>Cuw":"銀樹","pb2>Znp":"鉛樹"});
+  const add=(k,o)=>{T[k]=Object.assign(T[k]||{},o)};
+  const PASS=[null,"表面に緻密な酸化被膜ができ、反応がすぐに止まった（不動態）"];
+  // 銅
+  add("cu_m",{HNO3:["cu2","銅が溶けて青色の溶液になり、無色の気体（$NO$）が発生した","3Cu + 8HNO3 → 3Cu(NO3)2 + 2NO↑ + 4H2O"],
+    cHNO3:["cu2","銅が溶け、赤褐色の気体（$NO2$）が発生した","Cu + 4HNO3 → Cu(NO3)2 + 2NO2↑ + 2H2O"],
+    cH2SO4:["cu2","銅が溶け、刺激臭のある気体（$SO2$）が発生した","Cu + 2H2SO4 → CuSO4 + SO2↑ + 2H2O"],
+    HCl:[null,"銅は水素よりイオン化傾向が小さいので、塩酸には溶けない"],
+    H2SO4:[null,"銅は希硫酸には溶けない（酸化力のある酸が必要）"],
+    heat:["cuo","空気中で加熱すると、表面が黒くなった","2Cu + O2 → 2CuO"]});
+  add("cu2",{Znp:["cu_m","亜鉛板の表面に赤色の銅が析出し、溶液の青色が薄くなった（イオン化傾向 $Zn$ ＞ $Cu$）","Cu^{2+} + Zn → Cu + Zn^{2+}"],
+    Fen:["cu_m","鉄くぎの表面に赤色の銅が析出した（イオン化傾向 $Fe$ ＞ $Cu$）","Cu^{2+} + Fe → Cu + Fe^{2+}"]});
+  add("cuo",{cH2SO4:["cu2","黒色の固体が溶けて青色の溶液になった","CuO + H2SO4 → CuSO4 + H2O"]});
+  // 銀
+  add("ag1",{Cuw:["ag","銅線の表面に銀が樹枝状に析出し、溶液が青みを帯びた（イオン化傾向 $Cu$ ＞ $Ag$）","2Ag^+ + Cu → 2Ag + Cu^{2+}"]});
+  add("ag",{cHNO3:["ag1","銀が溶け、赤褐色の気体（$NO2$）が発生した","Ag + 2HNO3 → AgNO3 + NO2↑ + H2O"],
+    HCl:[null,"銀は塩酸には溶けない"]});
+  // 亜鉛
+  add("zn_m",{HCl:["zn2","泡（$H2$）を出して溶けた","Zn + 2HCl → ZnCl2 + H2↑"],
+    H2SO4:["zn2","泡（$H2$）を出して溶けた","Zn + H2SO4 → ZnSO4 + H2↑"],
+    NaOH:["znoh4","泡（$H2$）を出して溶けた（両性金属）","Zn + 2NaOH + 2H2O → Na2[Zn(OH)4] + H2↑"]});
+  // アルミニウム
+  add("al_m",{HCl:["al3","泡（$H2$）を出して溶けた","2Al + 6HCl → 2AlCl3 + 3H2↑"],
+    NaOH:["aloh4","泡（$H2$）を出して溶けた（両性金属）","2Al + 2NaOH + 6H2O → 2Na[Al(OH)4] + 3H2↑"],
+    cHNO3:PASS});
+  add("aloh",{heat:["al2o3","加熱すると水が抜けて、白色の酸化アルミニウムになった","2Al(OH)3 → Al2O3 + 3H2O"]});
+  add("al2o3",{HCl:["al3","溶けた（両性酸化物）","Al2O3 + 6HCl → 2AlCl3 + 3H2O"],
+    NaOH:["aloh4","溶けた（両性酸化物）","Al2O3 + 2NaOH + 3H2O → 2Na[Al(OH)4]"]});
+  // 鉄
+  add("fe_m",{HCl:["fe2","泡（$H2$）を出して溶け、淡緑色の溶液になった","Fe + 2HCl → FeCl2 + H2↑"],
+    H2SO4:["fe2","泡（$H2$）を出して溶け、淡緑色の溶液になった","Fe + H2SO4 → FeSO4 + H2↑"],
+    HNO3:["fe3","溶けて黄褐色の溶液になり、$NO$ が発生した","Fe + 4HNO3 → Fe(NO3)3 + NO↑ + 2H2O"],
+    cHNO3:PASS});
+  add("fe3",{Fen:["fe2","鉄くぎが溶け、黄褐色が淡緑色に変わった","2Fe^{3+} + Fe → 3Fe^{2+}"]});
+  add("fe2",{H2SO4:[null,"すでに酸性で、変化しない"]});
+  add("feoh3",{heat:["fe2o3","加熱すると水が抜けて、赤褐色の酸化鉄(III)になった","2Fe(OH)3 → Fe2O3 + 3H2O"]});
+  add("fe2o3",{HCl:["fe3","溶けて黄褐色の溶液になった","Fe2O3 + 6HCl → 2FeCl3 + 3H2O"]});
+  // 鉛
+  add("pb2",{Znp:["pb_m","亜鉛板の表面に鉛が樹枝状に析出した（イオン化傾向 $Zn$ ＞ $Pb$）","Pb^{2+} + Zn → Pb + Zn^{2+}"]});
+  add("pb_m",{HNO3:["pb2","溶けて無色の溶液になった","3Pb + 8HNO3 → 3Pb(NO3)2 + 2NO↑ + 4H2O"],
+    HCl:[null,"表面に溶けにくい $PbCl2$ ができ、ほとんど溶けない"],
+    H2SO4:[null,"表面に溶けにくい $PbSO4$ ができ、ほとんど溶けない"]});
+  // マグネシウム
+  T.mg_m={HCl:["mg2","泡（$H2$）を出して溶けた","Mg + 2HCl → MgCl2 + H2↑"],
+    heat:["mgo","空気中で加熱すると、まぶしい白い光を出して燃えた","2Mg + O2 → 2MgO"],
+    NaOH:[null,"マグネシウムは両性金属ではないので、$NaOH$ 水溶液には溶けない"]};
+  T.mg2={NaOH:["mgoh","白色の沈殿が生じた","Mg^{2+} + 2OH^- → Mg(OH)2↓"],
+    NH3:["mgoh","白色の沈殿が生じた","Mg^{2+} + 2NH3 + 2H2O → Mg(OH)2↓ + 2NH4^+"],
+    Na2CO3:["mgco3","白色の沈殿が生じた","Mg^{2+} + CO3^{2-} → MgCO3↓"]};
+  T.mgoh={HCl:["mg2","沈殿が溶けた","Mg(OH)2 + 2HCl → MgCl2 + 2H2O"],
+    NaOH:[null,"さらに加えても溶けない（両性ではない）"],
+    NH3:[null,"さらに加えても溶けない（アンモニアと錯イオンをつくらない）"],
+    heat:["mgo","加熱すると水が抜けて、酸化マグネシウムになった","Mg(OH)2 → MgO + H2O"]};
+  T.mgo={HCl:["mg2","溶けた（塩基性酸化物）","MgO + 2HCl → MgCl2 + H2O"]};
+  T.mgco3={HCl:["mg2","泡（$CO2$）を出して溶けた","MgCO3 + 2HCl → MgCl2 + H2O + CO2↑"],
+    heat:["mgo","加熱すると $CO2$ を出して、酸化マグネシウムになった","MgCO3 → MgO + CO2↑"]};
+  // スズ
+  T.sn2={NaOH:["snoh2","白色の沈殿が生じた","Sn^{2+} + 2OH^- → Sn(OH)2↓"],
+    H2Sa:["sns","褐色の沈殿が生じた","Sn^{2+} + H2S → SnS↓ + 2H^+"],
+    FeCl3:["sn4","加えた $Fe^{3+}$ の黄褐色が消えた（$Sn^{2+}$ が還元剤として働いた）","Sn^{2+} + 2Fe^{3+} → Sn^{4+} + 2Fe^{2+}"]};
+  T.snoh2={NaOH:["snoh4","さらに加えると沈殿が溶けた（両性）","Sn(OH)2 + 2OH^- → [Sn(OH)4]^{2-}"],
+    HCl:["sn2","沈殿が溶けた","Sn(OH)2 + 2HCl → SnCl2 + 2H2O"]};
+  T.snoh4={HCl:["snoh2","白色の沈殿が生じた（中和）．さらに加えると溶ける","[Sn(OH)4]^{2-} + 2H^+ → Sn(OH)2↓ + 2H2O"],
+    H2Sa:["sns","酸性になり、褐色の沈殿が生じた",null]};
+  T.sns={HCl:[null,"$SnS$ は希塩酸には溶けにくい"]};
+  T.sn4={FeCl3:[null,"これ以上は還元されない（$Sn^{4+}$ は安定な形）"]};
+  // 水銀
+  T.hg2={NaOH:["hgo","黄色の沈殿が生じた","Hg^{2+} + 2OH^- → HgO↓ + H2O"],
+    H2Sa:["hgs","黒色の沈殿が生じた（酸性でも沈殿する）","Hg^{2+} + H2S → HgS↓ + 2H^+"],
+    KI:["hgi2","赤色の沈殿が生じた","Hg^{2+} + 2I^- → HgI2↓"],
+    HCl:[null,"$HgCl2$ は水に溶けるので沈殿しない"]};
+  T.hgo={HCl:["hg2","沈殿が溶けた","HgO + 2HCl → HgCl2 + H2O"],
+    H2Sa:["hgs","黒色に変わった","HgO + H2S → HgS + H2O"]};
+  T.hgi2={KI:["hgi4","さらに加えると沈殿が溶け、無色の溶液になった（錯イオン形成）","HgI2 + 2I^- → [HgI4]^{2-}"],
+    H2Sa:["hgs","黒色に変わった","HgI2 + H2S → HgS + 2HI"]};
+  T.hgi4={H2Sa:["hgs","黒色の沈殿が生じた",null]};
+  T.hgs={HCl:[null,"$HgS$ は酸にきわめて溶けにくい"],
+    HNO3:[null,"$HgS$ は硝酸にも溶けない（王水には溶ける）"]};
+  // ナトリウム（炭酸ナトリウムの二段階中和など）
+  T.naoh={CO2:["na2co3","変化は見えないが、$CO2$ が吸収された","2NaOH + CO2 → Na2CO3 + H2O"],
+    HCl:["nacl","中和された","NaOH + HCl → NaCl + H2O"]};
+  T.na2co3={HCl:["nahco3","泡は出なかった（第一段階の中和）．さらに加えると泡が出る","Na2CO3 + HCl → NaHCO3 + NaCl"],
+    CO2:["nahco3","$CO2$ が吸収されて、炭酸水素ナトリウムになった","Na2CO3 + CO2 + H2O → 2NaHCO3"],
+    heat:[null,"$Na2CO3$ は加熱しても分解しない"]};
+  T.nahco3={HCl:["nacl","泡（$CO2$）が出た（第二段階の中和）","NaHCO3 + HCl → NaCl + H2O + CO2↑"],
+    heat:["na2co3","加熱すると $CO2$ を出して、炭酸ナトリウムになった","2NaHCO3 → Na2CO3 + H2O + CO2↑"]};
+  T.nacl={CO2:[null,"変化しない"],heat:[null,"水が蒸発するだけで、変化しない"],HCl:[null,"変化しない"]};
+  // 章
+  const addCh=(id,o)=>{const c=CH.find(h=>h.id===id);c.shelf=[...new Set(c.shelf.concat(o.shelf||[]))];c.forms=[...new Set(c.forms.concat(o.forms||[]))]};
+  addCh("Cu",{shelf:["cHNO3","cH2SO4","Znp","Fen","flame"],forms:["cu_m"]});
+  addCh("Ag",{shelf:["Cuw","cHNO3"],forms:[]});
+  addCh("Zn",{shelf:[],forms:["zn_m"]});
+  addCh("Al",{shelf:["cHNO3","heat"],forms:["al_m","al2o3"]});
+  addCh("Fe",{shelf:["H2SO4","cHNO3","Fen","heat"],forms:["fe_m","fe2o3"]});
+  addCh("Pb",{shelf:["Znp"],forms:["pb_m"]});
+  addCh("Ca",{shelf:["flame"],forms:[]});
+  addCh("Ba",{shelf:["flame"],forms:[]});
+  CH.push({id:"Na",z:"11",nm:"ナトリウム",shelf:["HCl","CO2","heat","flame"],forms:["naoh","na2co3","nahco3","nacl"]},
+          {id:"Mg",z:"12",nm:"マグネシウム",shelf:["HCl","NaOH","NH3","Na2CO3","heat","flame"],forms:["mg_m","mg2","mgoh","mgo","mgco3"]},
+          {id:"Sn",z:"50",nm:"スズ",shelf:["HCl","NaOH","H2Sa","FeCl3"],forms:["sn2","snoh2","snoh4","sns","sn4"]},
+          {id:"Hg",z:"80",nm:"水銀",shelf:["HCl","HNO3","NaOH","H2Sa","KI"],forms:["hg2","hgo","hgs","hgi2","hgi4"]});
+  // 炎色反応（その章の物質ならどれでも同じ色）
+  const FLAME={Na:["黄色","#f2c418"],Cu:["青緑色","#2fb39a"],Ca:["橙赤色","#f06a2a"],Ba:["黄緑色","#9ccc3a"],Mg:[null,null]};
+  CH.forEach(c=>{if(!(c.id in FLAME))return;const [nm]=FLAME[c.id];
+    c.forms.forEach(k=>{T[k]=T[k]||{};T[k].flame=[null,nm?"炎色反応：白金線につけて炎に入れると、"+nm+"の炎が見えた":"炎色反応は見られなかった（$Mg$ は炎色反応を示さない）"]})});
+  window.IK_FLAME=FLAME;
+})();
 // 1回目は「少量」の反応、生じた沈殿にもう一度加えると「過剰」の反応になるように統合する
 (function(){
   for(const k in T){const t=T[k];
@@ -533,6 +680,9 @@ const CH=[
   T.feoh2.NaOH=[null,"さらに加えても溶けない"];T.feoh3.NaOH=[null,"さらに加えても溶けない"];
   T.feoh2.NH3=[null,"さらに加えても溶けない"];T.feoh3.NH3=[null,"さらに加えても溶けない"];
   T.croh3.NH3=[null,"さらに加えても $Cr(OH)3$ はほとんど溶けない"];
+  T.pbso4.NaOH=["pboh","白色の $Pb(OH)2$ に変わった．さらに加えると溶ける","PbSO4 + 2OH^- → Pb(OH)2 + SO4^{2-}"];
+  T.pbcro4.NaOH=["pboh","黄色が消え、白色の $Pb(OH)2$ に変わった．さらに加えると溶ける","PbCrO4 + 2OH^- → Pb(OH)2 + CrO4^{2-}"];
+  T.pbi2.NaOH=["pboh","黄色が消え、白色の $Pb(OH)2$ に変わった．さらに加えると溶ける","PbI2 + 2OH^- → Pb(OH)2 + 2I^-"];
   // 錯イオンに酸を加えると、まず水酸化物が沈殿し、さらに加えると溶ける
   const two=(k,acids,to,eq,obs)=>acids.forEach(a=>{T[k][a]=[to,obs,eq]});
   two("znoh4",["HCl","H2SO4"],"znoh","[Zn(OH)4]^{2-} + 2H^+ → Zn(OH)2↓ + 2H2O","白色の沈殿が生じた（中和）．さらに加えると溶ける");
@@ -590,15 +740,18 @@ function drawBeaker(id){
 let animDelay=0,motionTimer=null;
 const GAS=["CO2","SO2","H2Sa","H2Sb"];
 // 酸・塩基など、ふつう液体としてそのまま注ぐもの
-const POUR=["HCl","cHCl","HNO3","H2SO4","NaOH","NH3","H2O2","Cl2","Br2","I2","KMnO4","H2C2O4","MnO2a"];
-const STREAM={Cl2:"#cfdc6e",Br2:"#b5501d",I2:"#8a4a14",KMnO4:"#7a1a6e",K2CrO4:"#f0c419",CuSO4:"#3f9ad6",K3:"#d8b23a",K4:"#e8d36a"};
-const ALLCLS=["heating","lit","gassing","pouring","dropping"];
+const POUR=["HCl","cHCl","HNO3","cHNO3","H2SO4","cH2SO4","NaOH","NH3","H2O2","Cl2","Br2","I2","KMnO4","H2C2O4","MnO2a"];
+const STREAM={cHNO3:"#efe2a6",FeCl3:"#c98f2e",Cl2:"#cfdc6e",Br2:"#b5501d",I2:"#8a4a14",KMnO4:"#7a1a6e",K2CrO4:"#f0c419",CuSO4:"#3f9ad6",K3:"#d8b23a",K4:"#e8d36a"};
+const ALLCLS=["heating","lit","gassing","pouring","dropping","dipping","flaming"];
+const METAL={Znp:"#9ea6ab",Cuw:"#b5653a",Fen:"#6b6e72"};
 function motion(r){const b=$("beaker");clearTimeout(motionTimer);b.classList.remove(...ALLCLS);void b.getBBox();
   const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const cls=r==="heat"?"heating":r==="light"?"lit":GAS.includes(r)?"gassing":POUR.includes(r)?"pouring":"dropping";
+  const cls=r==="heat"?"heating":r==="light"?"lit":r==="flame"?"flaming":(r in METAL)?"dipping":GAS.includes(r)?"gassing":POUR.includes(r)?"pouring":"dropping";
+  if(r in METAL)b.style.setProperty("--strip",METAL[r]);
+  if(r==="flame"){const fc=(window.IK_FLAME[CH[S.ci].id]||[])[1];b.style.setProperty("--fcol",fc||"rgba(120,160,255,.55)")}
   b.style.setProperty("--stream",STREAM[r]||"rgba(120,170,200,.85)");
   b.classList.add(cls);
-  const dur={heating:1800,lit:1800,gassing:1800,pouring:1800,dropping:1200}[cls];
+  const dur={heating:1800,lit:1800,gassing:1800,pouring:1800,dropping:1200,dipping:1900,flaming:1800}[cls];
   animDelay=reduce?0:(cls==="dropping"?500:800);
   motionTimer=setTimeout(()=>b.classList.remove(cls),reduce?400:dur)}
 
@@ -700,7 +853,7 @@ function ptPos(z){
   if(k<=16)return {per,grp:3,f:k-2};               // ランタノイド・アクチノイド（f は 0〜14）
   return {per,grp:k-13};
 }
-const PT_GAME={Cu:"Cu",Ag:"Ag",Zn:"Zn",Al:"Al",Fe:"Fe",Pb:"Pb",Ni:"Ni",Cr:"Cr",Mn:"Mn",Ca:"Ca",Ba:"Ba",X:["Cl","Br","I"],S:"S"};
+const PT_GAME={Na:"Na",Mg:"Mg",Sn:"Sn",Hg:"Hg",Cu:"Cu",Ag:"Ag",Zn:"Zn",Al:"Al",Fe:"Fe",Pb:"Pb",Ni:"Ni",Cr:"Cr",Mn:"Mn",Ca:"Ca",Ba:"Ba",X:["Cl","Br","I"],S:"S"};
 const ptGameSet=new Set(Object.values(PT_GAME).flat());
 function ptInfo(z){
   const p=ptPos(z),sym=PT_SYM[z-1],tr=p.grp>=3&&p.grp<=12;

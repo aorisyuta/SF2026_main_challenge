@@ -277,3 +277,17 @@
   .ik-pt-ph { font-size: 6.5px; }
   .ik-pt-fl { font-size: 8px; writing-mode: horizontal-tb; }
 }
+
+/* 金属を入れる・炎色反応のモーション */
+.ik-beaker { --strip: #9ea6ab; --fcol: rgba(120, 160, 255, .55); }
+.ik-beaker #dip, .ik-beaker #flamet { opacity: 0; transition: opacity .25s; }
+.ik-beaker.dipping #dip, .ik-beaker.flaming #flamet { opacity: 1; }
+.ik-beaker .ik-strip { transform-box: view-box; }
+.ik-beaker.dipping .ik-strip { animation: ik-dip 1.9s ease-in-out forwards; }
+@keyframes ik-dip { 0% { transform: translateY(0); } 40%, 75% { transform: translateY(150px); } 100% { transform: translateY(150px); } }
+.ik-beaker.flaming .ik-ftf { animation: ik-flicker .16s ease-in-out infinite alternate; transform-box: fill-box; transform-origin: 50% 100%; }
+@media (prefers-reduced-motion: reduce) { .ik-beaker .ik-strip, .ik-beaker .ik-ftf { animation: none !important; } }
+/* 元素タイル：名前が長い元素（ナトリウム・マグネシウムなど）は幅を広げる */
+.ik-tile { width: auto; min-width: 60px; padding: 0 6px; }
+@media (min-width: 1100px) and (min-height: 620px) { .ik-tile { width: auto; min-width: 54px; padding: 0 5px; } }
+@media (max-width: 599px) { .ik-tile { width: auto; min-width: calc((100% - 6px * 4) / 5); } }
