@@ -20,7 +20,7 @@
     { key: 'about', href: 'about.html', label: 'Aoristos とは' },
     { key: 'members', href: 'members.html', label: 'メンバー' },
     { key: 'goods', href: 'goods.html', label: 'グッズ' },
-    { key: 'blog', href: 'blog.html', label: 'ブログ' },
+    { key: 'blog', href: 'blog.html', label: 'お知らせ' },
     { key: 'games', href: 'games/index.html', label: 'ゲーム' },
     { key: 'archive', href: 'archive/index.html', label: 'アーカイブ' }
   ];

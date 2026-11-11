@@ -75,12 +75,12 @@
     if (index === -1) {
       article.innerHTML = '<div class="post-head"><h1>記事が見つかりません</h1>' +
         '<p class="post-lead">公開が終了したか、URL が変わった可能性があります。</p>' +
-        '<p><a class="more-link" href="' + base + 'blog.html">ブログ一覧へ</a></p></div>';
+        '<p><a class="more-link" href="' + base + 'blog.html">お知らせ一覧へ</a></p></div>';
       return;
     }
 
     var p = posts[index];
-    document.title = p.title + ' — Aoristos ブログ';
+    document.title = p.title + ' — Aoristos お知らせ';
     var meta = document.querySelector('meta[name="description"]');
     if (meta && p.text) meta.setAttribute('content', p.text);
 
@@ -89,7 +89,7 @@
 
     article.innerHTML =
       '<header class="post-head">' +
-        '<p class="eyebrow">' + E(p.tags[0] || 'ブログ') + '</p>' +
+        '<p class="eyebrow">' + E(p.tags[0] || 'お知らせ') + '</p>' +
         '<h1>' + E(p.title) + '</h1>' +
         (p.text ? '<p class="post-lead">' + E(p.text) + '</p>' : '') +
         '<p class="post-byline"><time>' + E(p.dateLabel) + '</time>' + (p.author ? '<span>' + E(p.author) + '</span>' : '') + '</p>' +
@@ -119,7 +119,7 @@
       if (pick.length) {
         more.innerHTML = '<div class="container"><h2 class="section-title-sm">ほかの記事</h2>' +
           '<div class="post-grid">' + pick.map(function (x) { return cardHTML(x, E, false); }).join('') + '</div>' +
-          '<p class="center"><a class="more-link" href="' + base + 'blog.html">ブログ一覧へ</a></p></div>';
+          '<p class="center"><a class="more-link" href="' + base + 'blog.html">お知らせ一覧へ</a></p></div>';
         more.hidden = false;
       }
     }
