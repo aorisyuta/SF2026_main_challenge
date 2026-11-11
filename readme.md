@@ -186,7 +186,7 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 ├── about.html              Aoristos とは（団体の説明・活動のしかた・主な活動）
 ├── members.html            メンバー一覧（カードを足すとメンバーが増える）
 ├── goods.html              グッズ（部誌・Tシャツなど。シートの type = news）
-├── sodpion/                メンバー sodpion のページ（sodpion.html＝プロフィール。自作の小説・問題などもこの中に置く）
+├── sodpion/                メンバー sodpion のページ（introduce.html＝プロフィール。自作の小説・問題などもこの中に置く）
 ├── sf.html                 SF2026 トップ（出展案内・企画カード・開催概要）
 ├── projects.html           Aoristos の企画（SF2026）
 ├── timetable.html          タイムテーブル（AorXC・制作体験の実施時間）
