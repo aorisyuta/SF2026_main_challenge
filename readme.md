@@ -19,57 +19,38 @@ SF2026 開催日：**2026年11月7日（土）午後のみ・8日（日）**（�
 
 | 更新したいもの | 場所 |
 | --- | --- |
-| ブログ記事 | Google スプレッドシート（`type` = `post`） |
-| グッズのページ（`goods.html`）の「部誌発売中」「Tシャツ発売中」などと、各ページの右側・下部に出るグッズの枠 | Google スプレッドシート（`type` = `news`） |
-| X・Instagram などの SNS リンク | `assets/config.js` の `fallbackLinks`（スプレッドシートに `type` = `link` の行があればそちらが優先） |
+| お知らせ記事 | `assets/config.js` の `sitePosts` |
+| グッズのページ（`goods.html`）の部誌・Tシャツなどと、各ページの右側・下部に出るグッズの枠 | `assets/config.js` の `defaultNews` |
+| X・Instagram などの SNS リンク | `assets/config.js` の `fallbackLinks` |
 | 企画一覧 | `assets/projects.csv` |
 | 他の企画（SF 全体の企画・ステージ・校内マップ） | `assets/others-data.json`（`npm run build` で `others.html`・`others-list.html` を生成） |
 | 企画の詳しい情報 | `assets/projects-details.json` |
 | タイムテーブル | `timetable.html` |
-| 開催日・時間・スプレッドシートの URL | `assets/config.js` |
+| 開催日・時間 | `assets/config.js` |
 
-スプレッドシートを書き換えると、**サイトを再アップロードしなくても数分で反映**されます
-（Google 側の公開キャッシュとブラウザのキャッシュで最大5分ほどかかります）。
+どれも、書き換えたら `npm run build` → push で反映されます（以前は Google スプレッドシートから読み込んでいましたが、廃止しました）。
 
 ---
 
-## スプレッドシートの使い方
+## お知らせ記事（`sitePosts`）の書き方
 
-### 初回の準備
+`assets/config.js` の `sitePosts` に 1 件ずつ足します。「お知らせ」ページとトップの「最新情報」に、日付の新しい順で並びます。
 
-1. `templates/site-data-template.xlsx`（または `.csv`）を Google スプレッドシートに読み込みます。
-   既存のシートに入れる場合は「ファイル → インポート → アップロード」で「現在のシートを置換」を選びます。
-2. 「ファイル → 共有 → ウェブに公開」で、対象のシートを **カンマ区切り形式（.csv）** で公開します。
-3. 表示された URL を `assets/config.js` の `sheetCsvUrl` に貼ります（設定済み）。
-
-> テンプレートの `news` / `link` / `post` の行はサンプルです。URL やアカウント名を本物に書き換えるか、行を削除してください。
-
-### 列の意味
-
-1行目の見出しは変えないでください（日本語の見出し「種類」「タイトル」なども読み取れます）。
-
-| 列 | 内容 |
+| 項目 | 内容 |
 | --- | --- |
-| `type` | `post`＝ブログ記事 / `news`＝グッズ（`goods.html` と、各ページの右側・下部のグッズの枠） / `link`＝SNS などのリンク。`#` で始まる行はメモとして無視されます |
-| `visible` | `FALSE` で非表示（下書き）。空欄なら表示 |
-| `pin` | `post`：`TRUE` で一覧の先頭に固定（`news` では使わない） |
-| `date` | `2026/10/20` や `2026/10/20 18:00`。`post` は**未来の日時にするとその時刻まで公開されません（予約投稿）** |
-| `id` | 記事の URL になる半角英数字。`open-2026` なら `blog/post.html?id=open-2026`。公開後は変えない |
-| `title` | 記事タイトル／お知らせの見出し（例「Aoristos 部誌、発売中。」）／サービス名（`X`、`Instagram`） |
-| `text` | 記事の概要／お知らせの説明文／SNS のアカウント名（`@...`） |
-| `body` | 記事本文（下の記法） |
-| `url` | お知らせ・SNS のリンク先。サイト内のページは `projects/aorxc.html` のようにトップからの位置で書けます |
-| `link_label` | お知らせのボタンの文字（例「購入する」「予約する」） |
-| `image` | 画像の URL。Google ドライブの共有リンク（「リンクを知っている全員」が閲覧可）もそのまま使えます。`news` では `pdf` / `tshirt` と書くと内蔵のイラストを表示 |
-| `tags` | 記事のタグ。`お知らせ,販売` のようにカンマ区切り。最初のタグがカードの上に表示されます |
-| `author` | 記事の筆者 |
-| `style` | グッズのタイルの色。`light`（白）/ `dark`（黒）。空欄なら自動 |
+| `id` | 記事の URL になる半角英数字。`sf2026-view` なら `blog/post.html?id=sf2026-view`。公開後は変えない |
+| `title` | 記事タイトル |
+| `date` | `2026/11/11` や `2026/11/11 18:00`。**未来の日時にするとその時刻まで公開されません（予約投稿）** |
+| `tags` | `['お知らせ', 'SF2026']` のように。最初のタグがカードの上に表示されます |
+| `author` | 筆者 |
+| `text` | 概要（一覧のカードと記事の冒頭に表示） |
+| `body` | 本文（下の記法。改行は `\n`、または \` \` で囲んだ複数行の文字列で書けます） |
+| `image` | 冒頭の画像の URL（省略可） |
+| `pin` | `true` で一覧の先頭に固定（省略可） |
 
-`news` はシートの**上の行から順に**グッズのページに並びます。`name`（短い名前）・`note`（一言）の列を足すと、グッズの枠での表示に使われます。`news` の行が1つもないとき（シートが読めないときも）は、`assets/config.js` の `defaultNews`（部誌 PDF 版・Tシャツ）が表示されるので、グッズのページが空になることはありません。`link` は X・Instagram・YouTube を自動判別してアイコンを付けます。
+### 本文（`body`）の記法
 
-### 記事本文（`body`）の書き方
-
-セル内の改行は **Alt + Enter**（Mac は **⌘ + Enter**）。HTML は書けません（安全のため）。
+HTML は書けません（安全のため）。
 
 ```
 空行をはさむと段落が分かれます。
@@ -87,10 +68,9 @@ SF2026 開催日：**2026年11月7日（土）午後のみ・8日（日）**（�
 ---（区切り線）
 ```
 
-### 表示の確認
+## グッズ（`defaultNews`）
 
-URL の末尾に `?data=local` を付けると、スプレッドシートの代わりに `templates/site-data-template.csv` を読み込みます（デザイン確認用）。
-例：`index.html?data=local`
+`title`・`text`・`url`（リンク先。サイト内は `projects/aoristos-bushi.html` のようにトップからの位置）・`linkLabel`（ボタンの文字）・`art`（`pdf` / `tshirt` で内蔵のイラスト）・`style`（`light` / `dark`）・`name`（グッズ枠での短い名前）・`note`（グッズ枠での一言）。上から順にグッズのページに並びます。
 
 ---
 
@@ -185,7 +165,7 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 ├── index.html              トップ（Aoristos の紹介・活動・いまの活動として SF2026）
 ├── about.html              Aoristos とは（団体の説明・活動のしかた・主な活動）
 ├── members.html            メンバー一覧（カードを足すとメンバーが増える）
-├── goods.html              グッズ（部誌・Tシャツなど。シートの type = news）
+├── goods.html              グッズ（部誌・Tシャツなど。config.js の defaultNews）
 ├── sodpion/                メンバー sodpion のページ（introduce.html＝プロフィール。自作の小説・問題などもこの中に置く）
 │   └── hyoko500/           小説「標高五百米」（章ごとのページ。tools/build-novel.js が tools/novel/hyoko500.txt から生成）
 ├── sf.html                 SF2026 トップ（出展案内・企画カード・開催概要）
@@ -206,12 +186,9 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 ├── tools/build-novel.js    小説の章ページの生成（原稿は tools/novel/。原稿を直して npm run build）
 ├── _headers / robots.txt / sitemap.xml   build-site.js が生成
 ├── apple-touch-icon*.png   iPhone などがルートに取りに来るアイコン（assets/ のコピー）
-├── templates/
-│   ├── site-data-template.csv   スプレッドシートのひな形
-│   └── site-data-template.xlsx  同（書式つき）
 └── assets/
-    ├── config.js           サイト設定（開催日・テーマ・シート URL）
-    ├── sheet.js            スプレッドシートの読み込み・本文の整形
+    ├── config.js           サイト設定（開催日・テーマ・お知らせ記事・グッズ・SNS）
+    ├── sheet.js            config.js のお知らせ・グッズ・SNS の整理、本文の整形、CSV の読み込み
     ├── header.js           ナビ・お知らせ帯・フッター
     ├── script.js           カウントダウン・タブ・企画一覧
     ├── home.js             トップのお知らせ・最新記事・SNS
@@ -302,7 +279,7 @@ rm -rf archive/sf25 && cp -r /tmp/sf25-out archive/sf25 && python3 tools/rebase_
 ## 設計方針
 
 - **デザイン**：余白と文字で見せる。影・グラデーション・絵文字は使わない。白・薄灰・黒の帯を交互に置く
-- **軽さ**：Web フォントなし（端末内蔵フォント）、外部ライブラリなし。スプレッドシートは1ページにつき1回だけ取得し、数分間ブラウザに保持
+- **軽さ**：Web フォントなし（端末内蔵フォント）、外部ライブラリなし
 - **カウントダウン**：分が変わるときだけ更新し、タブが非表示のあいだは停止。開催中は「1日目 開催中」などに自動で切り替わる
 - **アクセシビリティ**：キーボード操作、`prefers-reduced-motion` で動きを停止、見出し順の維持
 
@@ -310,7 +287,7 @@ rm -rf archive/sf25 && cp -r /tmp/sf25-out archive/sf25 && python3 tools/rebase_
 
 ## 未対応・TODO
 
-- **部誌・Tシャツの購入リンク**：スプレッドシートの `news` 行の `url` を本物に差し替えてください
+- **部誌・Tシャツの購入リンク**：`assets/config.js` の `defaultNews` の `url` を本物に差し替えてください
 - **校内マップ PDF**：用意できたら `info.html` の `#map` にリンクを追加
 - **タイムテーブル**：内容は暫定。確定次第 `timetable.html` を更新
 - **企画の場所・時間**：`projects-details.json` の「準備中」を確定情報に更新

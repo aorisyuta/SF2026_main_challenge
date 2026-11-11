@@ -281,8 +281,7 @@ function buildHeaders(pages) {
     "style-src 'self' 'unsafe-inline'",
     // スプレッドシートの画像（Google ドライブ等）は任意の https URL を許可
     "img-src 'self' data: https:",
-    // 公開 CSV は docs.google.com から *.googleusercontent.com へリダイレクトされる
-    `connect-src 'self' https://docs.google.com https://*.googleusercontent.com ${CF_ANALYTICS.connect}`,
+    `connect-src 'self' ${CF_ANALYTICS.connect}`,
     // 来場案内の Google マップ、部誌 PDF、SF2026 トップの YouTube 動画（プライバシー強化モード）の埋め込み
     "frame-src 'self' https://www.google.com https://www.youtube-nocookie.com",
     "font-src 'self'",

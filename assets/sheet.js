@@ -1,19 +1,16 @@
 /*
-  sheet.js — Google スプレッドシート（CSV 公開）からサイトのデータを読む
-  - ブログ記事（type = post）
-  - トップのお知らせ・販売情報（type = news）
-  - SNS などのリンク（type = link）
-
-  1 ページにつき通信は 1 回。sessionStorage に数分キャッシュしてページ移動では再取得しない。
-  URL に ?data=local を付けると templates/site-data-template.csv を読む（ローカルでの確認用。本番では無効）。
+  sheet.js — サイトのデータ（お知らせ・グッズ・SNS リンク）をまとめて扱う
+  - お知らせ記事：config.js の sitePosts
+  - グッズ：config.js の defaultNews
+  - SNS などのリンク：config.js の fallbackLinks
+  （以前は Google スプレッドシートから読んでいたが、すべて config.js に書く形にした）
 */
 (function () {
   'use strict';
 
   var CFG = window.SF_CONFIG || {};
-  var CACHE_KEY = 'sf2026-sheet-v1';
 
-  /* ---------- CSV（RFC 4180: セル内の改行・カンマ・"" に対応） ---------- */
+  /* ---------- CSV（企画一覧 assets/projects.csv の読み込みに使う。RFC 4180: セル内の改行・カンマ・"" に対応） ---------- */
   function parseCSV(text) {
     var rows = [], row = [], field = '', q = false;
     text = String(text || '').replace(/^﻿/, '');
@@ -179,33 +176,14 @@
     return html.join('\n');
   }
 
-  /* ---------- 取得 ---------- */
-  function readCache() {
-    try {
-      var raw = sessionStorage.getItem(CACHE_KEY);
-      if (!raw) return null;
-      var c = JSON.parse(raw);
-      var ttl = (CFG.sheetCacheMinutes || 3) * 60000;
-      if (Date.now() - c.t > ttl) return null;
-      return c.text;
-    } catch (e) { return null; }
-  }
-  function writeCache(text) {
-    try { sessionStorage.setItem(CACHE_KEY, JSON.stringify({ t: Date.now(), text: text })); } catch (e) { /* 容量超過などは無視 */ }
-  }
-
-  function sourceUrl() {
-    var base = (window.pageConfig && window.pageConfig.basePath) || '';
-    var params = new URLSearchParams(location.search);
-    // ?data=local（サンプル CSV）はローカル確認用。本番では templates/ を公開しないので無効にする
-    var isLocalHost = /^(localhost|127\.0\.0\.1|\[::1\]|)$/.test(location.hostname);
-    if ((params.get('data') === 'local' && isLocalHost) || !CFG.sheetCsvUrl) return { url: base + 'templates/site-data-template.csv', cache: false };
-    return { url: CFG.sheetCsvUrl, cache: true };
-  }
-
-  function build(rows) {
+  function build() {
     var now = new Date();
     var data = { posts: [], news: [], links: [] };
+    // config.js の sitePosts（お知らせ記事）を記事の行として扱う
+    var rows = (CFG.sitePosts || []).map(function (p) {
+      return { type: 'post', id: p.id, title: p.title, text: p.text, body: p.body, date: p.date,
+        tags: (p.tags || []).join(','), author: p.author, image: p.image, pin: p.pin ? 'TRUE' : '' };
+    });
 
     rows.forEach(function (r, i) {
       var type = String(r.type || '').trim().toLowerCase();
@@ -276,24 +254,7 @@
 
   var promise = null;
   function load() {
-    if (promise) return promise;
-    var src = sourceUrl();
-    var cached = src.cache ? readCache() : null;
-
-    promise = (cached != null ? Promise.resolve(cached) : fetch(src.url, { cache: 'no-cache' }).then(function (res) {
-      if (!res.ok) throw new Error('スプレッドシートの取得に失敗しました (' + res.status + ')');
-      return res.text();
-    }).then(function (text) {
-      if (/^\s*</.test(text)) throw new Error('CSV ではなく HTML が返りました。シートを「ウェブに公開」→ CSV で公開してください。');
-      if (src.cache) writeCache(text);
-      return text;
-    })).then(function (text) {
-      return build(parseCSV(text));
-    }, function (err) {
-      // シートが読めなくても、トップの販売タイルと SNS の初期値は出す
-      console.warn(err);
-      return { posts: [], news: defaultNews(), links: (CFG.fallbackLinks || []).slice(), error: err };
-    });
+    if (!promise) promise = Promise.resolve(build());
     return promise;
   }
 
