@@ -716,7 +716,7 @@ function starsFor(m,par){return m<=par?3:m<=par+2?2:1}
 
 function newProblem(){
   const cis=S.scope<0?CH.map((_,i)=>i):[S.scope];const D=DIFF[S.diff];
-  let c=candidates(cis,D.lo,D.hi);if(!c.length)c=candidates(cis,1,9);
+  let c=candidates(cis,D.lo,D.hi);if(!c.length){const all=candidates(cis,1,9);const mx=Math.max(...all.map(x=>x.d));c=all.filter(x=>x.d===mx)} // その範囲に難しい問題がなければ、いちばん手数の多い問題を出す
   const fresh=c.filter(x=>!(x.s===S.start&&x.t===S.target));if(fresh.length)c=fresh;
   // pick a chapter first so large chapters don't dominate
   const chs=[...new Set(c.map(x=>x.ci))];const pick=chs[Math.floor(Math.random()*chs.length)];
