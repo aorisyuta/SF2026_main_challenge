@@ -335,3 +335,14 @@
 .ik-map-canvas path.is-out { stroke: var(--ink); stroke-width: 1.8; }
 .ik-map-canvas path.is-in { stroke: var(--btn); stroke-width: 1.8; }
 .ik-map-canvas path.is-dim { stroke: #c7c7cc; stroke-width: 1.2; }
+/* 反応図：文字を大きく、線を太く */
+.ik-map-node { padding: 6px 10px 6px 30px; }
+.ik-map-node .ik-fx { font-size: 19px; }
+.ik-map-node small { font-size: 11.5px; }
+.ik-map-node em, .ik-map-node i { font-size: 11px; }
+.ik-map-sw { width: 15px; height: 15px; margin-top: -7.5px; }
+.ik-map-lb { font-size: 14px; padding: 1px 6px; }
+.ik-map-canvas line.is-out, .ik-map-canvas path.is-out, .ik-map-canvas line.is-in, .ik-map-canvas path.is-in { stroke-width: 2.2; }
+.ik-map-canvas line.is-dim, .ik-map-canvas path.is-dim { stroke: #b8b8be; stroke-width: 1.3; }
+.ik-map-lb.is-dim { color: var(--ink-2); font-size: 12px; }
+.ik-map-node.is-focus { background: #fff6e0; }

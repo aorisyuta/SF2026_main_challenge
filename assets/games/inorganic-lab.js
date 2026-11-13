@@ -149,7 +149,7 @@ const NM={cu2:"銅(II)イオン",cuoh:"水酸化銅(II)",cuo:"酸化銅(II)",cun
  cl1:"塩化物イオン",cl2x:"塩素",agclx:"塩化銀",br1:"臭化物イオン",br2:"臭素",agbrx:"臭化銀",i1:"ヨウ化物イオン",i2:"ヨウ素",istarch:"ヨウ素デンプン複合体",agix:"ヨウ化銀",
  h2s:"硫化水素",s0:"硫黄",so2:"二酸化硫黄",so4:"硫酸イオン",baso4s:"硫酸バリウム",cuss:"硫化銅(II)"};
 // default common names
-const AL={pblue:"紺青（ベルリンブルー／ターンブルブルー）",fe2k4:"Everitt 塩",pbcro4:"クロムイエロー",caoh:"石灰水",cl2x:"塩素水",br2:"臭素水",so2:"亜硫酸水",baso4:"X線造影剤",baso4s:"X線造影剤"};
+const AL={pblue:"紺青（ベルリンブルー／ターンブルブルー）・Fe₄[Fe(CN)₆]₃ とも書く",fe2k4:"プルシアンホワイト（Everitt 塩）",feoh3:"FeO(OH) とも書く",pbcro4:"クロムイエロー",caoh:"石灰水",cl2x:"塩素水",br2:"臭素水",so2:"亜硫酸水",baso4:"X線造影剤",baso4s:"X線造影剤"};
 for(const k in F){F[k].nm=NM[k]||"";F[k].al=AL[k]||null}
 F.istarch.f="I2";
 // path-dependent common names, keyed "from>reagent"
@@ -548,6 +548,12 @@ const CH=[
     nahco3:{f:"NaHCO3",ph:"aq",col:W,look:"無色の溶液",nm:"炭酸水素ナトリウム",al:"重曹"},
     nacl:{f:"NaCl",ph:"aq",col:W,look:"無色の溶液",nm:"塩化ナトリウム"}
   };
+  Object.assign(NF,{
+    feo:{f:"FeO",ph:"s",col:"#1e1e1e",look:"黒色の固体",nm:"酸化鉄(II)"},
+    febrown:{f:"Fe[Fe(CN)6]",ph:"aq",col:"#6b4a1f",look:"暗褐色の溶液",nm:"ヘキサシアニド鉄(III)酸鉄(III)",al:"プルシアンブラウン"}
+  });
+  Object.assign(R,{CO:{f:"CO",s:"高温で還元"},O2:{f:"O2",s:"酸素で酸化"}});
+  ["CO","O2"].forEach(k=>{if(!ORDER.includes(k))ORDER.push(k)});
   for(const k in NF){F[k]=Object.assign({al:null},NF[k])}
   Object.assign(PAL,{"ag1>Cuw":"銀樹","pb2>Znp":"鉛樹"});
   const add=(k,o)=>{T[k]=Object.assign(T[k]||{},o)};
@@ -585,7 +591,16 @@ const CH=[
   add("fe3",{Fen:["fe2","鉄くぎが溶け、黄褐色が淡緑色に変わった","2Fe^{3+} + Fe → 3Fe^{2+}"]});
   add("fe2",{H2SO4:[null,"すでに酸性で、変化しない"]});
   add("feoh3",{heat:["fe2o3","加熱すると水が抜けて、赤褐色の酸化鉄(III)になった","2Fe(OH)3 → Fe2O3 + 3H2O"]});
-  add("fe2o3",{HCl:["fe3","溶けて黄褐色の溶液になった","Fe2O3 + 6HCl → 2FeCl3 + 3H2O"]});
+  add("fe2o3",{HCl:["fe3","溶けて黄褐色の溶液になった","Fe2O3 + 6HCl → 2FeCl3 + 3H2O"],
+    CO:["feo","高温で一酸化炭素に還元され、黒色の酸化鉄(II)になった","Fe2O3 + CO → 2FeO + CO2"]});
+  add("feo",{CO:["fe_m","さらに還元されて鉄になった（製鉄）","FeO + CO → Fe + CO2"],
+    O2:["fe2o3","酸化されて赤褐色の酸化鉄(III)になった","4FeO + O2 → 2Fe2O3"],
+    HCl:["fe2","溶けて淡緑色の溶液になった","FeO + 2HCl → FeCl2 + H2O"],
+    H2SO4:["fe2","溶けて淡緑色の溶液になった","FeO + H2SO4 → FeSO4 + H2O"]});
+  add("fe_m",{O2:["feo","加熱すると酸素と反応して、黒色の酸化鉄(II)になった","2Fe + O2 → 2FeO"]});
+  add("feoh2",{O2:["feoh3","空気中の酸素で酸化され、赤褐色に変わった","4Fe(OH)2 + O2 + 2H2O → 4Fe(OH)3"]});
+  add("fe2",{O2:["fe3","酸素で酸化され、黄褐色になった","4Fe^{2+} + O2 + 4H^+ → 4Fe^{3+} + 2H2O"]});
+  add("fe3",{K3:["febrown","暗褐色の溶液になった（沈殿はしない）","Fe^{3+} + [Fe(CN)6]^{3-} → Fe[Fe(CN)6]"]});
   // 鉛
   add("pb2",{Znp:["pb_m","亜鉛板の表面に鉛が樹枝状に析出した（イオン化傾向 $Zn$ ＞ $Pb$）","Pb^{2+} + Zn → Pb + Zn^{2+}"]});
   add("pb_m",{HNO3:["pb2","溶けて無色の溶液になった","3Pb + 8HNO3 → 3Pb(NO3)2 + 2NO↑ + 4H2O"],
@@ -642,7 +657,7 @@ const CH=[
   addCh("Ag",{shelf:["Cuw","cHNO3"],forms:[]});
   addCh("Zn",{shelf:[],forms:["zn_m"]});
   addCh("Al",{shelf:["cHNO3","heat"],forms:["al_m","al2o3"]});
-  addCh("Fe",{shelf:["H2SO4","cHNO3","Fen","heat"],forms:["fe_m","fe2o3"]});
+  addCh("Fe",{shelf:["H2SO4","cHNO3","Fen","heat","O2","CO"],forms:["fe_m","feo","fe2o3","febrown"]});
   addCh("Pb",{shelf:["Znp"],forms:["pb_m"]});
   addCh("Ca",{shelf:["flame"],forms:[]});
   addCh("Ba",{shelf:["flame"],forms:[]});
@@ -738,7 +753,7 @@ function drawBeaker(id){
       DOTS.map(d=>'<circle cx="'+d[0].toFixed(1)+'" cy="'+(d[1]-8).toFixed(1)+'" r="'+d[2].toFixed(1)+'" fill="'+fm.col+'" stroke="var(--pptline)" stroke-width=".5"/>').join("");
     ppt.style.opacity=1}}
 let animDelay=0,motionTimer=null;
-const GAS=["CO2","SO2","H2Sa","H2Sb"];
+const GAS=["CO2","SO2","H2Sa","H2Sb","CO"];
 // 酸・塩基など、ふつう液体としてそのまま注ぐもの
 const POUR=["HCl","cHCl","HNO3","cHNO3","H2SO4","cH2SO4","NaOH","NH3","H2O2","Cl2","Br2","I2","KMnO4","H2C2O4","MnO2a"];
 const STREAM={cHNO3:"#efe2a6",FeCl3:"#c98f2e",Cl2:"#cfdc6e",Br2:"#b5501d",I2:"#8a4a14",KMnO4:"#7a1a6e",K2CrO4:"#f0c419",CuSO4:"#3f9ad6",K3:"#d8b23a",K4:"#e8d36a"};
@@ -746,7 +761,7 @@ const ALLCLS=["heating","lit","gassing","pouring","dropping","dipping","flaming"
 const METAL={Znp:"#9ea6ab",Cuw:"#b5653a",Fen:"#6b6e72"};
 function motion(r){const b=$("beaker");clearTimeout(motionTimer);b.classList.remove(...ALLCLS);void b.getBBox();
   const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const cls=r==="heat"?"heating":r==="light"?"lit":r==="flame"?"flaming":(r in METAL)?"dipping":GAS.includes(r)?"gassing":POUR.includes(r)?"pouring":"dropping";
+  const cls=(r==="heat"||r==="O2")?"heating":r==="light"?"lit":r==="flame"?"flaming":(r in METAL)?"dipping":GAS.includes(r)?"gassing":POUR.includes(r)?"pouring":"dropping";
   if(r in METAL)b.style.setProperty("--strip",METAL[r]);
   if(r==="flame"){const fc=(window.IK_FLAME[CH[S.ci].id]||[])[1];b.style.setProperty("--fcol",fc||"rgba(120,160,255,.55)")}
   b.style.setProperty("--stream",STREAM[r]||"rgba(120,170,200,.85)");
@@ -891,36 +906,66 @@ const MAP_LABEL={cHCl:"濃HCl・加熱",cHNO3:"濃HNO3",cH2SO4:"熱濃H2SO4",H2S
   NaOH:"NaOH",NH3:"NH3水",K4:"K4[Fe(CN)6]",K3:"K3[Fe(CN)6]",S2O3:"Na2S2O3"};
 function mapLabel(r){const s=MAP_LABEL[r]||(R[r].f||R[r].t);return s.replace(/[A-Za-z][A-Za-z0-9()\[\]]*/g,m=>f(m))}
 const mapCache={};
-const MAP={CW:236,RH:150,BW:156,BH:68,PAD:40};
-// 物質を格子に置く：矢印が短く、交差や箱の上を通る線が少なくなる配置を焼きなましで探す（実際の箱の大きさで判定）
+const MAP={CW:250,RH:160,BW:170,BH:76,PAD:40};
+// 物質の置き場所：教科書の図と同じく
+//   左の列＝金属と、金属から加熱・還元でできる酸化物
+//   上の段＝水酸化物・酸化物の沈殿（塩基を加えてできるもの）
+//   真ん中の段＝イオン・錯イオン（水溶液）
+//   下の段＝そのほかの沈殿（硫化物・ハロゲン化物・クロム酸塩など）
+// 各段の中の並び順は、矢印が短く交差が少なくなるように焼きなましで決める
+const MAP_LEFT=["cuo","feo","fe2o3","al2o3","mgo"];
+function mapCat(k){const fm=F[k];
+  if(/_m$/.test(k)||MAP_LEFT.includes(k))return "M";
+  if(fm.ph==="aq")return "C";
+  if(/\(OH\)/.test(fm.f)||k==="ag2o"||k==="hgo")return "T";
+  return "B"}
 function mapLayout(ci){
   if(mapCache[ci])return mapCache[ci];
   const c=CH[ci],nodes=c.forms,n=nodes.length,idx={};nodes.forEach((k,i)=>idx[k]=i);
   const pairs=new Map();
   nodes.forEach(u=>{for(const r of c.shelf){const v=step(u,r);if(v&&v!==u&&v in idx){const a=Math.min(idx[u],idx[v]),b=Math.max(idx[u],idx[v]);pairs.set(a+"-"+b,[a,b])}}});
   const E=[...pairs.values()];
-  const cols=Math.max(3,Math.ceil(Math.sqrt(n*1.9))),rows=Math.max(2,Math.ceil(n/cols)+1),cells=cols*rows;
+  // 段を決める（1 段に 5 個を超えたら 2 段に分ける）
+  const groups={M:[],T:[],C:[],B:[]};nodes.forEach((k,i)=>groups[mapCat(k)].push(i));
+  const rowsDef=[];
+  for(const g of ["T","C","B"]){const items=groups[g];if(!items.length)continue;
+    for(let i=0;i<items.length;i+=5)rowsDef.push(items.slice(i,i+5))}
+  const hasM=groups.M.length>0,c0=hasM?1:0;
+  const width=Math.max(3,...rowsDef.map(r=>r.length+1));
+  const nRows=Math.max(rowsDef.length,groups.M.length);
+  // 初期配置
   let seed=ci*7919+13;const rnd=()=>(seed=(seed*1103515245+12345)%2147483648)/2147483648;
-  let pos=[...Array(cells).keys()].sort(()=>rnd()-.5).slice(0,n);
-  const px=p=>[(p%cols)*MAP.CW,Math.floor(p/cols)*MAP.RH];
+  const row=[],col=[];
+  rowsDef.forEach((items,r)=>items.forEach((i,j)=>{row[i]=r;col[i]=c0+j}));
+  groups.M.forEach((i,j)=>{row[i]=j;col[i]=0});
+  const px=i=>[col[i]*MAP.CW,row[i]*MAP.RH];
   const o=(p,q,r)=>Math.sign((q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]));
   const cross=(a,b,c2,d)=>o(a,b,c2)*o(a,b,d)<0&&o(c2,d,a)*o(c2,d,b)<0;
   const hw=MAP.BW/2+10,hh=MAP.BH/2+10;
   const hitBox=(a,b,p)=>{const R=[[p[0]-hw,p[1]-hh],[p[0]+hw,p[1]-hh],[p[0]+hw,p[1]+hh],[p[0]-hw,p[1]+hh]];
     for(let i=0;i<4;i++)if(cross(a,b,R[i],R[(i+1)%4]))return true;return false};
-  const cost=P=>{const X=P.map(px);let s=0;
-    for(const [a,b] of E){const dx=(X[a][0]-X[b][0])/MAP.CW,dy=(X[a][1]-X[b][1])/MAP.RH;s+=Math.hypot(dx,dy)*1.3+(dx&&dy?0.3:0);
-      for(let k=0;k<n;k++)if(k!==a&&k!==b&&hitBox(X[a],X[b],X[k]))s+=8}
+  const cost=()=>{const X=nodes.map((_,i)=>px(i));let s=0;
+    for(const [a,b] of E){const dx=(X[a][0]-X[b][0])/MAP.CW,dy=(X[a][1]-X[b][1])/MAP.RH;s+=Math.hypot(dx,dy)*1.2+(dx&&dy?0.25:0);
+      for(let k=0;k<n;k++)if(k!==a&&k!==b&&hitBox(X[a],X[b],X[k]))s+=6}
     for(let i=0;i<E.length;i++)for(let j=i+1;j<E.length;j++){const [a,b]=E[i],[c2,d]=E[j];if(a===c2||a===d||b===c2||b===d)continue;if(cross(X[a],X[b],X[c2],X[d]))s+=3}
     return s};
-  let cur=cost(pos),best=pos.slice(),bestC=cur;
-  const N=16000;
-  for(let it=0;it<N;it++){const T0=2.5*(1-it/N)+0.02,P=pos.slice(),i=Math.floor(rnd()*n),cell=Math.floor(rnd()*cells),j=P.indexOf(cell);
-    if(j>=0){P[j]=P[i]}P[i]=cell;const c2=cost(P);
-    if(c2<cur||rnd()<Math.exp((cur-c2)/T0)){pos=P;cur=c2;if(cur<bestC){bestC=cur;best=P.slice()}}}
-  const X=best.map(p=>[p%cols,Math.floor(p/cols)]),minX=Math.min(...X.map(p=>p[0])),minY=Math.min(...X.map(p=>p[1]));
-  const L={nodes,pt:X.map(p=>[p[0]-minX,p[1]-minY])};
-  L.cols=Math.max(...L.pt.map(p=>p[0]))+1;L.rows=Math.max(...L.pt.map(p=>p[1]))+1;
+  const movable=nodes.map((_,i)=>i).filter(i=>col[i]>=c0&&!(hasM&&col[i]===0&&groups.M.includes(i)));
+  const mv=movable.filter(i=>!groups.M.includes(i));
+  let cur=cost(),best=col.slice(),bestM=row.slice(),bestC=cur;
+  const N=9000;
+  for(let it=0;it<N&&mv.length;it++){
+    const T0=2*(1-it/N)+0.02,i=mv[Math.floor(rnd()*mv.length)],nc=c0+Math.floor(rnd()*width);
+    const j=mv.find(k=>k!==i&&row[k]===row[i]&&col[k]===nc),oc=col[i];
+    col[i]=nc;if(j!=null)col[j]=oc;
+    // 左の列（金属・酸化物）の上下の順も入れ替える
+    let si=-1,sj=-1,orow=null;if(groups.M.length>1&&rnd()<.15){si=groups.M[Math.floor(rnd()*groups.M.length)];sj=groups.M[Math.floor(rnd()*groups.M.length)];orow=[row[si],row[sj]];row[si]=orow[1];row[sj]=orow[0]}
+    const c2=cost();
+    if(c2<cur||rnd()<Math.exp((cur-c2)/T0)){cur=c2;if(cur<bestC){bestC=cur;best=col.slice();bestM=row.slice()}}
+    else{col[i]=oc;if(j!=null)col[j]=nc;if(orow){row[si]=orow[0];row[sj]=orow[1]}}
+  }
+  const used=[...new Set(best)].sort((a,b)=>a-b),remap={};used.forEach((v,k)=>remap[v]=k);
+  const L={nodes,pt:nodes.map((_,i)=>[remap[best[i]],bestM[i]])};
+  L.cols=used.length;L.rows=nRows;
   return mapCache[ci]=L;
 }
 let mapState={ci:0,focus:null};
@@ -958,10 +1003,10 @@ function renderMap(ci,focus){
     const A=clipTo([U[0]+nx*off,U[1]+ny*off],[C[0]-U[0],C[1]-U[1]]),B=clipTo([V[0]+nx*off,V[1]+ny*off],[C[0]-V[0],C[1]-V[1]]);
     const ax=A[0],ay=A[1],bx=B[0],by=B[1];
     const kind=e.u===focus?'out':e.v===focus?'in':'dim';
+    if(kind==='dim'&&!all)continue;
     svg+=(bend?'<path class="is-'+kind+'" d="M'+ax.toFixed(1)+' '+ay.toFixed(1)+' Q'+C[0].toFixed(1)+' '+C[1].toFixed(1)+' '+bx.toFixed(1)+' '+by.toFixed(1)+'" fill="none"':
       '<line class="is-'+kind+'" x1="'+ax.toFixed(1)+'" y1="'+ay.toFixed(1)+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+'"')+' marker-end="url(#ikArrow'+kind+')"/>';
-    if(kind==='dim'&&!all)continue;
-    const lines=e.rs.map(mapLabel),w=Math.max(...lines.map(textW)),h=lines.length*16+4;
+    const lines=e.rs.map(mapLabel),w=Math.max(...lines.map(textW))*1.15,h=lines.length*19+4;
     let place=null;
     for(const t of [.5,.4,.6,.3,.7,.22,.78])for(const side of [1,-1]){
       const q=bez([ax,ay],C,[bx,by],t),d=(both?14:8)*side,cx=q[0]+nx*(d+(Math.abs(nx)*w/2)*side),cy=q[1]+ny*(d+(Math.abs(ny)*h/2)*side);
@@ -981,13 +1026,16 @@ function renderMap(ci,focus){
   $("mapView").innerHTML='<div class="ik-map-canvas" style="width:'+W+'px;height:'+H+'px">'+
     '<svg width="'+W+'" height="'+H+'" aria-hidden="true"><defs>'+['out','in','dim'].map(k=>'<marker id="ikArrow'+k+'" class="is-'+k+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z"/></marker>').join('')+'</defs>'+svg+'</svg>'+
     boxes+labels+'</div>';
+  // 画面に収まらないときは 7 割まで縮小して全体を見せる（それ以上はスクロール）
+  const avail=$("mapView").clientWidth-12,cv=document.querySelector(".ik-map-canvas");
+  if(cv&&avail>0&&W>avail&&avail/W>=0.7)cv.style.zoom=(avail/W).toFixed(3);
   $("mapTitle").textContent=(c.id==="X"?"ハロゲン":c.nm+"（"+c.id+"）")+"の反応図";
   $("mapFocus").innerHTML='<span class="ik-fx">'+f(F[focus].f)+'</span>　'+esc(F[focus].nm)+' から変化する反応（黒）と、'+esc(F[focus].nm)+' ができる反応（青）を表示中';
 }
 function openMap(){
   $("mapChap").innerHTML=CH.map((h,i)=>'<option value="'+i+'"'+(i===S.ci?" selected":"")+'>'+esc(h.nm)+'</option>').join("");
-  renderMap(S.ci);
   const d=$("mapDlg");if(d.showModal)d.showModal();else d.setAttribute("open","");
+  renderMap(S.ci);
 }
 function closeMap(){const d=$("mapDlg");if(d.close)d.close();else d.removeAttribute("open");$("mapBtn").focus()}
 $("mapDlg").addEventListener("click",e=>{if(e.target===e.currentTarget)closeMap()});
