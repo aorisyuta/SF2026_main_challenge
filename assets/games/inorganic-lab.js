@@ -828,6 +828,8 @@ document.addEventListener("click",e=>{
   else if(b.id==="hint"){if(S.free||S.won||S.gave)return;
     const p=path(cur(),S.target,shelf());
     $("flash").innerHTML=p?'次の一手の候補：'+rFull(p[0][1])+'　残り最少 '+p.length+'手':"この状態からは目標に戻れない．「1手戻す」を使おう"}
+  else if(b.id==="mapBtn"){openMap()}
+  else if(b.id==="mapClose"){closeMap()}
   else if(b.id==="ptBtn"){openPT()}
   else if(b.id==="ptClose"){closePT()}
   else if(b.dataset.z){$("ptInfo").innerHTML=ptInfo(+b.dataset.z)}
@@ -882,6 +884,117 @@ function openPT(){
 }
 function closePT(){const d=$("ptDlg");if(d.close)d.close();else d.removeAttribute("open");$("ptBtn").focus()}
 $("ptDlg").addEventListener("click",e=>{if(e.target===e.currentTarget)closePT()});
+
+// ---------- 反応図（「反応図」ボタンで開く。T の反応データから自動で描く）
+const MAP_LABEL={cHCl:"濃HCl・加熱",cHNO3:"濃HNO3",cH2SO4:"熱濃H2SO4",H2Sa:"H2S（酸性）",H2Sb:"H2S（中〜塩基性）",MnO2a:"MnO2・濃H2SO4",
+  Znp:"Zn板",Cuw:"Cu線",Fen:"Fe",starch:"デンプン",heat:"加熱",light:"光",H2C2O4:"(COOH)2",KMnO4:"KMnO4（酸性）",
+  NaOH:"NaOH",NH3:"NH3水",K4:"K4[Fe(CN)6]",K3:"K3[Fe(CN)6]",S2O3:"Na2S2O3"};
+function mapLabel(r){const s=MAP_LABEL[r]||(R[r].f||R[r].t);return s.replace(/[A-Za-z][A-Za-z0-9()\[\]]*/g,m=>f(m))}
+const mapCache={};
+const MAP={CW:236,RH:150,BW:156,BH:68,PAD:40};
+// 物質を格子に置く：矢印が短く、交差や箱の上を通る線が少なくなる配置を焼きなましで探す（実際の箱の大きさで判定）
+function mapLayout(ci){
+  if(mapCache[ci])return mapCache[ci];
+  const c=CH[ci],nodes=c.forms,n=nodes.length,idx={};nodes.forEach((k,i)=>idx[k]=i);
+  const pairs=new Map();
+  nodes.forEach(u=>{for(const r of c.shelf){const v=step(u,r);if(v&&v!==u&&v in idx){const a=Math.min(idx[u],idx[v]),b=Math.max(idx[u],idx[v]);pairs.set(a+"-"+b,[a,b])}}});
+  const E=[...pairs.values()];
+  const cols=Math.max(3,Math.ceil(Math.sqrt(n*1.9))),rows=Math.max(2,Math.ceil(n/cols)+1),cells=cols*rows;
+  let seed=ci*7919+13;const rnd=()=>(seed=(seed*1103515245+12345)%2147483648)/2147483648;
+  let pos=[...Array(cells).keys()].sort(()=>rnd()-.5).slice(0,n);
+  const px=p=>[(p%cols)*MAP.CW,Math.floor(p/cols)*MAP.RH];
+  const o=(p,q,r)=>Math.sign((q[0]-p[0])*(r[1]-p[1])-(q[1]-p[1])*(r[0]-p[0]));
+  const cross=(a,b,c2,d)=>o(a,b,c2)*o(a,b,d)<0&&o(c2,d,a)*o(c2,d,b)<0;
+  const hw=MAP.BW/2+10,hh=MAP.BH/2+10;
+  const hitBox=(a,b,p)=>{const R=[[p[0]-hw,p[1]-hh],[p[0]+hw,p[1]-hh],[p[0]+hw,p[1]+hh],[p[0]-hw,p[1]+hh]];
+    for(let i=0;i<4;i++)if(cross(a,b,R[i],R[(i+1)%4]))return true;return false};
+  const cost=P=>{const X=P.map(px);let s=0;
+    for(const [a,b] of E){const dx=(X[a][0]-X[b][0])/MAP.CW,dy=(X[a][1]-X[b][1])/MAP.RH;s+=Math.hypot(dx,dy)*1.3+(dx&&dy?0.3:0);
+      for(let k=0;k<n;k++)if(k!==a&&k!==b&&hitBox(X[a],X[b],X[k]))s+=8}
+    for(let i=0;i<E.length;i++)for(let j=i+1;j<E.length;j++){const [a,b]=E[i],[c2,d]=E[j];if(a===c2||a===d||b===c2||b===d)continue;if(cross(X[a],X[b],X[c2],X[d]))s+=3}
+    return s};
+  let cur=cost(pos),best=pos.slice(),bestC=cur;
+  const N=16000;
+  for(let it=0;it<N;it++){const T0=2.5*(1-it/N)+0.02,P=pos.slice(),i=Math.floor(rnd()*n),cell=Math.floor(rnd()*cells),j=P.indexOf(cell);
+    if(j>=0){P[j]=P[i]}P[i]=cell;const c2=cost(P);
+    if(c2<cur||rnd()<Math.exp((cur-c2)/T0)){pos=P;cur=c2;if(cur<bestC){bestC=cur;best=P.slice()}}}
+  const X=best.map(p=>[p%cols,Math.floor(p/cols)]),minX=Math.min(...X.map(p=>p[0])),minY=Math.min(...X.map(p=>p[1]));
+  const L={nodes,pt:X.map(p=>[p[0]-minX,p[1]-minY])};
+  L.cols=Math.max(...L.pt.map(p=>p[0]))+1;L.rows=Math.max(...L.pt.map(p=>p[1]))+1;
+  return mapCache[ci]=L;
+}
+let mapState={ci:0,focus:null};
+function renderMap(ci,focus){
+  const c=CH[ci],L=mapLayout(ci),{CW,RH,BW,BH,PAD}=MAP;
+  if(!focus||!c.forms.includes(focus))focus=(S.ci===ci?S.hist[S.hist.length-1]:c.forms[0]);
+  mapState={ci,focus};const all=$("mapAll").checked;
+  const W=(L.cols-1)*CW+BW+PAD*2,H=(L.rows-1)*RH+BH+PAD*2;
+  const at=i=>[PAD+L.pt[i][0]*CW+BW/2,PAD+L.pt[i][1]*RH+BH/2];
+  const idx={};L.nodes.forEach((k,i)=>idx[k]=i);
+  const ed=new Map();
+  L.nodes.forEach(u=>{for(const r of c.shelf){const v=step(u,r);if(v&&v!==u&&v in idx){const key=u+">"+v;if(!ed.has(key))ed.set(key,{u,v,rs:[]});ed.get(key).rs.push(r)}}});
+  const clip=(x1,y1,x2,y2)=>{const dx=x2-x1,dy=y2-y1,t=Math.min(Math.abs((BW/2+3)/(dx||1e-9)),Math.abs((BH/2+3)/(dy||1e-9)));return [x1+dx*t,y1+dy*t]};
+  // ラベルの置き場所：箱やほかのラベルに重ならない位置を線の上で探す
+  const rects=L.nodes.map((_,i)=>{const [x,y]=at(i);return [x-BW/2-2,y-BH/2-2,x+BW/2+2,y+BH/2+2]});
+  const ov=(a,b)=>a[0]<b[2]&&b[0]<a[2]&&a[1]<b[3]&&b[1]<a[3];
+  const textW=t=>t.replace(/<[^>]+>/g,'').split('').reduce((w,ch)=>w+(/[\x00-\x7f]/.test(ch)?6.6:12),0)+12;
+  let svg='',labels='';
+  const boxes0=L.nodes.map((_,i)=>{const [x,y]=at(i);return [x-BW/2-6,y-BH/2-6,x+BW/2+6,y+BH/2+6]});
+  const inR=(p,r)=>p[0]>r[0]&&p[0]<r[2]&&p[1]>r[1]&&p[1]<r[3];
+  const bez=(P0,C,P2,t)=>[(1-t)*(1-t)*P0[0]+2*(1-t)*t*C[0]+t*t*P2[0],(1-t)*(1-t)*P0[1]+2*(1-t)*t*C[1]+t*t*P2[1]];
+  const clipTo=(c0,dir)=>{const [dx,dy]=dir,t=Math.min(Math.abs((BW/2+3)/(dx||1e-9)),Math.abs((BH/2+3)/(dy||1e-9)));return [c0[0]+dx*t,c0[1]+dy*t]};
+  for(const e of ed.values()){
+    const iu=idx[e.u],iv=idx[e.v],U=at(iu),V=at(iv);
+    const both=ed.has(e.v+">"+e.u),len=Math.hypot(V[0]-U[0],V[1]-U[1]),nx=-(V[1]-U[1])/len,ny=(V[0]-U[0])/len,off=both?6:0;
+    // ほかの箱の上を通るなら、通らなくなるまで曲げる
+    const others=boxes0.filter((_,k)=>k!==iu&&k!==iv);
+    let bend=0;
+    for(const cand of [0,46,-46,80,-80,120,-120]){
+      const C=[(U[0]+V[0])/2+nx*(cand+off),(U[1]+V[1])/2+ny*(cand+off)];
+      const ok=[...Array(19).keys()].every(k=>{const p=bez(U,C,V,(k+1)/20);return p[0]>6&&p[0]<W-6&&p[1]>6&&p[1]<H-6&&!others.some(r=>inR(p,r))});
+      if(ok){bend=cand;break}
+    }
+    const C=[(U[0]+V[0])/2+nx*(bend+off),(U[1]+V[1])/2+ny*(bend+off)];
+    const A=clipTo([U[0]+nx*off,U[1]+ny*off],[C[0]-U[0],C[1]-U[1]]),B=clipTo([V[0]+nx*off,V[1]+ny*off],[C[0]-V[0],C[1]-V[1]]);
+    const ax=A[0],ay=A[1],bx=B[0],by=B[1];
+    const kind=e.u===focus?'out':e.v===focus?'in':'dim';
+    svg+=(bend?'<path class="is-'+kind+'" d="M'+ax.toFixed(1)+' '+ay.toFixed(1)+' Q'+C[0].toFixed(1)+' '+C[1].toFixed(1)+' '+bx.toFixed(1)+' '+by.toFixed(1)+'" fill="none"':
+      '<line class="is-'+kind+'" x1="'+ax.toFixed(1)+'" y1="'+ay.toFixed(1)+'" x2="'+bx.toFixed(1)+'" y2="'+by.toFixed(1)+'"')+' marker-end="url(#ikArrow'+kind+')"/>';
+    if(kind==='dim'&&!all)continue;
+    const lines=e.rs.map(mapLabel),w=Math.max(...lines.map(textW)),h=lines.length*16+4;
+    let place=null;
+    for(const t of [.5,.4,.6,.3,.7,.22,.78])for(const side of [1,-1]){
+      const q=bez([ax,ay],C,[bx,by],t),d=(both?14:8)*side,cx=q[0]+nx*(d+(Math.abs(nx)*w/2)*side),cy=q[1]+ny*(d+(Math.abs(ny)*h/2)*side);
+      const r=[cx-w/2,cy-h/2,cx+w/2,cy+h/2];
+      if(!rects.some(q2=>ov(r,q2))){place=[cx,cy,r];break}
+    }
+    if(!place){const q=bez([ax,ay],C,[bx,by],.5);place=[q[0],q[1],[q[0]-w/2,q[1]-h/2,q[0]+w/2,q[1]+h/2]]}
+    rects.push(place[2]);
+    labels+='<span class="ik-map-lb is-'+kind+'" style="left:'+place[0].toFixed(0)+'px;top:'+place[1].toFixed(0)+'px">'+lines.join('<br>')+'</span>';
+  }
+  const cur=S.ci===ci?S.hist[S.hist.length-1]:null,goal=S.ci===ci&&!S.free?S.target:null;
+  const boxes=L.nodes.map((k,i)=>{const [x,y]=at(i),fm=F[k];
+    const cls='ik-map-node'+(k===cur?' is-cur':'')+(k===goal?' is-goal':'')+(k===focus?' is-focus':'');
+    return '<div class="'+cls+'" data-node="'+k+'" role="button" tabindex="0" style="left:'+(x-BW/2)+'px;top:'+(y-BH/2)+'px;width:'+BW+'px;height:'+BH+'px" title="'+esc(fm.nm+(fm.al?'（'+fm.al+'）':''))+'">'+
+      '<span class="ik-map-sw" style="background:'+(fm.col||"var(--water)")+'"></span>'+
+      '<b class="ik-fx">'+f(fm.f)+'</b><small>'+esc(fm.nm)+'</small>'+(fm.al?'<em>'+esc(fm.al)+'</em>':'')+'<i>'+esc(fm.look)+'</i></div>'}).join('');
+  $("mapView").innerHTML='<div class="ik-map-canvas" style="width:'+W+'px;height:'+H+'px">'+
+    '<svg width="'+W+'" height="'+H+'" aria-hidden="true"><defs>'+['out','in','dim'].map(k=>'<marker id="ikArrow'+k+'" class="is-'+k+'" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 z"/></marker>').join('')+'</defs>'+svg+'</svg>'+
+    boxes+labels+'</div>';
+  $("mapTitle").textContent=(c.id==="X"?"ハロゲン":c.nm+"（"+c.id+"）")+"の反応図";
+  $("mapFocus").innerHTML='<span class="ik-fx">'+f(F[focus].f)+'</span>　'+esc(F[focus].nm)+' から変化する反応（黒）と、'+esc(F[focus].nm)+' ができる反応（青）を表示中';
+}
+function openMap(){
+  $("mapChap").innerHTML=CH.map((h,i)=>'<option value="'+i+'"'+(i===S.ci?" selected":"")+'>'+esc(h.nm)+'</option>').join("");
+  renderMap(S.ci);
+  const d=$("mapDlg");if(d.showModal)d.showModal();else d.setAttribute("open","");
+}
+function closeMap(){const d=$("mapDlg");if(d.close)d.close();else d.removeAttribute("open");$("mapBtn").focus()}
+$("mapDlg").addEventListener("click",e=>{if(e.target===e.currentTarget)closeMap()});
+$("mapChap").addEventListener("change",e=>renderMap(+e.target.value));
+$("mapAll").addEventListener("change",()=>renderMap(mapState.ci,mapState.focus));
+$("mapView").addEventListener("click",e=>{const n=e.target.closest(".ik-map-node");if(n)renderMap(mapState.ci,n.dataset.node)});
+$("mapView").addEventListener("keydown",e=>{const n=e.target.closest(".ik-map-node");if(n&&(e.key==="Enter"||e.key===" ")){e.preventDefault();renderMap(mapState.ci,n.dataset.node);const m=document.querySelector('.ik-map-node[data-node="'+n.dataset.node+'"]');if(m)m.focus()}});
 
 newProblem();
 })();

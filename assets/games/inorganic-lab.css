@@ -291,3 +291,47 @@
 .ik-tile { width: auto; min-width: 60px; padding: 0 6px; }
 @media (min-width: 1100px) and (min-height: 620px) { .ik-tile { width: auto; min-width: 54px; padding: 0 5px; } }
 @media (max-width: 599px) { .ik-tile { width: auto; min-width: calc((100% - 6px * 4) / 5); } }
+
+/* ---- 反応図 ---- */
+.ik-map { width: min(1180px, 97vw); }
+.ik-map-bar { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; margin: 10px 0 12px; font-size: 13px; color: var(--ink-2); }
+.ik-map-legend { display: flex; align-items: center; flex-wrap: wrap; gap: 4px; }
+.ik-map-key { display: inline-block; width: 14px; height: 14px; border-radius: 4px; border: 2px solid var(--line); vertical-align: -2px; }
+.ik-map-key.is-cur { border-color: var(--shu); }
+.ik-map-key.is-goal { border-color: var(--btn); border-style: dashed; }
+.ik-map-scroll { overflow: auto; max-height: calc(92dvh - 150px); border-radius: var(--radius-s); background: var(--bg-alt); }
+.ik-map-canvas { position: relative; margin: 0 auto; }
+.ik-map-canvas svg { position: absolute; inset: 0; }
+.ik-map-canvas line { stroke: var(--ink); stroke-width: 1.6; }
+.ik-map-canvas marker path { fill: var(--ink); }
+.ik-map-node { position: absolute; display: flex; flex-direction: column; justify-content: center; padding: 6px 10px 6px 28px;
+  background: var(--bg); border: 1.5px solid var(--ink); border-radius: 8px; line-height: 1.25; overflow: hidden; }
+.ik-map-node .ik-fx { font-size: 17px; }
+.ik-map-node small { font-size: 10.5px; font-weight: 700; color: var(--ink); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ik-map-node i { font-style: normal; font-size: 10px; color: var(--ink-2); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ik-map-sw { position: absolute; left: 8px; top: 50%; width: 13px; height: 13px; margin-top: -6.5px; border-radius: 50%; border: 1px solid var(--pptline); }
+.ik-map-node.is-cur { border-color: var(--shu); box-shadow: inset 0 0 0 1.5px var(--shu); }
+.ik-map-node.is-goal { border-color: var(--btn); border-style: dashed; box-shadow: inset 0 0 0 1px var(--btn); }
+.ik-map-lb { position: absolute; transform: translate(-50%, -50%); padding: 1px 5px; border-radius: 5px; background: rgba(245, 245, 247, .92);
+  font-family: var(--f-fx); font-size: 12px; line-height: 1.3; color: var(--shu); white-space: nowrap; text-align: center; pointer-events: none; }
+.ik-map-lb sub, .ik-map-lb sup { font-size: .7em; line-height: 0; }
+.ik-map-node em { font-style: normal; font-size: 10px; font-weight: 700; color: var(--btn); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ik-map-lb { background: rgba(245, 245, 247, .96); }
+/* 反応図：選んだ物質の反応だけ強調（黒＝その物質から、青＝その物質へ） */
+.ik-map-focus { font-size: 13px; color: var(--ink-2); margin: -4px 0 10px; }
+.ik-map-focus .ik-fx { font-size: 15px; color: var(--ink); }
+.ik-map-canvas line.is-out { stroke: var(--ink); stroke-width: 1.8; }
+.ik-map-canvas line.is-in { stroke: var(--btn); stroke-width: 1.8; }
+.ik-map-canvas line.is-dim { stroke: #c7c7cc; stroke-width: 1.2; }
+.ik-map-canvas marker.is-out path { fill: var(--ink); }
+.ik-map-canvas marker.is-in path { fill: var(--btn); }
+.ik-map-canvas marker.is-dim path { fill: #c7c7cc; }
+.ik-map-lb.is-in { color: var(--btn); }
+.ik-map-lb.is-dim { color: var(--ink-3); }
+.ik-map-node { cursor: pointer; }
+.ik-map-node:hover { background: #fafafa; }
+.ik-map-node.is-focus { background: #fff8e8; }
+.ik-map-node:focus-visible { outline: 2px solid var(--btn); outline-offset: 2px; }
+.ik-map-canvas path.is-out { stroke: var(--ink); stroke-width: 1.8; }
+.ik-map-canvas path.is-in { stroke: var(--btn); stroke-width: 1.8; }
+.ik-map-canvas path.is-dim { stroke: #c7c7cc; stroke-width: 1.2; }
