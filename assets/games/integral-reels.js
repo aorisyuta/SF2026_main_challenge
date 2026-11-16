@@ -648,7 +648,9 @@ function tex(e) {
         if (b.k === 'f' && ['sin', 'cos', 'tan'].includes(b.f) && r.isInt()) return '\\' + b.f + '^{' + r.n + '}' + argTex(b.a);
         if (b.k === 'f' && b.f === 'log' && r.isInt()) return '\\left(\\log' + argTex(b.a) + '\\right)^{' + r.n + '}';
         if (r.isInt() && (b.k === 'x' || b.k === 'c' || (b.k === 'n' && b.q.sign() > 0 && b.q.isInt()))) return tex(b) + '^{' + r.n + '}';
-        if (r.d === 2n && b.k !== 'add' && false) return '';
+        // x^{3/2} → x\sqrt{x}、x^{5/2} → x^{2}\sqrt{x}（x や定数が底のとき）
+        if (r.d === 2n && r.sign() > 0 && (b.k === 'x' || b.k === 'c')) { const k = (r.n - 1n) / 2n; return (k === 1n ? tex(b) : tex(b) + '^{' + k + '}') + '\\sqrt{' + tex(b) + '}'; }
+        if (b.k === 'x') return 'x^{' + r.tex() + '}';
         if (r.d === 2n) return '\\left(' + tex(b) + '\\right)^{\\frac{' + r.n + '}{2}}';
         return '\\left(' + tex(b) + '\\right)^{' + r.tex() + '}';
       }
@@ -1435,9 +1437,196 @@ GEN.dinv = { name: '逆関数の微分', hue: 120, deriv: true, make() {
   return null;
 } };
 
+// ===================== 不定積分（このゲームの中心） =====================
+// 答えは原始関数 F(x)。判定は「入力した式 − F(x)」が、いくつかの x で同じ値（積分定数）になるかで行う。
+// 問題を作るたびに、F を数値微分したものが被積分関数に一致するかを確かめてから出す。
+function toSrc(e) {
+  switch (e.k) {
+    case 'n': return e.q.d === 1n ? '(' + e.q.n + ')' : '((' + e.q.n + ')/(' + e.q.d + '))';
+    case 'x': return 'x';
+    case 'c': return e.c === 'pi' ? 'pi' : 'e';
+    case 'add': return '(' + e.a.map(toSrc).join('+') + ')';
+    case 'mul': return '(' + e.a.map(toSrc).join('*') + ')';
+    case 'pow': return '((' + toSrc(e.b) + ')^(' + toSrc(e.e) + '))';
+    case 'f': return e.f + '(' + toSrc(e.a) + ')';
+  }
+  throw new Error('toSrc: ' + e.k);
+}
+const IPTS = [0.55, 0.8, 1.15, 1.6, 2.05, 2.6];   // 判定に使う x（どの問題も x>0 の範囲で定義される）
+const IPTS_SMALL = [0.15, 0.35, 0.55, 0.75, 0.95, 1.15]; // tan・log(cos x) などは 0<x<π/2 の中で
+function I(f, F, o) {
+  // o: {stars, tags, hint, steps, pts}
+  const ft = f.k === 'add' ? '\\left(' + tex(f) + '\\right)' : tex(f);
+  return Object.assign({ indef: true, f, F, statement: '次の不定積分を求めよ。' + DMath(`\\int ${ft}\\,dx`) + '\n\n（積分定数 $C$ は省略してよい）' }, o);
+}
+const T_ = e => tex(e);
+const cT = (c, body) => { // 係数つきの項の TeX
+  if (c.isOne()) return body; if (c.neg().isOne()) return '-' + body; return c.tex() + body;
+};
+
+GEN.ibasic = { name: '不定積分の基本', hue: 205, indef: true, make() {
+  const pool = [
+    () => { const n = PK([2, 3, 4, 5]), a = RI(1, 6) * PK([1, -1]); return [mul(N(a), pow(VX, N(n))), mul(N(a, n + 1), pow(VX, N(n + 1))), `x^n \\to \\frac{x^{n+1}}{n+1}`]; },
+    () => { const n = PK([-2, -3]), a = RI(1, 5) * PK([1, -1]); return [mul(N(a), pow(VX, N(n))), mul(N(a, n + 1), pow(VX, N(n + 1))), `x^{${n}} \\to \\frac{x^{${n + 1}}}{${n + 1}}`]; },
+    () => { const a = RI(1, 5) * PK([1, -1]); return [mul(N(a), pow(VX, N(-1))), mul(N(a), log(VX)), `\\frac{1}{x} \\to \\log x`]; },
+    () => { const a = RI(1, 4) * PK([1, 1, -1]); return [mul(N(a), pow(VX, N(1, 2))), mul(N(2 * a, 3), pow(VX, N(3, 2))), `\\sqrt{x}=x^{\\frac12} \\to \\frac23 x^{\\frac32}`]; },
+    () => { const k = PK([1, 2, 3, -1, -2]), a = RI(1, 4); return [mul(N(a), exp(mul(N(k), VX))), mul(N(a, k), exp(mul(N(k), VX))), `e^{kx} \\to \\frac{1}{k}e^{kx}`]; },
+    () => { const k = PK([1, 2, 3]), a = RI(1, 4) * PK([1, -1]); return [mul(N(a), sin(mul(N(k), VX))), mul(N(-a, k), cos(mul(N(k), VX))), `\\sin kx \\to -\\frac{1}{k}\\cos kx`]; },
+    () => { const k = PK([1, 2, 3]), a = RI(1, 4) * PK([1, -1]); return [mul(N(a), cos(mul(N(k), VX))), mul(N(a, k), sin(mul(N(k), VX))), `\\cos kx \\to \\frac{1}{k}\\sin kx`]; },
+    () => { const a = RI(1, 3); return [mul(N(a), pow(cos(VX), N(-2))), mul(N(a), tan(VX)), `\\frac{1}{\\cos^2 x} \\to \\tan x`, true]; },
+  ];
+  const picks = []; const used = new Set();
+  const nT = PK([2, 3, 3]);
+  while (picks.length < nT) { const i = RI(0, pool.length - 1); if (used.has(i)) continue; used.add(i); picks.push(pool[i]()); }
+  const f = add(...picks.map(p => p[0])), F = add(...picks.map(p => p[1]));
+  const small = picks.some(p => p[3]);
+  return I(f, F, {
+    stars: 1, tags: ['基本公式', '線形性'], pts: small ? IPTS_SMALL : IPTS,
+    hint: '項ごとに基本公式で積分する（定数倍・和はそのまま外に出せる）。',
+    steps: [
+      ['使う公式', '$$' + picks.map(p => p[2]).join(',\\qquad ') + '$$'],
+      ['項ごとに積分', `$$\\int ${T_(f)}\\,dx=${T_(F)}+C$$`],
+      ['発想の源', '不定積分は微分の逆。答えを微分して元の関数に戻るか確かめる習慣をつけると、符号や係数のミスがなくなる。'],
+    ]
+  });
+} };
+
+GEN.isub = { name: '置換積分（合成関数）', hue: 150, indef: true, make() {
+  const kind = PK(['lin', 'xpow', 'xexp', 'sincos', 'exppow', 'logpow', 'lintrig']);
+  let f, F, u, du, tags = ['置換積分'], hint, small = false;
+  if (kind === 'lin') { const a = PK([2, 3, -1, 4]), b = RI(1, 5), n = PK([3, 4, 5, -2, -3]);
+    u = add(mul(N(a), VX), N(b)); f = pow(u, N(n)); F = mul(N(1, a * (n + 1)), pow(u, N(n + 1)));
+    if (a < 0) u = add(mul(N(a), VX), N(b + 6)), f = pow(u, N(n)), F = mul(N(1, a * (n + 1)), pow(u, N(n + 1)));
+    hint = '$u=ax+b$ とおくと $dx=\\frac{1}{a}du$。'; du = `\\frac{du}{dx}=${a}`; }
+  else if (kind === 'xpow') { const c = RI(1, 4), n = PK([2, 3, 4, -2]); u = add(pow(VX, N(2)), N(c));
+    f = mul(VX, pow(u, N(n))); F = mul(N(1, 2 * (n + 1)), pow(u, N(n + 1))); hint = '$u=x^2+' + c + '$ とおくと $du=2x\\,dx$。'; du = '\\frac{du}{dx}=2x'; }
+  else if (kind === 'xexp') { const m = PK([2, 3]), a = RI(1, 3); u = pow(VX, N(m));
+    f = mul(N(a), pow(VX, N(m - 1)), exp(u)); F = mul(N(a, m), exp(u)); hint = `$u=x^{${m}}$ とおくと $du=${m}x^{${m - 1}}dx$。`; du = `\\frac{du}{dx}=${m}x^{${m - 1}}`; }
+  else if (kind === 'sincos') { const n = RI(2, 5);
+    if (Math.random() < .5) { u = sin(VX); f = mul(pow(sin(VX), N(n)), cos(VX)); F = mul(N(1, n + 1), pow(sin(VX), N(n + 1))); hint = '$u=\\sin x$ とおくと $du=\\cos x\\,dx$。'; du = '\\frac{du}{dx}=\\cos x'; }
+    else { u = cos(VX); f = mul(pow(cos(VX), N(n)), sin(VX)); F = mul(N(-1, n + 1), pow(cos(VX), N(n + 1))); hint = '$u=\\cos x$ とおくと $du=-\\sin x\\,dx$。'; du = '\\frac{du}{dx}=-\\sin x'; } }
+  else if (kind === 'exppow') { const n = PK([2, 3, -2]); u = add(exp(VX), N(1));
+    f = mul(exp(VX), pow(u, N(n))); F = mul(N(1, n + 1), pow(u, N(n + 1))); hint = '$u=e^x+1$ とおくと $du=e^x\\,dx$。'; du = '\\frac{du}{dx}=e^x'; }
+  else if (kind === 'logpow') { const n = PK([2, 3, 4]); u = log(VX);
+    f = mul(pow(log(VX), N(n)), pow(VX, N(-1))); F = mul(N(1, n + 1), pow(log(VX), N(n + 1))); hint = '$u=\\log x$ とおくと $du=\\frac{1}{x}dx$。'; du = '\\frac{du}{dx}=\\frac{1}{x}'; }
+  else { const a = PK([2, 3, 4]), b = RI(1, 3), t = PK(['sin', 'cos', 'exp']); u = add(mul(N(a), VX), N(b));
+    f = fn(t, u); F = t === 'sin' ? mul(N(-1, a), cos(u)) : t === 'cos' ? mul(N(1, a), sin(u)) : mul(N(1, a), exp(u));
+    hint = '$u=ax+b$ とおくと $dx=\\frac{1}{a}du$。'; du = `\\frac{du}{dx}=${a}`; tags = ['置換積分', '1次式の合成']; }
+  return I(f, F, {
+    stars: 2, tags, pts: small ? IPTS_SMALL : IPTS, hint,
+    steps: [
+      ['置き換える', `$u=${T_(u)}$ とおくと $${du}$。被積分関数の中に $u$ の微分（の定数倍）があるので、$u$ だけの積分に直せる。`],
+      ['積分して戻す', `$$\\int ${T_(f)}\\,dx=${T_(F)}+C$$`],
+      ['発想の源', '「合成関数 × 中身の微分」の形を見つけたら置換積分。$\\int g(u)\\,\\frac{du}{dx}\\,dx=\\int g(u)\\,du$。'],
+    ]
+  });
+} };
+
+GEN.ilog = { name: "f′/f 型（対数）", hue: 280, indef: true, make() {
+  const c = RI(1, 4), a = RI(1, 3);
+  const opts = [
+    () => add(pow(VX, N(2)), N(c)), () => add(pow(VX, N(3)), N(c)), () => add(exp(VX), N(c)),
+    () => add(pow(VX, N(2)), VX, N(c)), () => add(N(2), sin(VX)), () => add(N(2), cos(VX)), () => add(mul(N(2), VX), N(c)),
+  ];
+  let g, small = false;
+  if (Math.random() < .2) { // tan x = sin x / cos x
+    const f = mul(N(a), tan(VX)), F = mul(N(-a), log(cos(VX)));
+    return I(f, F, { stars: 2, tags: ["f'/f 型", '対数'], pts: IPTS_SMALL,
+      hint: '$\\tan x=\\dfrac{\\sin x}{\\cos x}$ と書き、分子が分母の微分の $-1$ 倍になっていることに気づく。',
+      steps: [['書き直す', '$\\tan x=-\\dfrac{(\\cos x)\'}{\\cos x}$'], ['積分する', `$$\\int ${T_(f)}\\,dx=${T_(F)}+C$$（$\\cos x>0$ の範囲。一般には $\\log|\\cos x|$）`],
+        ['発想の源', '$\\int\\frac{g\'(x)}{g(x)}dx=\\log|g(x)|+C$。分子が分母の微分になっていないか、まず確かめる。']] });
+  }
+  g = PK(opts)();
+  const f = mul(N(a), diff(g), pow(g, N(-1))), F = mul(N(a), log(g));
+  return I(f, F, { stars: 2, tags: ["f'/f 型", '対数'], pts: IPTS,
+    hint: '分子が分母の微分（の定数倍）になっていないか見る。',
+    steps: [['分母を微分する', `$\\left(${T_(g)}\\right)'=${T_(diff(g))}$ なので、分子は分母の微分の ${a} 倍。`],
+      ['積分する', `$$\\int ${T_(f)}\\,dx=${T_(F)}+C$$（真数は正なので絶対値は不要）`],
+      ['発想の源', '$\\int\\frac{g\'(x)}{g(x)}dx=\\log|g(x)|+C$。置換 $u=g(x)$ の特別な場合。']] });
+} };
+
+GEN.iparts = { name: '部分積分', hue: 28, indef: true, make() {
+  const kind = PK(['pexp', 'ptrig', 'xlog', 'log2', 'expsin']);
+  if (kind === 'pexp') { const deg = RI(1, 2), Pp = randPoly(deg, -2, 3), k = PK([1, 2, -1]);
+    const Qp = partsExp(Pp, k), f = mul(P.expr(Pp), exp(mul(N(k), VX))), F = mul(P.expr(Qp), exp(mul(N(k), VX)));
+    return I(f, F, { stars: deg + 1, tags: ['部分積分'], pts: IPTS, hint: '多項式を微分する側、指数関数を積分する側にする。',
+      steps: [['方針', `多項式 × 指数関数なので、多項式が消えるまで部分積分を ${deg} 回。`], ['結果', `$$\\int ${T_(f)}\\,dx=${T_(F)}+C$$`],
+        ['発想の源', '$\\int f g\'\\,dx=fg-\\int f\'g\\,dx$。微分すると簡単になる方（多項式）を $f$ に選ぶ。']] }); }
+  if (kind === 'ptrig') { const deg = RI(1, 2), Pp = randPoly(deg, -2, 3), k = PK([1, 2]), t = PK(['sin', 'cos']);
+    const r = partsTrig(Pp, k, t), f = mul(P.expr(Pp), fn(t, mul(N(k), VX))), F = add(mul(cos(mul(N(k), VX)), P.expr(r.A)), mul(sin(mul(N(k), VX)), P.expr(r.B)));
+    return I(f, F, { stars: deg + 1, tags: ['部分積分'], pts: IPTS, hint: '多項式を微分する側、三角関数を積分する側にする。',
+      steps: [['方針', `多項式 × 三角関数なので、部分積分を ${deg} 回。`], ['結果', `$$\\int ${T_(f)}\\,dx=${T_(F)}+C$$`],
+        ['発想の源', '$\\sin,\\cos$ は何回積分しても形が変わらないので、積分する側に回すのが定石。']] }); }
+  if (kind === 'xlog') { const m = RI(0, 3), m1 = m + 1;
+    const f = mul(pow(VX, N(m)), log(VX)), F = add(mul(N(1, m1), pow(VX, N(m1)), log(VX)), mul(N(-1, m1 * m1), pow(VX, N(m1))));
+    return I(f, F, { stars: 2, tags: ['部分積分', '対数'], pts: IPTS, hint: m ? `$x^{${m}}$ を積分する側、$\\log x$ を微分する側にする。` : '$\\log x=1\\cdot\\log x$ と見て、$1$ を積分する側にする。',
+      steps: [['部分積分', `$$\\int ${T_(f)}\\,dx=\\frac{x^{${m1}}}{${m1}}\\log x-\\int\\frac{x^{${m1}}}{${m1}}\\cdot\\frac1x\\,dx$$`], ['結果', `$$=${T_(F)}+C$$`],
+        ['発想の源', '$\\log x$ は微分すると $\\frac1x$ になって消える。だから $\\log x$ を微分する側に回す。']] }); }
+  if (kind === 'log2') { const f = pow(log(VX), N(2)), F = add(mul(VX, pow(log(VX), N(2))), mul(N(-2), VX, log(VX)), mul(N(2), VX));
+    return I(f, F, { stars: 3, tags: ['部分積分', '対数'], pts: IPTS, hint: '$1\\cdot(\\log x)^2$ と見て部分積分を 2 回。',
+      steps: [['1回目', '$$\\int(\\log x)^2dx=x(\\log x)^2-2\\int\\log x\\,dx$$'], ['2回目', '$\\int\\log x\\,dx=x\\log x-x$ を使って'], ['結果', `$$=${T_(F)}+C$$`]] }); }
+  const t = PK(['sin', 'cos']), f = mul(exp(VX), fn(t, VX));
+  const F = t === 'sin' ? mul(N(1, 2), exp(VX), add(sin(VX), mul(N(-1), cos(VX)))) : mul(N(1, 2), exp(VX), add(sin(VX), cos(VX)));
+  return I(f, F, { stars: 3, tags: ['部分積分', '同形出現'], pts: IPTS, hint: '部分積分を 2 回すると、もとの積分がもう一度出てくる。それを $I$ とおいて方程式を解く。',
+    steps: [['2回部分積分', `$I=\\int ${T_(f)}\\,dx$ とおくと、2 回の部分積分で $I$ がもう一度現れる。`], ['方程式を解く', `$$I=${T_(F)}+C$$`],
+      ['発想の源', '$e^x$ と $\\sin,\\cos$ はどちらも微分・積分で形が巡回する。同じ積分が戻ってきたら、移項して解く。']] });
+} };
+
+GEN.itrig = { name: '三角関数の積分', hue: 320, indef: true, make() {
+  const kind = PK(['sq', 'sq', 'prod', 'cube', 'tan2']);
+  let f, F, how;
+  if (kind === 'sq') { const k = PK([1, 2, 3]), t = PK(['sin', 'cos']), s = t === 'sin' ? -1 : 1;
+    f = pow(fn(t, mul(N(k), VX)), N(2)); F = add(mul(N(1, 2), VX), mul(N(s, 4 * k), sin(mul(N(2 * k), VX))));
+    how = `半角の公式 $${t}^2\\theta=\\frac{1${s < 0 ? '-' : '+'}\\cos2\\theta}{2}$ で次数を下げる。`; }
+  else if (kind === 'prod') { let a = RI(1, 4), b = RI(1, 4); if (a === b) b = a + 1;
+    f = mul(sin(mul(N(a), VX)), cos(mul(N(b), VX)));
+    // sin a cos b = (sin(a+b) + sin(a-b))/2
+    const dd = Math.abs(a - b); // cos(-θ)=cos θ なので角度は正にして書く
+    F = add(mul(N(-1, 2 * (a + b)), cos(mul(N(a + b), VX))), mul(N(a > b ? -1 : 1, 2 * dd), dd === 1 ? cos(VX) : cos(mul(N(dd), VX))));
+    how = '積和の公式 $\\sin A\\cos B=\\frac12\\{\\sin(A+B)+\\sin(A-B)\\}$ で和に直す。'; }
+  else if (kind === 'cube') { const t = PK(['sin', 'cos']);
+    f = pow(fn(t, VX), N(3));
+    F = t === 'sin' ? add(mul(N(-1), cos(VX)), mul(N(1, 3), pow(cos(VX), N(3)))) : add(sin(VX), mul(N(-1, 3), pow(sin(VX), N(3))));
+    how = t === 'sin' ? '$\\sin^3x=(1-\\cos^2x)\\sin x$ と分けて $u=\\cos x$ で置換。' : '$\\cos^3x=(1-\\sin^2x)\\cos x$ と分けて $u=\\sin x$ で置換。'; }
+  else { f = pow(tan(VX), N(2)); F = add(tan(VX), mul(N(-1), VX)); how = '$\\tan^2x=\\frac{1}{\\cos^2x}-1$ と書き直す。'; }
+  return I(f, F, { stars: kind === 'sq' ? 2 : 3, tags: ['三角関数', kind === 'prod' ? '積和の公式' : kind === 'sq' ? '半角の公式' : '置換'], pts: kind === 'tan2' ? IPTS_SMALL : IPTS,
+    hint: how, steps: [['変形', how], ['積分する', `$$\\int ${T_(f)}\\,dx=${T_(F)}+C$$`],
+      ['発想の源', '三角関数の積やべきは、そのままでは積分できない。公式で「1 次の三角関数の和」に直すか、置換できる形に分ける。']] });
+} };
+
+GEN.ifrac = { name: '分数関数（部分分数）', hue: 95, indef: true, make() {
+  let a = RI(0, 3), b = RI(1, 5); if (a === b) b = a + 2;
+  const kind = PK(['simple', 'num', 'div']);
+  const A = add(VX, N(a)), Bx = add(VX, N(b));
+  if (kind === 'div') { // (x^2 + p x + r)/(x + a) = 多項式 + 余り/(x+a)
+    const c1 = RI(1, 3), r = RI(1, 4) * PK([1, -1]);
+    const f = mul(add(pow(VX, N(2)), mul(N(a + c1), VX), N(a * c1 + r)), pow(A, N(-1)));
+    const F = add(mul(N(1, 2), pow(VX, N(2))), mul(N(c1), VX), mul(N(r), log(A)));
+    return I(f, F, { stars: 2, tags: ['分数関数', '割り算'], pts: IPTS, hint: '分子を分母で割って「多項式＋（定数）／（1次式）」の形にする。',
+      steps: [['割り算', `$$${T_(f)}=x+${c1}+\\frac{${r}}{${T_(A)}}$$`], ['積分する', `$$\\int ${T_(f)}\\,dx=${T_(F)}+C$$`],
+        ['発想の源', '分子の次数が分母以上なら、まず割り算。']] });
+  }
+  const p = kind === 'num' ? RI(1, 3) : 0, r0 = kind === 'num' ? RI(1, 5) : 1;
+  // (p x + r0)/((x+a)(x+b)) = α/(x+a) + β/(x+b)
+  const al = q(r0 - p * a, b - a), be = q(r0 - p * b, a - b);
+  if (al.isZero() || be.isZero()) throw new Error('約分できてしまう'); // 部分分数にならない組み合わせは作り直す
+  const f = mul(add(mul(N(p), VX), N(r0)), pow(A, N(-1)), pow(Bx, N(-1)));
+  const F = add(mul(N(al), log(A)), mul(N(be), log(Bx)));
+  return I(f, F, { stars: 3, tags: ['部分分数分解', '対数'], pts: IPTS, hint: '$\\frac{\\alpha}{x+' + a + '}+\\frac{\\beta}{x+' + b + '}$ の形に分ける（部分分数分解）。',
+    steps: [['部分分数分解', `$$${T_(f)}=\\frac{${al.tex()}}{${T_(A)}}+\\frac{${be.tex()}}{${T_(Bx)}}$$`], ['積分する', `$$\\int ${T_(f)}\\,dx=${T_(F)}+C$$（$x>0$ の範囲。一般には絶対値をつける）`],
+      ['発想の源', '分母が 1 次式の積なら部分分数分解。係数は、両辺に分母を掛けて $x=-' + a + ',\\,-' + b + '$ を代入すると一発で出る。']] });
+} };
+
 // ---- 生成 + 検証 ----
 function verifyProblem(p) {
   if (!p) return false;
+  if (p.indef) { // F'(x) = f(x) を数値で確かめる
+    for (const x of p.pts) {
+      const h = 1e-5, d = (evalN(p.F, x + h) - evalN(p.F, x - h)) / (2 * h), fx = evalN(p.f, x);
+      if (!Number.isFinite(d) || !Number.isFinite(fx) || !close(d, fx, 1e-5)) return false;
+    }
+    return true;
+  }
   if (!Number.isFinite(p.value)) return false;
   if (p.answerX && !close(p.answerX.num(), p.value, 1e-12)) return false;
   if (p.check) {
@@ -1454,7 +1643,8 @@ function generate(id) {
     let p; try { p = G.make(); } catch (e) { p = null; }
     if (p && verifyProblem(p)) {
       p.fid = id; p.hue = G.hue; p.gen = G.name; p.deriv = !!G.deriv;
-      p.answerTex = p.answerX.tex();
+      if (p.indef) { p.answerTex = tex(p.F) + '+C'; p.Fsrc = toSrc(p.F); p.value = 0; delete p.F; delete p.f; }
+      else p.answerTex = p.answerX.tex();
       delete p.answerX; delete p.check;
       return p;
     }
@@ -1571,6 +1761,7 @@ function pickGen() {
     let w = 1 + 2.2 * (st.give + Math.min(st.wrong, 3)) / (st.seen + 1) - 0.6 * st.fast / (st.seen + 1);
     if (st.seen === 0) w += .6;
     if (GEN[id].deriv) w *= .5;
+    if (GEN[id].indef) w *= 4; else if (!GEN[id].deriv) w *= .5; // 不定積分を中心に出す
     const r = recentF.indexOf(id); if (r >= 0) w *= [.02, .1, .3, .6][r] ?? 1;
     return Math.max(.03, w);
   });
@@ -1609,7 +1800,7 @@ function makeReel(p, opts = {}) {
     <div class="glyph" aria-hidden="true">${p.deriv ? 'd' : '∫'}</div>
     <div class="reel-body">
       <div class="meta">
-        <span class="src ${p.deriv ? 'ai' : ''}">${p.deriv ? '微分' : '積分'}</span>
+        <span class="src ${p.deriv ? 'ai' : ''}">${p.deriv ? '微分' : p.indef ? '不定積分' : '定積分'}</span>
         <span>問 #${r.no}</span>
         <span class="stars" aria-label="難易度${p.stars}">${'★'.repeat(p.stars)}${'☆'.repeat(5 - p.stars)}</span>
         <span class="clock">0:00</span>
@@ -1747,7 +1938,7 @@ document.querySelectorAll('.sheet').forEach(sh => {
 
 // ================== キーパッド（枠に書き込む構造化入力） ==================
 // 式は木で持つ。分数・ルート・指数・log は「枠（スロット）」を持ち、カーソルは枠の中を移動する。
-const STRUCT = { frac: ['a', 'b'], sqrt: ['a'], pow: ['a'], log: ['a'] };
+const STRUCT = { frac: ['a', 'b'], sqrt: ['a'], pow: ['a'], log: ['a'], fn: ['a'] };
 const newEd = () => { const root = []; return { root, list: root, i: 0 }; };
 const slotsOf = n => STRUCT[n.t] ? STRUCT[n.t].map(k => n[k]) : [];
 function findParent(root, target) {
@@ -1787,6 +1978,8 @@ function edInsert(ed, key) {
   }
   if (key === 'sqrt') { const n = { t: 'sqrt', a: [] }; return enter(n, n.a); }
   if (key === 'log') { const n = { t: 'log', a: [] }; return enter(n, n.a); }
+  if (key === 'e^x') { L.splice(ed.i, 0, { t: 'c', v: 'e' }); ed.i++; const n = { t: 'pow', a: [] }; return enter(n, n.a); }
+  if (['sin', 'cos', 'tan', 'abs'].includes(key)) { const n = { t: 'fn', f: key, a: [] }; return enter(n, n.a); }
   if (key === 'pow') { const n = { t: 'pow', a: [] }; return enter(n, n.a); }
   if (key === 'sq') { L.splice(ed.i, 0, { t: 'pow', a: [{ t: 'c', v: '2' }] }); ed.i++; return; }
   L.splice(ed.i, 0, { t: 'c', v: key }); ed.i++;
@@ -1826,6 +2019,7 @@ function edSer(list) {
     if (n.t === 'frac') return '((' + edSer(n.a) + ')/(' + edSer(n.b) + '))';
     if (n.t === 'sqrt') return 'sqrt(' + edSer(n.a) + ')';
     if (n.t === 'log') return 'log(' + edSer(n.a) + ')';
+    if (n.t === 'fn') return n.f + '(' + edSer(n.a) + ')';
     if (n.t === 'pow') return '^(' + edSer(n.a) + ')';
     return '';
   }).join(' ');
@@ -1843,7 +2037,7 @@ function edRender(ed, host) {
   const slot = list => { const s = document.createElement('span'); s.className = 'es'; s._list = list; build(list, s); return s; };
   const item = (n, list, j) => {
     const e = document.createElement('span'); e._list = list; e._j = j;
-    if (n.t === 'c') { e.className = 'ec' + ('+−×'.includes(n.v) ? ' eo' : 'πe'.includes(n.v) ? ' ev' : '()'.includes(n.v) ? ' epar' : ''); e.textContent = n.v; }
+    if (n.t === 'c') { e.className = 'ec' + ('+−×'.includes(n.v) ? ' eo' : 'πex'.includes(n.v) ? ' ev' : '()'.includes(n.v) ? ' epar' : ''); e.textContent = n.v; }
     else if (n.t === 'frac') { e.className = 'ef'; e.append(slot(n.a), slot(n.b)); }
     else if (n.t === 'sqrt') { e.className = 'esq'; const r = document.createElement('span'); r.className = 'rad'; r.textContent = '√'; const s = slot(n.a); s.classList.add('under'); e.append(r, s); }
     else if (n.t === 'pow') { e.className = 'ep'; e.append(slot(n.a)); }
@@ -1854,6 +2048,13 @@ function edRender(ed, host) {
       const c = document.createElement('span'); c.className = 'pr'; c.textContent = ')';
       e.append(f, o, slot(n.a), c);
     }
+    else if (n.t === 'fn') {
+      e.className = 'elog efn';
+      const o = document.createElement('span'); o.className = 'pr';
+      const c = document.createElement('span'); c.className = 'pr';
+      if (n.f === 'abs') { o.textContent = '|'; c.textContent = '|'; e.append(o, slot(n.a), c); }
+      else { const f = document.createElement('span'); f.className = 'fnm'; f.textContent = n.f; o.textContent = '('; c.textContent = ')'; e.append(f, o, slot(n.a), c); }
+    }
     return e;
   };
   const root = document.createElement('span'); root.className = 'es root'; root._list = ed.root;
@@ -1862,6 +2063,7 @@ function edRender(ed, host) {
 }
 
 const KEYS = [
+  ['x', 'sym', '<i>x</i>', 'エックス'], ['sin', 'fn', 'sin', 'sin'], ['cos', 'fn', 'cos', 'cos'], ['tan', 'fn', 'tan', 'tan'], ['abs', 'tpl', '<span class="kx">|<i></i>|</span>', '絶対値'], ['e^x', 'tpl', '<span class="kx">e<sup><i></i></sup></span>', 'eの累乗'],
   ['7', 'num'], ['8', 'num'], ['9', 'num'], ['frac', 'tpl', '<span class="kfrac"><i></i><b></b><i></i></span>', '分数'], ['pow', 'tpl', '<span class="kx">x<sup><i></i></sup></span>', '指数'], ['sq', 'tpl', '<span class="kx">x<sup>2</sup></span>', '2乗'],
   ['4', 'num'], ['5', 'num'], ['6', 'num'], ['×', 'op'], ['sqrt', 'tpl', '<span class="ksq">√<i></i></span>', 'ルート'], ['log', 'fn', 'log', 'log'],
   ['1', 'num'], ['2', 'num'], ['3', 'num'], ['−', 'op'], ['(', 'op'], [')', 'op'],
@@ -1940,6 +2142,7 @@ function openKeypad(r) {
   kr = r;
   if (!r.ed) r.ed = newEd();
   $('#keyTitle').textContent = `問 #${r.no} の答え`;
+  $('#keySub').textContent = r.p.indef ? 'x の式で入力（積分定数 C は省略してよい）。分数・ルート・指数は枠に書き込みます' : '厳密値で入力。分数・ルート・指数は枠に書き込みます';
   $('#attemptsLbl').textContent = r.attempts ? `挑戦 ${r.attempts} 回目` : '';
   $('#msg').textContent = r.solved ? '正解済み。別の形で入力して試すこともできます' : ''; $('#msg').className = 'msg';
   $('#display').classList.remove('shake', 'okglow');
@@ -1949,7 +2152,7 @@ function openKeypad(r) {
 document.addEventListener('keydown', e => {
   if (openSheet && openSheet.id === 'keySheet') {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
-    const map = { '*': '×', 'x': '×', '/': 'frac', '-': '−', '^': 'pow', 'Backspace': '⌫', 'Delete': 'AC', 'ArrowLeft': 'left', 'ArrowRight': 'right', 'p': 'π', 's': 'sqrt', 'r': 'sqrt', 'l': 'log' };
+    const map = { '*': '×', '/': 'frac', '-': '−', '^': 'pow', 'Backspace': '⌫', 'Delete': 'AC', 'ArrowLeft': 'left', 'ArrowRight': 'right', 'p': 'π', 's': 'sqrt', 'r': 'sqrt', 'l': 'log' };
     if (e.key === 'Enter') { e.preventDefault(); judge(); return; }
     if (e.key === 'Escape') { closeSheet(); return; }
     const k = map[e.key] ?? e.key;
@@ -1971,12 +2174,13 @@ function judge() {
   if (edEmpty(r.ed)) { msg.textContent = '式を入力してください'; msg.className = 'msg warn'; return; }
   const src = edSer(r.ed.root);
   let v;
-  try { v = evalAst(parse(src), NaN); } catch { v = NaN; }
+  try { v = evalAst(parse(src), r.p.indef ? 1.1 : NaN); } catch { v = NaN; }
   if (!Number.isFinite(v)) {
     d.classList.remove('shake'); void d.offsetWidth; d.classList.add('shake');
     const open = (src.match(/\(/g) || []).length - (src.match(/\)/g) || []).length;
     msg.textContent = open ? '括弧が閉じていません' : '空いている枠か、書きかけの部分があります'; msg.className = 'msg warn'; vib(30); return;
   }
+  if (r.p.indef) return judgeIndef(r, src, d, msg);
   const A = r.p.value;
   const rel = Math.abs(v - A) / Math.max(1e-12, Math.abs(A));
   if (rel < 1e-7 || Math.abs(v - A) < 1e-10) {
@@ -1990,6 +2194,30 @@ function judge() {
   if (r.p.fid) famStats(r.p.fid).wrong++;
   if (rel < 1e-3) { msg.textContent = '近い！ 小数ではなく厳密値で入力してください'; msg.className = 'msg warn'; }
   else { msg.textContent = '不正解。もう一度考えてみよう'; msg.className = 'msg ng'; }
+  if (!r.solved && S.streak) { S.streak = 0; updateHud(); }
+  saveAll();
+}
+
+// 不定積分：入力 U(x) と正解 F(x) の差が、どの x でも同じ（積分定数）なら正解
+function judgeIndef(r, src, d, msg) {
+  let U, F;
+  try { U = compile(src); F = compile(r.p.Fsrc); } catch { U = null; }
+  const pts = r.p.pts || [0.55, 0.8, 1.15, 1.6, 2.05, 2.6];
+  let ok = !!U, diffs = [];
+  if (ok) for (const x of pts) { const u = U(x), fx = F(x); if (!Number.isFinite(u) || !Number.isFinite(fx)) { ok = false; break; } diffs.push(u - fx); }
+  if (ok) { const scale = Math.max(1, ...pts.map(x => Math.abs(F(x)))); ok = diffs.every(t => Math.abs(t - diffs[0]) < 1e-7 * scale); }
+  if (ok) {
+    if (r.solved) { msg.textContent = 'これも正解の形です（積分定数の違いだけ）'; msg.className = 'msg'; d.classList.add('okglow'); return; }
+    return win(r);
+  }
+  r.attempts++;
+  $('#attemptsLbl').textContent = `挑戦 ${r.attempts} 回目`;
+  d.classList.remove('shake'); void d.offsetWidth; d.classList.add('shake');
+  sfxWrong(); vib([40, 40, 40]);
+  if (r.p.fid) famStats(r.p.fid).wrong++;
+  const hasX = /x/.test(src);
+  msg.textContent = hasX ? '不正解。答えを微分して、元の関数に戻るか確かめてみよう' : '答えは x の式です（x キーで入力）';
+  msg.className = 'msg ng';
   if (!r.solved && S.streak) { S.streak = 0; updateHud(); }
   saveAll();
 }
@@ -2127,7 +2355,7 @@ function openSolution(r) {
 $('#savedBtn').onclick = () => {
   const b = $('#savedBody');
   if (!S.saved.length) b.innerHTML = '<p class="empty">まだ保存した問題はありません。<br>リール右側のハートで保存できます。</p>';
-  else b.innerHTML = S.saved.map((p, i) => `<div class="saved-item"><div class="meta"><span class="src ${p.deriv ? 'ai' : ''}">${p.deriv ? '微分' : '積分'}</span><span class="stars">${'★'.repeat(p.stars)}</span><span>${p.tags.map(t => '#' + esc(t)).join(' ')}</span></div><div class="md">${md(p.statement)}</div><div class="saved-actions"><button data-redo="${i}">もう一度解く</button><button data-del="${i}">削除</button></div></div>`).join('');
+  else b.innerHTML = S.saved.map((p, i) => `<div class="saved-item"><div class="meta"><span class="src ${p.deriv ? 'ai' : ''}">${p.deriv ? '微分' : p.indef ? '不定積分' : '定積分'}</span><span class="stars">${'★'.repeat(p.stars)}</span><span>${p.tags.map(t => '#' + esc(t)).join(' ')}</span></div><div class="md">${md(p.statement)}</div><div class="saved-actions"><button data-redo="${i}">もう一度解く</button><button data-del="${i}">削除</button></div></div>`).join('');
   showSheet('#savedSheet');
   typeset(b);
 };

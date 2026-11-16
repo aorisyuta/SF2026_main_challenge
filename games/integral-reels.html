@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>積分リール（ゲーム）｜Aoristos — 星光 SF2026</title>
-  <meta name="description" content="Aoristos の数学ゲーム「積分リール」。スワイプで次々に出てくる積分・微分の問題に、厳密値で答えて連続正解を目指します。部分積分、King's property、区分求積法、Wallis 積分など。">
+  <meta name="description" content="Aoristos の数学ゲーム「積分リール」。スワイプで次々に出てくる不定積分の問題を中心に、定積分・微分も。置換積分、部分積分、部分分数分解、三角関数の積分から、King's property、区分求積法、Wallis 積分まで。">
   <meta name="author" content="Aoristos">
   <meta name="theme-color" content="#ffffff">
   <!-- site-meta:start -->
@@ -15,7 +15,7 @@
   <meta property="og:locale" content="ja_JP">
   <meta property="og:type" content="article">
   <meta property="og:title" content="積分リール（ゲーム）｜Aoristos — 星光 SF2026">
-  <meta property="og:description" content="Aoristos の数学ゲーム「積分リール」。スワイプで次々に出てくる積分・微分の問題に、厳密値で答えて連続正解を目指します。部分積分、King's property、区分求積法、Wallis 積分など。">
+  <meta property="og:description" content="Aoristos の数学ゲーム「積分リール」。スワイプで次々に出てくる不定積分の問題を中心に、定積分・微分も。置換積分、部分積分、部分分数分解、三角関数の積分から、King's property、区分求積法、Wallis 積分まで。">
   <meta property="og:url" content="https://aoristos.net/games/integral-reels">
   <meta property="og:image" content="https://aoristos.net/assets/og-image.jpg">
   <meta property="og:image:secure_url" content="https://aoristos.net/assets/og-image.jpg">
@@ -25,7 +25,7 @@
   <meta property="og:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="積分リール（ゲーム）｜Aoristos — 星光 SF2026">
-  <meta name="twitter:description" content="Aoristos の数学ゲーム「積分リール」。スワイプで次々に出てくる積分・微分の問題に、厳密値で答えて連続正解を目指します。部分積分、King's property、区分求積法、Wallis 積分など。">
+  <meta name="twitter:description" content="Aoristos の数学ゲーム「積分リール」。スワイプで次々に出てくる不定積分の問題を中心に、定積分・微分も。置換積分、部分積分、部分分数分解、三角関数の積分から、King's property、区分求積法、Wallis 積分まで。">
   <meta name="twitter:image" content="https://aoristos.net/assets/og-image.jpg">
   <meta name="twitter:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">
   <!-- site-meta:end -->
@@ -42,7 +42,7 @@
   <script src="../assets/header.js?v=f3da0fd06f" defer></script>
   <script src="../assets/games/mathjax-config.js?v=5261025b3f"></script>
   <script src="../assets/vendor/mathjax/tex-svg.js?v=d4295dc337" defer></script>
-  <script src="../assets/games/integral-reels.js?v=080be62e2f" defer></script>
+  <script src="../assets/games/integral-reels.js?v=852894dddd" defer></script>
 </head>
 <body>
 
@@ -70,7 +70,7 @@
     <section class="sheet" id="keySheet" aria-label="答えの入力">
       <div class="grab"></div>
       <div class="sheet-head">
-        <div><h2 id="keyTitle">答えを入力</h2><div class="sub">厳密値で入力。分数・ルート・指数は枠に書き込みます</div></div>
+        <div><h2 id="keyTitle">答えを入力</h2><div class="sub" id="keySub">厳密値で入力。分数・ルート・指数は枠に書き込みます</div></div>
         <button class="x" data-close aria-label="閉じる"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
       </div>
       <div class="sheet-body">
