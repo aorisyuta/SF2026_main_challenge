@@ -708,6 +708,84 @@ const CH=[
   two("znnh",["HCl","H2SO4"],"znoh","[Zn(NH3)4]^{2+} + 2H^+ + 2H2O → Zn(OH)2↓ + 4NH4^+","白色の沈殿が生じた．さらに加えると溶ける");
   two("ninh",["HCl","HNO3"],"nioh","[Ni(NH3)6]^{2+} + 4H^+ + 2H2O → Ni(OH)2↓ + 6NH4^+","青紫色が消え、緑色の沈殿が生じた．さらに加えると溶ける");
 })();
+// ---------- 授業プリント（73期 理系化学 No.46〜75）に合わせる
+//   プリントにあってゲームになかった物質・反応を追加し、プリントにない物質は名前を（ ）で囲む
+(function(){
+  Object.assign(R,{
+    H2Ow:{f:"H2O",s:"水でうすめる"},
+    KCN:{f:"KCN",s:"シアン化カリウム"},
+    heatS:{f:null,t:"強熱",s:"1100 ℃以上で強熱"}
+  });
+  ["H2Ow","KCN","heatS"].forEach(k=>{if(!ORDER.includes(k))ORDER.push(k)});
+  const NF={
+    cu2o:{f:"Cu2O",ph:"s",col:"#b8321f",look:"赤色の固体",nm:"酸化銅(I)"},
+    cucl4:{f:"[CuCl4]^{2-}",ph:"aq",col:"#7fb24a",look:"黄緑色の溶液",nm:"テトラクロリド銅(II)酸イオン"},
+    agbr:{f:"AgBr",ph:"s",col:"#f1e9b8",look:"淡黄色の沈殿",nm:"臭化銀"},
+    agcn:{f:"[Ag(CN)2]^-",ph:"aq",col:W,look:"無色の溶液",nm:"ジシアニド銀(I)酸イオン"},
+    zno:{f:"ZnO",ph:"s",col:"#f6f6f4",look:"白色の粉末",nm:"酸化亜鉛",al:"亜鉛華（白色顔料）"},
+    co2:{f:"[Co(H2O)6]^{2+}",ph:"aq",col:"#e7a3b4",look:"淡赤色の溶液",nm:"ヘキサアクアコバルト(II)イオン"},
+    cocl4:{f:"[CoCl4]^{2-}",ph:"aq",col:"#2e55c9",look:"青色の溶液",nm:"テトラクロリドコバルト(II)酸イオン"},
+    cocl2:{f:"CoCl2",ph:"s",col:"#3a5fd0",look:"青色の固体",nm:"塩化コバルト(II)（無水物）"},
+    cocl6:{f:"CoCl2・6H2O",ph:"s",col:"#d9637e",look:"赤色の固体",nm:"塩化コバルト(II)六水和物"},
+    cooh:{f:"Co(OH)2",ph:"s",col:"#d98aa0",look:"桃色の沈殿",nm:"水酸化コバルト(II)",x:1},
+    cd2:{f:"Cd^{2+}",ph:"aq",col:W,look:"無色の溶液",nm:"カドミウムイオン"},
+    cds:{f:"CdS",ph:"s",col:"#efc21b",look:"黄色の沈殿",nm:"硫化カドミウム",al:"カドミウムイエロー（顔料）"},
+    cdoh:{f:"Cd(OH)2",ph:"s",col:"#f6f6f4",look:"白色の沈殿",nm:"水酸化カドミウム",x:1},
+    cdnh:{f:"[Cd(NH3)4]^{2+}",ph:"aq",col:W,look:"無色の溶液",nm:"テトラアンミンカドミウム(II)イオン",x:1}
+  };
+  for(const k in NF){F[k]=Object.assign({al:null},NF[k])}
+  const add=(k,o)=>{T[k]=Object.assign(T[k]||{},o)};
+  // 銅（No.67・68）
+  add("cuo",{heatS:["cu2o","1100 ℃以上に加熱すると、黒色から赤色に変わった","4CuO → 2Cu2O + O2"]});
+  add("cu_m",{O2:["cuo","空気中で加熱すると、黒色の酸化銅(II)になった","2Cu + O2 → 2CuO"]});
+  add("cu2o",{H2SO4:["cu2","希硫酸に溶け、青色の溶液と銅が生じた","Cu2O + H2SO4 → CuSO4 + Cu + H2O"]});
+  add("cu2",{cHCl:["cucl4","濃塩酸を加えると、黄緑色の溶液になった","Cu^{2+} + 4Cl^- → [CuCl4]^{2-}"]});
+  add("cucl4",{H2Ow:["cu2","水でうすめると、青色の溶液に戻った","[CuCl4]^{2-} → Cu^{2+} + 4Cl^-"]});
+  // 銀（No.49・69）
+  add("ag1",{KBr:["agbr","淡黄色の沈殿が生じた","Ag^+ + Br^- → AgBr↓"]});
+  add("agbr",{light:["ag","光が当たると分解し、黒っぽい銀が析出した（感光性）","2AgBr → 2Ag + Br2"],
+    S2O3:["agtsc","沈殿が溶けて無色の溶液になった（写真の定着）","AgBr + 2S2O3^{2-} → [Ag(S2O3)2]^{3-} + Br^-"],
+    NH3:[null,"$AgBr$ はアンモニア水にはわずかしか溶けない"]});
+  add("agcl",{KCN:["agcn","沈殿が溶けて無色の溶液になった（錯イオン形成）","AgCl + 2CN^- → [Ag(CN)2]^- + Cl^-"]});
+  add("ag2o",{KCN:["agcn","沈殿が溶けて無色の溶液になった","Ag2O + 4CN^- + H2O → 2[Ag(CN)2]^- + 2OH^-"]});
+  // 亜鉛（No.65・66）
+  add("znoh",{heat:["zno","加熱すると水を失い、白色の酸化亜鉛になった","Zn(OH)2 → ZnO + H2O"]});
+  add("zn_m",{O2:["zno","空気中で加熱すると、白色の酸化亜鉛になった","2Zn + O2 → 2ZnO"]});
+  add("zno",{HCl:["zn2","酸に溶けた（両性酸化物）","ZnO + 2HCl → ZnCl2 + H2O"],H2SO4:["zn2","酸に溶けた（両性酸化物）","ZnO + H2SO4 → ZnSO4 + H2O"],
+    NaOH:["znoh4","強塩基にも溶けた（両性酸化物）","ZnO + 2NaOH + H2O → Na2[Zn(OH)4]"]});
+  // コバルト（No.71）
+  T.co2={cHCl:["cocl4","濃塩酸を加えると、青色の溶液になった","[Co(H2O)6]^{2+} + 4Cl^- ⇄ [CoCl4]^{2-} + 6H2O"],
+    heat:["cocl6","水を蒸発させると、赤色の結晶が残った",null],
+    NaOH:["cooh","桃色（青色を経て）の沈殿が生じた","Co^{2+} + 2OH^- → Co(OH)2↓"]};
+  T.cocl4={H2Ow:["co2","水でうすめると、淡赤色に戻った","[CoCl4]^{2-} + 6H2O ⇄ [Co(H2O)6]^{2+} + 4Cl^-"]};
+  T.cocl6={heat:["cocl2","加熱して水和水を除くと、青色になった（塩化コバルト紙の原理）","CoCl2・6H2O → CoCl2 + 6H2O"],H2Ow:["co2","水に溶けて、淡赤色の溶液になった",null]};
+  T.cocl2={H2Ow:["cocl6","水を吸うと、青色から赤色に変わった（水の検出）","CoCl2 + 6H2O → CoCl2・6H2O"]};
+  T.cooh={HCl:["co2","沈殿が溶けて淡赤色の溶液になった","Co(OH)2 + 2H^+ → Co^{2+} + 2H2O"]};
+  // カドミウム（No.66）
+  T.cd2={H2Sa:["cds","黄色の沈殿が生じた（酸性でも沈殿する）","Cd^{2+} + H2S → CdS↓ + 2H^+"],
+    NaOH:["cdoh","白色の沈殿が生じた","Cd^{2+} + 2OH^- → Cd(OH)2↓"],
+    NH3:["cdoh","白色の沈殿が生じた","Cd^{2+} + 2NH3 + 2H2O → Cd(OH)2↓ + 2NH4^+"]};
+  T.cdoh={HCl:["cd2","沈殿が溶けた","Cd(OH)2 + 2H^+ → Cd^{2+} + 2H2O"],NaOH:[null,"さらに加えても溶けない（両性ではない）"],
+    NH3:["cdnh","さらに加えると沈殿が溶けた（錯イオン形成）","Cd(OH)2 + 4NH3 → [Cd(NH3)4]^{2+} + 2OH^-"],
+    H2Sa:["cds","黄色の沈殿に変わった","Cd(OH)2 + H2S → CdS + 2H2O"]};
+  T.cdnh={HCl:["cdoh","白色の沈殿が生じた．さらに加えると溶ける",null],H2Sa:["cds","黄色の沈殿が生じた",null]};
+  T.cds={HNO3:["cd2","沈殿が溶け、硫黄が遊離した",null],HCl:[null,"$CdS$ は希塩酸にはほとんど溶けない"]};
+  const addCh=(id,o)=>{const c=CH.find(h=>h.id===id);c.shelf=[...new Set(c.shelf.concat(o.shelf||[]))];c.forms=[...new Set(c.forms.concat(o.forms||[]))]};
+  addCh("Cu",{shelf:["cHCl","H2Ow","O2","heatS"],forms:["cu2o","cucl4"]});
+  addCh("Ag",{shelf:["KBr","KCN"],forms:["agbr","agcn"]});
+  addCh("Zn",{shelf:["heat","O2"],forms:["zno"]});
+  {const c=CH.find(h=>h.id==="Cu");c.forms=c.forms.filter(k=>k!=="cucl4");c.forms.splice(c.forms.indexOf("cu2"),0,"cucl4")}
+  CH.push({id:"Co",z:"27",nm:"コバルト",shelf:["cHCl","H2Ow","heat","NaOH","HCl"],forms:["co2","cocl4","cocl6","cocl2","cooh"]},
+          {id:"Cd",z:"48",nm:"カドミウム",shelf:["HCl","HNO3","NaOH","NH3","H2Sa"],forms:["cd2","cdoh","cdnh","cds"]});
+  // 対応する授業プリントの番号
+  const NO={Cu:"No.67・68",Ag:"No.69",Zn:"No.65・66",Al:"No.63・64",Fe:"No.71〜73",Pb:"No.64",Ni:"No.70",Cr:"No.74",Mn:"No.73",Ca:"No.61・62",Ba:"No.62",X:"No.47〜49",S:"No.51〜53",Na:"No.59・60",Mg:"No.61",Sn:"No.64",Hg:"No.66",Co:"No.71",Cd:"No.66"};
+  CH.forEach(c=>{c.no=NO[c.id]||""});
+  // プリントにない物質（発展的な内容）は名前を（ ）で囲む
+  ["nis","croh3","croh4","mnoh2","mgoh","mgco3","sns","hgo","hgi2","hgi4"].forEach(k=>{if(F[k])F[k].x=1});
+  for(const k in F){if(F[k].x&&F[k].nm&&F[k].nm[0]!=="（")F[k].nm="（"+F[k].nm+"）"}
+  // 表記をプリントに合わせる
+  F.mns.look="淡赤色の沈殿";F.cr3.look="緑色の溶液";F.pbcl2&&(F.pbcl2.look="白色の沈殿（熱水に溶ける）");
+})();
 const DIFF=[{nm:"やさしい",lo:1,hi:2},{nm:"ふつう",lo:2,hi:3},{nm:"むずかしい",lo:3,hi:9}];
 
 // ---------- graph search
@@ -786,7 +864,7 @@ function render(){
   $("undo").disabled=moves===0;$("reset").disabled=moves===0;
 
   if(!S.free){const tf=F[S.target];
-    $("goalEb").textContent="目標　"+c.nm+"（"+(c.id==="X"?"ハロゲン":c.id)+"）の問題";
+    $("goalEb").textContent="目標　"+c.nm+"（"+(c.id==="X"?"ハロゲン":c.id)+"）の問題"+(c.no?"　授業プリント "+c.no:"");
     $("goal").innerHTML='<span class="ik-goal-sw" style="background:'+(tf.col||"var(--water)")+'"></span><div class="ik-goal-meta"><div class="ik-state-fx">'+fxBlock(S.target)+'</div><p class="ik-look">'+esc(tf.look)+'</p></div>';
     $("par").textContent=S.par;$("parBox").hidden=false;$("hint").hidden=false;$("giveup").hidden=false;
     $("hint").disabled=done;$("giveup").disabled=done;
@@ -799,7 +877,7 @@ function render(){
         '</div><p></p><button class="ik-btn ik-primary" data-next="1">次の問題へ</button></div>'}
     else $("win").innerHTML="";
   }else{
-    $("goalEb").textContent="自由実験　"+c.nm;$("parBox").hidden=true;$("hint").hidden=true;$("giveup").hidden=true;$("win").innerHTML="";
+    $("goalEb").textContent="自由実験　"+c.nm+(c.no?"　授業プリント "+c.no:"");$("parBox").hidden=true;$("hint").hidden=true;$("giveup").hidden=true;$("win").innerHTML="";
     $("goal").innerHTML='<div class="ik-goal-meta"><label for="freeChap" class="ik-look">元素と出発物質を選ぶ</label><div class="ik-bar" style="margin-top:6px"><select id="freeChap" class="ik-free-sel">'+
       CH.map((h,i)=>'<option value="'+i+'"'+(i===S.ci?" selected":"")+'>'+esc(h.nm)+'</option>').join("")+'</select><select id="freeStart" class="ik-free-sel">'+
       c.forms.map(k=>'<option value="'+k+'"'+(k===S.start?" selected":"")+'>'+esc(fu(F[k].f)+"　"+F[k].nm+"（"+F[k].look+"）")+'</option>').join("")+'</select></div></div>';
@@ -870,7 +948,7 @@ function ptPos(z){
   if(k<=16)return {per,grp:3,f:k-2};               // ランタノイド・アクチノイド（f は 0〜14）
   return {per,grp:k-13};
 }
-const PT_GAME={Na:"Na",Mg:"Mg",Sn:"Sn",Hg:"Hg",Cu:"Cu",Ag:"Ag",Zn:"Zn",Al:"Al",Fe:"Fe",Pb:"Pb",Ni:"Ni",Cr:"Cr",Mn:"Mn",Ca:"Ca",Ba:"Ba",X:["Cl","Br","I"],S:"S"};
+const PT_GAME={Na:"Na",Mg:"Mg",Sn:"Sn",Hg:"Hg",Cu:"Cu",Ag:"Ag",Zn:"Zn",Al:"Al",Fe:"Fe",Pb:"Pb",Ni:"Ni",Cr:"Cr",Mn:"Mn",Ca:"Ca",Ba:"Ba",X:["Cl","Br","I"],S:"S",Co:"Co",Cd:"Cd"};
 const ptGameSet=new Set(Object.values(PT_GAME).flat());
 function ptInfo(z){
   const p=ptPos(z),sym=PT_SYM[z-1],tr=p.grp>=3&&p.grp<=12;
@@ -994,7 +1072,7 @@ function renderMap(ci,focus){
     // ほかの箱の上を通るなら、通らなくなるまで曲げる
     const others=boxes0.filter((_,k)=>k!==iu&&k!==iv);
     let bend=0;
-    for(const cand of [0,46,-46,80,-80,120,-120]){
+    for(const cand of [0,46,-46,80,-80,120,-120,180,-180,240,-240]){
       const C=[(U[0]+V[0])/2+nx*(cand+off),(U[1]+V[1])/2+ny*(cand+off)];
       const ok=[...Array(19).keys()].every(k=>{const p=bez(U,C,V,(k+1)/20);return p[0]>6&&p[0]<W-6&&p[1]>6&&p[1]<H-6&&!others.some(r=>inR(p,r))});
       if(ok){bend=cand;break}
