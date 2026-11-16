@@ -1242,3 +1242,28 @@ a.tagchart-row:hover { text-decoration: none; }
 .news-noimg { background: var(--bg-alt) url("aoristos-mark.svg") center / 52% no-repeat; opacity: .9; }
 .post-cover.noimg { background: var(--bg-alt) url("aoristos-mark.svg") center / 34% no-repeat; }
 .post-cover.noimg svg { display: none; }
+
+/* ---------- サイト内検索 ---------- */
+.gnav-search { flex: none; display: grid; place-items: center; width: 36px; height: 36px; margin-left: 20px; border: 0; border-radius: 50%; background: transparent; color: var(--ink); opacity: .8; cursor: pointer; }
+.gnav-search:hover { opacity: 1; background: rgba(0, 0, 0, .05); }
+.gnav-search svg { display: block; }
+@media (max-width: 1099px) { .gnav-nav ul { gap: 26px; } }
+@media (max-width: 833px) { .gnav-search { margin-left: auto; margin-right: 4px; } }
+html.srch-open { overflow: hidden; }
+.srch { position: fixed; inset: 0; z-index: 1000; background: rgba(0, 0, 0, .4); display: flex; justify-content: center; align-items: flex-start; padding: 8vh 16px 16px; }
+.srch[hidden] { display: none; }
+.srch-panel { width: min(680px, 100%); max-height: 80vh; display: flex; flex-direction: column; background: var(--bg); border-radius: var(--radius-m); overflow: hidden; }
+.srch-bar { display: flex; align-items: center; gap: 10px; padding: 12px 12px 12px 18px; border-bottom: 1px solid var(--line); color: var(--ink-2); }
+.srch-bar svg { display: block; flex: none; }
+.srch-input { flex: 1; min-width: 0; border: 0; outline: none; font: inherit; font-size: 18px; color: var(--ink); background: transparent; }
+.srch-input::-webkit-search-cancel-button { display: none; }
+.srch-close { flex: none; border: 0; background: var(--bg-alt); border-radius: 980px; padding: 6px 12px; font-size: 13px; color: var(--ink-2); cursor: pointer; }
+.srch-res { overflow-y: auto; padding: 6px; }
+.srch-item { display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; border-radius: 12px; color: var(--ink); }
+.srch-item:hover, .srch-item.is-sel { background: var(--bg-alt); text-decoration: none; }
+.srch-item small { font-size: 11px; font-weight: 600; color: var(--ink-3); }
+.srch-item b { font-size: 16px; font-weight: 700; }
+.srch-item span { font-size: 13px; color: var(--ink-2); line-height: 1.6; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.srch-item mark { background: #fff2b3; color: inherit; border-radius: 2px; }
+.srch-hint { padding: 16px 12px; font-size: 14px; color: var(--ink-2); }
+@media (max-width: 599px) { .srch { padding: 0; } .srch-panel { max-height: 100%; height: 100%; border-radius: 0; } }

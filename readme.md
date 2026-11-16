@@ -184,6 +184,7 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 ├── archive/                アーカイブ一覧・閲覧ページ（view.html）・過去のサイト（sf25/ = SF 2025）
 ├── tools/rebase_sf25.py    アーカイブ取り込み時のパス書き換え
 ├── tools/build-others.js   others.html の生成
+├── tools/build-search.js   サイト内検索の索引 assets/search-index.json の生成（検索画面は assets/header.js。ヘッダーの虫めがね、または / キー）
 ├── tools/build-novel.js    小説の章ページの生成（原稿は tools/novel/。原稿を直して npm run build）
 ├── _headers / robots.txt / sitemap.xml   build-site.js が生成
 ├── apple-touch-icon*.png   iPhone などがルートに取りに来るアイコン（assets/ のコピー）

@@ -83,6 +83,9 @@
           '<nav class="gnav-nav" id="gnavNav" aria-label="メイン">' +
             '<ul>' + links + '</ul>' +
           '</nav>' +
+          '<button class="gnav-search" id="gnavSearch" type="button" aria-label="サイト内を検索" title="サイト内を検索（/）">' +
+            '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>' +
+          '</button>' +
           '<button class="gnav-toggle" id="gnavToggle" type="button" aria-expanded="false" aria-controls="gnavNav" aria-label="メニューを開く">' +
             '<span></span><span></span>' +
           '</button>' +
@@ -221,8 +224,107 @@
     });
   }
 
+  /* ---------- サイト内検索（索引は assets/search-index.json。tools/build-search.js が作る） ---------- */
+  var SR = null, srIndex = null, srSel = -1;
+  function srNorm(t) {
+    // 全角/半角・大文字/小文字・カタカナ/ひらがなの違いを無視して比べる
+    return String(t || '').normalize('NFKC').toLowerCase().replace(/[\u30a1-\u30f6]/g, function (c) { return String.fromCharCode(c.charCodeAt(0) - 0x60); });
+  }
+  function srLoad() {
+    if (srIndex) return Promise.resolve(srIndex);
+    return fetch(base + 'assets/search-index.json', { cache: 'no-cache' }).then(function (r) { return r.json(); }).then(function (a) {
+      srIndex = a.map(function (it) { return { it: it, t: srNorm(it.t), h: srNorm(it.h), d: srNorm(it.d), b: srNorm(it.b) }; });
+      return srIndex;
+    });
+  }
+  function srMark(text, terms) {
+    var t = String(text), n = srNorm(t);
+    if (n.length !== t.length) return esc(t); // 文字数が変わる正規化のときは強調しない
+    var marks = [];
+    terms.forEach(function (q) { var i = 0; while ((i = n.indexOf(q, i)) >= 0) { marks.push([i, i + q.length]); i += q.length; } });
+    if (!marks.length) return esc(t);
+    marks.sort(function (a, b) { return a[0] - b[0]; });
+    var out = '', pos = 0;
+    marks.forEach(function (m) { if (m[0] < pos) return; out += esc(t.slice(pos, m[0])) + '<mark>' + esc(t.slice(m[0], m[1])) + '</mark>'; pos = m[1]; });
+    return out + esc(t.slice(pos));
+  }
+  function srSnippet(x, terms) {
+    // 説明文に言葉があれば説明文を、なければ本文の該当箇所を見せる
+    if (x.it.d && terms.some(function (q) { return x.d.indexOf(q) >= 0; })) return srMark(x.it.d.length > 110 ? x.it.d.slice(0, 110) + '…' : x.it.d, terms);
+    var src = x.it.b || x.it.d, n = x.b || x.d, i = -1;
+    terms.some(function (q) { i = n.indexOf(q); return i >= 0; });
+    if (i < 0) return srMark((x.it.d || src).slice(0, 90), terms);
+    var a = Math.max(0, i - 30), z = Math.min(src.length, i + 70);
+    return (a > 0 ? '…' : '') + srMark(src.slice(a, z), terms) + (z < src.length ? '…' : '');
+  }
+  function srRun() {
+    var q = SR.input.value, terms = srNorm(q).split(/\s+/).filter(Boolean), res = SR.res;
+    srSel = -1;
+    if (!terms.length) { res.innerHTML = '<li class="srch-hint">ページ名・本文の言葉で探せます（例：積分、AorXC、部誌、LaTeX）</li>'; return; }
+    srLoad().then(function (idx) {
+      var hits = [];
+      idx.forEach(function (x) {
+        var score = 0;
+        for (var k = 0; k < terms.length; k++) {
+          var q = terms[k], s = 0;
+          if (x.t.indexOf(q) >= 0) s += 12; if (x.h.indexOf(q) >= 0) s += 5; if (x.d.indexOf(q) >= 0) s += 3; if (x.b.indexOf(q) >= 0) s += 1 + Math.min(3, x.b.split(q).length - 2);
+          if (!s) return; score += s;
+        }
+        hits.push([score, x]);
+      });
+      hits.sort(function (a, b) { return b[0] - a[0]; });
+      if (!hits.length) { res.innerHTML = '<li class="srch-hint">「' + esc(q) + '」に一致するページは見つかりませんでした</li>'; return; }
+      res.innerHTML = hits.slice(0, 30).map(function (h) {
+        var x = h[1];
+        return '<li><a class="srch-item" href="' + esc(base + x.it.u) + '"><small>' + esc(x.it.s) + '</small><b>' + srMark(x.it.t, terms) + '</b><span>' + srSnippet(x, terms) + '</span></a></li>';
+      }).join('') + (hits.length > 30 ? '<li class="srch-hint">ほか ' + (hits.length - 30) + ' 件。言葉を足すと絞り込めます</li>' : '');
+    }).catch(function () { res.innerHTML = '<li class="srch-hint">検索の準備に失敗しました。ページを再読み込みしてください</li>'; });
+  }
+  function srMove(d) {
+    var items = SR.res.querySelectorAll('.srch-item'); if (!items.length) return;
+    srSel = (srSel + d + items.length) % items.length;
+    items.forEach(function (a, i) { a.classList.toggle('is-sel', i === srSel); });
+    items[srSel].scrollIntoView({ block: 'nearest' });
+  }
+  function srOpen() {
+    if (!SR) {
+      var w = document.createElement('div');
+      w.className = 'srch'; w.hidden = true;
+      w.setAttribute('role', 'dialog'); w.setAttribute('aria-modal', 'true'); w.setAttribute('aria-label', 'サイト内検索');
+      w.innerHTML = '<div class="srch-panel"><div class="srch-bar">' +
+        '<svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>' +
+        '<input type="search" class="srch-input" placeholder="サイト内を検索" aria-label="検索する言葉" autocomplete="off" enterkeyhint="search">' +
+        '<button type="button" class="srch-close" aria-label="検索を閉じる">閉じる</button></div>' +
+        '<ul class="srch-res" role="listbox"></ul></div>';
+      document.body.appendChild(w);
+      SR = { el: w, input: w.querySelector('.srch-input'), res: w.querySelector('.srch-res') };
+      var t = 0;
+      SR.input.addEventListener('input', function () { clearTimeout(t); t = setTimeout(srRun, 120); });
+      SR.input.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown') { e.preventDefault(); srMove(1); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); srMove(-1); }
+        else if (e.key === 'Enter') { var a = SR.res.querySelectorAll('.srch-item')[Math.max(0, srSel)]; if (a) { e.preventDefault(); location.href = a.href; } }
+      });
+      w.addEventListener('click', function (e) { if (e.target === w || e.target.closest('.srch-close')) srClose(); });
+      srRun();
+    }
+    SR.el.hidden = false; document.documentElement.classList.add('srch-open');
+    SR.input.focus(); SR.input.select();
+    srLoad().catch(function () {});
+  }
+  function srClose() { if (!SR) return; SR.el.hidden = true; document.documentElement.classList.remove('srch-open'); var b = document.getElementById('gnavSearch'); if (b) b.focus(); }
+  document.addEventListener('keydown', function (e) {
+    if (SR && !SR.el.hidden && e.key === 'Escape') { srClose(); return; }
+    if (e.key !== '/' || e.metaKey || e.ctrlKey || e.altKey) return;
+    var t = e.target, tag = (t.tagName || '').toLowerCase();
+    if (tag === 'input' || tag === 'textarea' || tag === 'select' || t.isContentEditable) return;
+    if (document.querySelector('dialog[open]')) return;
+    e.preventDefault(); srOpen();
+  });
+
   document.addEventListener('DOMContentLoaded', function () {
     buildHeader();
+    var sb = document.getElementById('gnavSearch'); if (sb) sb.addEventListener('click', srOpen);
     if (!page.noFooter) buildFooter();
     fillFromSheet();
   });

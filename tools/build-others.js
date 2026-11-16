@@ -245,7 +245,7 @@ const SOURCE_NOTE = `<p class="ob-source">情報は <a href="${esc(data.source)}
 
 const html = `${head({
   scripts: '\n  <script src="assets/others-top.js" defer></script>',
-  title: '大阪星光学院 SF2026 まとめ（ステージ時間割・入場・金券）',
+  title: '他の企画のまとめ（ステージ・入場・金券）',
   desc: `大阪星光学院 SF2026（スクールフェア 2026「融合」・11月7日〜8日）の企画を Aoristos がまとめたページ。講堂・音楽室のステージ時間割、入場方法・金券・食品の時間、1日の流れ、階ごと・種類ごとの企画数。全 ${booths.length} 企画の一覧と校内マップへも。`
 })}
 <main id="main" class="band-alt">
@@ -351,7 +351,7 @@ ${stageList()}
 `;
 
 const listHtml = `${head({
-  title: '大阪星光学院 SF2026 企画一覧・校内マップ',
+  title: '企画一覧・校内マップ',
   desc: `大阪星光学院 SF2026（スクールフェア 2026）の全 ${booths.length} 企画を、校内マップ・検索・階・種類で探せる一覧（Aoristos によるまとめ）。焼きそばなどの飲食、ゲーム、展示、お化け屋敷・ジェットコースターなどのアトラクション。`,
   scripts: '\n  <script src="assets/others.js" defer></script>'
 })}
