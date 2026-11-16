@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LaTeXライター｜Aoristos</title>
+  <meta name="description" content="Aoristos のツール「LaTeXライター」。Word のように書くだけで LaTeX が自動で完成するエディタ。数式・表・図・参照に対応し、複数のプロジェクトをブラウザに保存できます。">
+  <meta name="author" content="Aoristos">
+  <meta name="theme-color" content="#ffffff">
+  <!-- site-meta:start -->
+  <link rel="canonical" href="https://aoristos.net/latex/">
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta property="og:site_name" content="Aoristos">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="LaTeXライター｜Aoristos">
+  <meta property="og:description" content="Aoristos のツール「LaTeXライター」。Word のように書くだけで LaTeX が自動で完成するエディタ。数式・表・図・参照に対応し、複数のプロジェクトをブラウザに保存できます。">
+  <meta property="og:url" content="https://aoristos.net/latex/">
+  <meta property="og:image" content="https://aoristos.net/assets/og-image.jpg">
+  <meta property="og:image:secure_url" content="https://aoristos.net/assets/og-image.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LaTeXライター｜Aoristos">
+  <meta name="twitter:description" content="Aoristos のツール「LaTeXライター」。Word のように書くだけで LaTeX が自動で完成するエディタ。数式・表・図・参照に対応し、複数のプロジェクトをブラウザに保存できます。">
+  <meta name="twitter:image" content="https://aoristos.net/assets/og-image.jpg">
+  <meta name="twitter:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">
+  <!-- site-meta:end -->
+  <link rel="icon" href="../favicon.ico?v=23e911113c" sizes="any">
+  <link rel="icon" href="../assets/favicon.svg?v=18f7d0c58a" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=ff38aa79bb">
+  <link rel="stylesheet" href="../assets/style.css?v=81e7a3624b">
+  <link rel="stylesheet" href="../assets/latex/list.css?v=2912da22cc">
+  <script>
+    window.pageConfig = { currentPage: 'tools', basePath: '../', hideRibbon: true };
+  </script>
+  <script src="../assets/config.js?v=7f6fc3bcb0"></script>
+  <script src="../assets/sheet.js?v=954cc28795" defer></script>
+  <script src="../assets/header.js?v=de22941ae2" defer></script>
+  <script src="../assets/script.js?v=1761404d4f" defer></script>
+  <script src="../assets/latex/projects.js?v=13ea0f396d" defer></script>
+  <script src="../assets/latex/list.js?v=8be86ad12d" defer></script>
+</head>
+<body>
+
+<main id="main" class="band-alt">
+  <header class="page-hero">
+    <div class="container">
+      <p class="eyebrow">ツール</p>
+      <h1 class="page-title">LaTeXライター</h1>
+      <p class="page-lead">Word のように書くだけで、LaTeX が自動で完成するエディタです。<br>数式・表・図・参照に対応。プロジェクトはこのブラウザに保存されます。</p>
+      <p class="lw-actions">
+        <button class="btn" type="button" id="lwNewBlank">白紙から作る</button>
+        <button class="btn btn-ghost" type="button" id="lwNewSample">サンプルから作る</button>
+        <label class="btn btn-ghost lw-file">.tex を読み込む<input type="file" id="lwImport" accept=".tex,.txt,text/plain" hidden></label>
+      </p>
+    </div>
+  </header>
+
+  <div class="container" style="padding-bottom:100px">
+    <h2 class="section-title-sm">プロジェクト</h2>
+    <p class="lw-empty" id="lwEmpty" hidden>まだプロジェクトはありません。上のボタンから作りましょう。</p>
+    <ul class="lw-list" id="lwList"></ul>
+    <p class="info-note" style="margin-top:28px">※ 内容はこの端末のブラウザだけに保存され、ほかの端末とは共有されません。ブラウザのデータを消すと失われるので、大事な文書はエディタの「LaTeXをコピー」やファイルへの保存で控えをとってください。</p>
+  </div>
+</main>
+
+</body>
+</html>

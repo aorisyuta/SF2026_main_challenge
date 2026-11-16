@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LaTeXライター（エディタ）｜Aoristos</title>
+  <meta name="description" content="Word のように書くだけで LaTeX が自動で完成するエディタ。数式・表・図・参照に対応。内容はこのブラウザに保存されます。">
+  <meta name="robots" content="noindex">
+  <meta name="author" content="Aoristos">
+  <meta name="theme-color" content="#ffffff">
+  <!-- site-meta:start -->
+  <link rel="icon" type="image/png" sizes="192x192" href="/assets/icon-192.png">
+  <link rel="manifest" href="/site.webmanifest">
+  <meta property="og:site_name" content="Aoristos">
+  <meta property="og:locale" content="ja_JP">
+  <meta property="og:type" content="article">
+  <meta property="og:title" content="LaTeXライター（エディタ）｜Aoristos">
+  <meta property="og:description" content="Word のように書くだけで LaTeX が自動で完成するエディタ。数式・表・図・参照に対応。内容はこのブラウザに保存されます。">
+  <meta property="og:url" content="https://aoristos.net/latex/editor">
+  <meta property="og:image" content="https://aoristos.net/assets/og-image.jpg">
+  <meta property="og:image:secure_url" content="https://aoristos.net/assets/og-image.jpg">
+  <meta property="og:image:type" content="image/jpeg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="LaTeXライター（エディタ）｜Aoristos">
+  <meta name="twitter:description" content="Word のように書くだけで LaTeX が自動で完成するエディタ。数式・表・図・参照に対応。内容はこのブラウザに保存されます。">
+  <meta name="twitter:image" content="https://aoristos.net/assets/og-image.jpg">
+  <meta name="twitter:image:alt" content="数式や化学式に囲まれて Aoristos と書かれた黒板アート">
+  <!-- site-meta:end -->
+  <link rel="icon" href="../favicon.ico?v=23e911113c" sizes="any">
+  <link rel="icon" href="../assets/favicon.svg?v=18f7d0c58a" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png?v=ff38aa79bb">
+  <link rel="stylesheet" href="../assets/style.css?v=81e7a3624b">
+  <link rel="stylesheet" href="../assets/latex/editor.css?v=c464b0a38f">
+  <script>
+    window.pageConfig = { currentPage: 'tools', basePath: '../', hideRibbon: true, noFooter: true };
+  </script>
+  <script src="../assets/config.js?v=7f6fc3bcb0"></script>
+  <script src="../assets/sheet.js?v=954cc28795" defer></script>
+  <script src="../assets/header.js?v=de22941ae2" defer></script>
+  <script src="../assets/latex/projects.js?v=13ea0f396d" defer></script>
+  <script src="../assets/latex/editor.js?v=4a1960173a" defer></script>
+</head>
+<body class="lw" data-view="split">
+<!-- エディタ本体：assets/latex/editor.js / editor.css（元は単体の「TeXノート」）。?id=プロジェクトID で開く -->
+<header class="topbar">
+  <a class="back" href="index.html" title="プロジェクト一覧へ"><span aria-hidden="true">‹</span>プロジェクト</a>
+  <div class="brand"><span class="logo">∑</span><b>LaTeXライター</b></div>
+  <div class="docname"><input id="docName" aria-label="ファイル名" spellcheck="false"><span>.tex</span></div>
+  <nav class="menubar" id="menubar" aria-label="メニュー"></nav>
+  <div class="spacer"></div>
+  <div class="actions">
+    <button class="btn primary" id="btnCopy" title="完成した LaTeX をクリップボードへ"><span>⧉</span><span class="lbl">LaTeXをコピー</span></button>
+  </div>
+  <div hidden>
+    <button id="btnNew"></button><button id="btnSettings"></button><button id="btnHelp"></button>
+    <input type="file" id="fileOpen" accept=".tex,.txt,text/plain">
+    <button id="btnDownload" hidden></button><button id="btnExport" hidden></button>
+  </div>
+</header>
+<nav class="toolbar" aria-label="よく使う操作">
+  <button class="tb icon" data-tb="undo" title="元に戻す（Ctrl+Z）">↶</button>
+  <button class="tb icon" data-tb="redo" title="やり直し（Ctrl+Y）">↷</button>
+  <span class="tsep"></span>
+  <select id="styleSel" class="tb sel" title="段落スタイル" aria-label="段落スタイル">
+    <option value="p">本文</option><option value="h2">見出し 1</option><option value="h3">見出し 2</option><option value="h4">見出し 3</option>
+  </select>
+  <button class="tb icon" id="tbB" data-tb="bold" title="太字（Ctrl+B）"><b>B</b></button>
+  <button class="tb icon" id="tbI" data-tb="italic" title="斜体・強調（Ctrl+I）"><i style="font-family:serif">I</i></button>
+  <button class="tb icon" id="tbU" data-tb="underline" title="下線（Ctrl+U）"><u>U</u></button>
+  <button class="tb icon" id="tbUl" data-tb="ul" title="箇条書き（- と Space）">•≡</button>
+  <button class="tb icon" id="tbOl" data-tb="ol" title="番号付きリスト（1. と Space）">1≡</button>
+  <span class="tsep"></span>
+  <button class="tb math" data-tb="mInline" title="数式（$ または Ctrl+M）"><span class="ico">∑</span>数式</button>
+  <button class="tb" data-tb="mEquation" title="番号付きの数式（別行・複数行は［挿入］メニュー）"><span class="ico">(1)</span>番号付き</button>
+  <button class="tb" data-tb="table" title="表を挿入">▦ 表</button>
+  <button class="tb" data-tb="figure" title="図を挿入">🖼 図</button>
+  <button class="tb" data-tb="ref" title="式・節・図・表を参照">↗ 参照</button>
+  <span id="tblGroup" class="tgroup" hidden>
+    <span class="tsep"></span>
+    <button class="tb" data-tb="addRow" title="下に行を追加">＋行</button>
+    <button class="tb" data-tb="addCol" title="右に列を追加">＋列</button>
+    <button class="tb" data-tb="delRow" title="この行を削除">−行</button>
+    <button class="tb" data-tb="delCol" title="この列を削除">−列</button>
+  </span>
+  <span class="grow"></span>
+  <span class="seg views" role="tablist" aria-label="表示"><button data-view="edit">編集</button><button data-view="split">編集＋LaTeX</button><button data-view="tex">LaTeX</button></span>
+</nav>
+<main class="split" id="split">
+  <section class="pane editpane">
+    <div class="prevscroll" id="pscroll">
+      <div class="welcome" id="welcome" hidden>
+        <button class="btn ghost icon x" title="閉じる">✕</button>
+        <b>Word と同じように書くだけ。</b>LaTeX はいっさい書かなくても、右側に完成した LaTeX が自動でできあがります。
+        数式は <kbd>$</kbd> を押して <b>GeoGebra と同じ感覚</b>で（<code>1/2</code> で分数、<code>x^2</code> で指数、<code>alpha</code> で α）。
+        <code>#</code>+Space で見出し、<code>-</code>+Space で箇条書き。右の LaTeX を直接書き換えても左に反映されます。
+      </div>
+      <article class="page" id="page">
+        <div class="titleblock" contenteditable="false">
+          <div class="t-title" data-f="title" contenteditable="true" data-ph="タイトル"></div>
+          <div class="t-author" data-f="author" contenteditable="true" data-ph="著者"></div>
+          <div class="t-date" data-f="date" contenteditable="true" data-ph="日付"></div>
+        </div>
+        <div id="wys" contenteditable="true" spellcheck="false" aria-label="本文"></div>
+      </article>
+    </div>
+    <div class="status"><span id="stInfo"></span><span class="grow"></span><span id="stSave"></span></div>
+  </section>
+  <div class="gutter" id="gutter" title="ドラッグで幅を変更"></div>
+  <section class="pane src">
+    <div class="pane-h"><b>LaTeX</b><span class="muted">自動で生成・ここを直接編集してもOK</span><span class="grow"></span><span id="stPos"></span><button id="stEdit" hidden>✎ 数式を編集 <kbd>Ctrl+M</kbd></button></div>
+    <div class="code"><pre id="hl" aria-hidden="true"></pre><textarea id="src" spellcheck="false" aria-label="LaTeX ソース" autocapitalize="off" autocomplete="off"></textarea></div>
+  </section>
+</main>
+
+<div class="mp" id="mp" hidden role="dialog" aria-modal="true" aria-labelledby="mpTitle">
+  <div class="mp-card">
+    <div class="mp-head">
+      <span class="ttl" id="mpTitle">数式を入力</span>
+      <div class="seg" id="mpMode" role="tablist" aria-label="数式の種類"></div>
+      <label class="mp-label" id="mpLabelWrap" hidden>ラベル <input id="mpLabel" spellcheck="false"></label>
+      <label class="mp-label" id="mpNumWrap" hidden><input type="checkbox" id="mpNum" checked> 式番号</label>
+      <span class="spacer"></span>
+      <button class="btn" id="mpCancel">キャンセル <kbd>Esc</kbd></button>
+      <button class="btn primary" id="mpOk">挿入 <kbd>Enter</kbd></button>
+    </div>
+    <div class="mp-fieldwrap"><div id="mpField"></div></div>
+    <div class="mp-under"><div class="mp-sugg" id="mpSugg"></div><div class="mp-hint" id="mpHint"></div></div>
+    <div class="mp-tex"><label for="mpTex">LaTeX</label><input id="mpTex" spellcheck="false" autocapitalize="off" autocomplete="off"><button class="btn" id="mpTexCopy">コピー</button><button class="btn icon" id="kbToggle" title="画面キーボードの表示切替">⌨</button></div>
+    <div class="kb" id="kb"><div class="kb-tabs" id="kbTabs"></div><div class="kb-keys" id="kbKeys"></div></div>
+  </div>
+</div>
+<div class="modal" id="modal" hidden><div class="modal-card"></div></div>
+<div class="pop" id="pop" hidden></div>
+<div class="toast" id="toast" role="status"></div>
+</body>
+</html>

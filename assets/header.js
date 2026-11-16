@@ -1,7 +1,7 @@
 /*
   header.js — 共通のナビゲーション・お知らせリボン・フッターを生成する
   各ページで window.pageConfig を定義してから defer で読み込む。
-    currentPage: index / about / members / goods / sf / projects / timetable / others / info / blog / games / archive
+    currentPage: index / about / members / goods / tools / sf / projects / timetable / others / info / blog / games / archive
                  （sf・projects・timetable・others・info は SF2026 のページ。アーカイブの中として扱い、上部にサブメニューが出る）
     basePath:    サブフォルダのページは '../'
     title:       タブに出るタイトル（省略時は既存の <title>）
@@ -22,6 +22,7 @@
     { key: 'goods', href: 'goods.html', label: 'グッズ' },
     { key: 'blog', href: 'blog.html', label: 'お知らせ' },
     { key: 'games', href: 'games/index.html', label: 'ゲーム' },
+    { key: 'tools', href: 'latex/index.html', label: 'ツール' },
     { key: 'archive', href: 'archive/index.html', label: 'アーカイブ' }
   ];
   // SF2026 のページ（開催後は「アーカイブ」の中のページとして扱う）
