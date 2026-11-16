@@ -136,7 +136,7 @@ function pageTemplate(project, d) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${title}｜Aoristos — 星光 SF2026</title>
+  <title>${title}｜星光 SF2026｜Aoristos</title>
   <meta name="description" content="${metaDescription}">
   <meta name="author" content="Aoristos">
   <meta name="theme-color" content="#ffffff">

@@ -29,7 +29,7 @@
   }
 
   function render(p, root) {
-    document.title = p.title + '｜Aoristos — 星光 SF2026';
+    document.title = p.title + '｜星光 SF2026｜Aoristos';
     var cat = window.SFProjects ? window.SFProjects.categoryClass(p.category) : '';
 
     var hero = el('header', 'page-hero page-hero-left');

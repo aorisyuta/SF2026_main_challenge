@@ -1230,3 +1230,15 @@ a.tagchart-row:hover { text-decoration: none; }
   .nv-next { grid-column: auto; }
   .nv-doc { font-size: 13.5px; padding: .9em 1em; }
 }
+
+/* ---------- 主な活動（分類ごと） ---------- */
+.act-groups { display: grid; gap: 28px; margin-top: 8px; }
+.act-group h3 { font-size: 14px; font-weight: 700; color: var(--ink-2); letter-spacing: .04em; margin-bottom: 10px; }
+.act-group .sf-all { margin-top: 0; }
+.info-grid .act-groups { margin-top: 0; }
+.info-grid .act-group .sf-all { grid-template-columns: 1fr 1fr; }
+@media (max-width: 833px) { .info-grid .act-group .sf-all { grid-template-columns: 1fr; } }
+/* 画像のないお知らせ：空の灰色ではなく、ロゴを薄く表示 */
+.news-noimg { background: var(--bg-alt) url("aoristos-mark.svg") center / 52% no-repeat; opacity: .9; }
+.post-cover.noimg { background: var(--bg-alt) url("aoristos-mark.svg") center / 34% no-repeat; }
+.post-cover.noimg svg { display: none; }

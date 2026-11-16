@@ -19,10 +19,10 @@
   var NAV = [
     { key: 'about', href: 'about.html', label: 'Aoristos とは' },
     { key: 'members', href: 'members.html', label: 'メンバー' },
-    { key: 'goods', href: 'goods.html', label: 'グッズ' },
     { key: 'blog', href: 'blog.html', label: 'お知らせ' },
     { key: 'games', href: 'games/index.html', label: 'ゲーム' },
     { key: 'tools', href: 'latex/index.html', label: 'ツール' },
+    { key: 'goods', href: 'goods.html', label: 'グッズ' },
     { key: 'archive', href: 'archive/index.html', label: 'アーカイブ' }
   ];
   // SF2026 のページ（開催後は「アーカイブ」の中のページとして扱う）
@@ -132,7 +132,7 @@
           '<div class="footer-brand">' +
             '<img class="footer-logo" src="' + base + 'assets/aoristos-mark.svg" alt="" width="54" height="28">' +
             '<div><p class="footer-theme">Aoristos</p>' +
-            '<p class="footer-event">大阪星光学院の生徒による探究団体<br>' + esc(CFG.eventName) + '「' + esc(CFG.theme) + '」出展：' + esc(dateLine()) + '</p></div>' +
+            '<p class="footer-event">大阪星光学院の生徒による探究団体</p></div>' +
           '</div>' +
           '<div class="footer-cols">' +
             '<div><h2>サイト</h2><ul>' +

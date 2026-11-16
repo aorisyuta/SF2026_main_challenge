@@ -219,7 +219,7 @@ function head(o) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${o.title}｜Aoristos — 星光 SF2026</title>
+  <title>${o.title}｜星光 SF2026｜Aoristos</title>
   <meta name="description" content="${esc(o.desc)}">
   <meta name="author" content="Aoristos">
   <meta name="theme-color" content="#ffffff">

@@ -80,7 +80,7 @@
     }
 
     var p = posts[index];
-    document.title = p.title + ' — Aoristos お知らせ';
+    document.title = p.title + '｜お知らせ｜Aoristos';
     var meta = document.querySelector('meta[name="description"]');
     if (meta && p.text) meta.setAttribute('content', p.text);
 
