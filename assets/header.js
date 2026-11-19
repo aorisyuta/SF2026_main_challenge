@@ -81,6 +81,12 @@
           '<nav class="gnav-nav" id="gnavNav" aria-label="メイン">' +
             '<ul>' + links + '</ul>' +
           '</nav>' +
+          // 広い画面のサイドバーだけに出す（ボタンとひとこと）
+          '<div class="gnav-side">' +
+            '<a class="gnav-cta" href="https://x.com/Team_Aoristos" target="_blank" rel="noopener noreferrer">X でフォロー</a>' +
+            '<p class="gnav-catch">問いに、<br>境界はない。</p>' +
+            '<p class="gnav-desc">学校や学年を越えた、<br>中学生・高校生の探究団体。<br>支部 4・班 2</p>' +
+          '</div>' +
           '<button class="gnav-search" id="gnavSearch" type="button" aria-label="サイト内を検索" title="サイト内を検索（/）">' +
             '<svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></svg>' +
           '</button>' +

@@ -33,109 +33,142 @@
   <link rel="icon" href="favicon.ico?v=23e911113c" sizes="any">
   <link rel="icon" href="assets/favicon.svg?v=18f7d0c58a" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=ff38aa79bb">
-  <link rel="stylesheet" href="assets/style.css?v=95a2c2c080">
+  <link rel="stylesheet" href="assets/style.css?v=593be19254">
   <script>
     window.pageConfig = { currentPage: 'index', basePath: '', hideRibbon: true };
   </script>
   <script src="assets/config.js?v=0db5806114"></script>
   <script src="assets/sheet.js?v=f63129ba7d" defer></script>
-  <script src="assets/header.js?v=743831596f" defer></script>
+  <script src="assets/header.js?v=33367938d3" defer></script>
   <script src="assets/script.js?v=1761404d4f" defer></script>
   <script src="assets/home.js?v=aa19ab117c" defer></script>
 </head>
 <body>
 
-<main id="main" class="nb-home">
+<main id="main" class="tp-home">
 
-  <section class="nb-hero" aria-labelledby="heroTitle">
-    <div class="container nb-hero-grid">
-      <div class="nb-hero-main">
-        <p class="nb-label">中学生・高校生の探究団体</p>
-        <h1 class="nb-wordmark" id="heroTitle"><img src="assets/aoristos-mark.svg" alt="" width="92" height="48">Aoristos</h1>
-        <p class="nb-hero-lead">積分のゲーム、無機化学のパズル、LaTeX のエディタ、物理チャレンジの背景解説。ここに並んでいるのは、メンバーが自分の問いから作ったものです。</p>
-        <p class="nb-hero-nav">
-          <a href="about.html">Aoristos とは</a>
-          <a href="organization.html">組織と運営</a>
-          <a href="members.html">メンバー</a>
-          <a href="https://x.com/Team_Aoristos" target="_blank" rel="noopener noreferrer">X @Team_Aoristos</a>
-          <a href="https://www.instagram.com/team_aoristos/" target="_blank" rel="noopener noreferrer">Instagram</a>
-        </p>
-      </div>
-      <aside class="nb-entry" aria-label="名前について">
-        <p class="nb-entry-head"><b>aoristos</b><span lang="grc">ἀόριστος</span></p>
-        <p class="nb-entry-pos">古代ギリシア語・形容詞</p>
-        <ol>
-          <li>境界のない。定まっていない。</li>
-          <li>〔文法〕アオリスト。出来事の長さや途中経過を問わず、ひとまとまりの出来事として表す動詞の形。</li>
-        </ol>
-      </aside>
+  <section class="tp-hero" aria-labelledby="heroTitle">
+    <img src="assets/blackboard-art.webp" srcset="assets/blackboard-art-640.webp 640w, assets/blackboard-art.webp 1280w" sizes="100vw" width="1280" height="720" alt="" decoding="async" fetchpriority="high">
+    <div class="tp-hero-text">
+      <p class="tp-hero-kicker">中学生・高校生の探究団体 Aoristos</p>
+      <h1 class="tp-hero-title" id="heroTitle">問いに、<br>境界はない。</h1>
+      <p class="tp-hero-lead">積分のゲーム、無機化学のパズル、LaTeX のエディタ、物理チャレンジの背景解説。<br>メンバーが自分の問いから作ったものを公開しています。</p>
+      <a class="tp-hero-btn" href="#works">つくったものを見る</a>
     </div>
-    <div class="container">
-      <dl class="nb-count" aria-label="いまの Aoristos">
-        <div><dt>支部</dt><dd>4</dd></div>
-        <div><dt>班</dt><dd>2</dd></div>
-        <div><dt>ゲーム</dt><dd>3</dd></div>
-        <div><dt>ツール</dt><dd>1</dd></div>
-        <div><dt>解説</dt><dd>1</dd></div>
-      </dl>
-    </div>
+    <p class="tp-hero-side" aria-hidden="true">MATHEMATICS<br>×<br>PHYSICS<br>×<br>CHEMISTRY</p>
   </section>
 
-  <!-- 最新のお知らせ（公開中の記事があるときだけ表示） -->
-  <section class="band" id="latestSection" aria-labelledby="latestTitle" hidden>
-    <div class="container">
-      <div class="nb-head">
-        <h2 class="nb-h2" id="latestTitle">お知らせ</h2>
-        <a href="blog.html">すべて見る</a>
-      </div>
-      <ul class="news-list" id="latestPosts"></ul>
-    </div>
-  </section>
-
-  <section class="band" id="activities" aria-labelledby="actTitle">
-    <div class="container">
-      <div class="nb-head">
-        <h2 class="nb-h2" id="actTitle">つくったもの</h2>
+  <section class="tp-sec" id="works" aria-labelledby="worksTitle">
+    <div class="tp-head">
+      <div>
+        <p class="tp-en">WORKS</p>
+        <h2 class="tp-h2" id="worksTitle">つくったもの</h2>
         <p>ブラウザでそのまま使えます。登録はいりません。</p>
       </div>
-      <ol class="nb-index">
-        <li><a href="games/integral-reels.html"><span class="nb-no">01</span><strong>積分リール</strong><em>ゲーム</em><span class="nb-desc">不定積分をスワイプで次々に解く。答えは式で入力し、定数の差は正解として扱う。</span></a></li>
-        <li><a href="games/inorganic-lab.html"><span class="nb-no">02</span><strong>無機変換ラボ</strong><em>ゲーム</em><span class="nb-desc">ビーカーに試薬を加えて、出発物質を目標の物質に変える。授業プリントの範囲に沿った無機化学のパズル。</span></a></li>
-        <li><a href="games/make-it.html"><span class="nb-no">03</span><strong>数字をつくれ</strong><em>ゲーム</em><span class="nb-desc">配られたカードを ＋ − × ÷ で組み合わせて、目標の数をつくる。</span></a></li>
-        <li><a href="latex/index.html"><span class="nb-no">04</span><strong>LaTeXライター</strong><em>ツール</em><span class="nb-desc">Word のように書くと、そのまま LaTeX になるエディタ。プロジェクトはブラウザに保存される。</span></a></li>
-        <li><a href="projects/aoristos-bushi-pre.html"><span class="nb-no">05</span><strong>物理チャレンジ 2026 背景解説</strong><em>解説</em><span class="nb-desc">第2チャレンジ理論問題の裏にある物理・歴史・発展。部誌の先行公開（PDF）。</span></a></li>
-      </ol>
+      <a class="tp-more" href="games/index.html">ゲームの一覧を見る</a>
+    </div>
+    <div class="tp-cards">
+        <a class="tp-card" href="games/integral-reels.html">
+          <span class="tp-card-art is-1" aria-hidden="true"><span class="tp-art-fx">∫ <i>x</i> e<sup><i>x</i></sup> d<i>x</i></span><small>GAME 01</small></span>
+          <span class="tp-card-body">
+            <span class="tp-tag">ゲーム</span>
+            <h3>積分リール</h3>
+            <p>不定積分をスワイプで次々に解く。答えは式で入力し、定数の差は正解として扱います。</p>
+            <span class="tp-go">詳しく見る</span>
+          </span>
+        </a>
+        <a class="tp-card" href="games/inorganic-lab.html">
+          <span class="tp-card-art is-2" aria-hidden="true"><span class="tp-art-fx">Cu<sup>2+</sup> ⇌</span><small>GAME 02</small></span>
+          <span class="tp-card-body">
+            <span class="tp-tag">ゲーム</span>
+            <h3>無機変換ラボ</h3>
+            <p>ビーカーに試薬を加えて、出発物質を目標の物質に変える無機化学のパズル。</p>
+            <span class="tp-go">詳しく見る</span>
+          </span>
+        </a>
+        <a class="tp-card" href="games/make-it.html">
+          <span class="tp-card-art is-3" aria-hidden="true"><span class="tp-art-fx">3 8 3 8 → 24</span><small>GAME 03</small></span>
+          <span class="tp-card-body">
+            <span class="tp-tag">ゲーム</span>
+            <h3>数字をつくれ</h3>
+            <p>配られたカードを ＋ − × ÷ で組み合わせて、目標の数をつくります。</p>
+            <span class="tp-go">詳しく見る</span>
+          </span>
+        </a>
+        <a class="tp-card" href="latex/index.html">
+          <span class="tp-card-art is-4" aria-hidden="true"><span class="tp-art-fx">\TeX</span><small>TOOL</small></span>
+          <span class="tp-card-body">
+            <span class="tp-tag">ツール</span>
+            <h3>LaTeXライター</h3>
+            <p>Word のように書くと、そのまま LaTeX になるエディタ。プロジェクトはブラウザに保存されます。</p>
+            <span class="tp-go">詳しく見る</span>
+          </span>
+        </a>
+        <a class="tp-card" href="projects/aoristos-bushi-pre.html">
+          <span class="tp-card-art is-5" aria-hidden="true"><span class="tp-art-fx">PDF</span><small>COMMENTARY</small></span>
+          <span class="tp-card-body">
+            <span class="tp-tag">解説</span>
+            <h3>物理チャレンジ 2026 背景解説</h3>
+            <p>第2チャレンジ理論問題の裏にある物理・歴史・発展。部誌の先行公開です。</p>
+            <span class="tp-go">詳しく見る</span>
+          </span>
+        </a>
     </div>
   </section>
 
-  <section class="band nb-org" aria-labelledby="orgTitle">
-    <div class="container nb-org-grid">
-      <div class="nb-head">
-        <h2 class="nb-h2" id="orgTitle">どこで活動しているか</h2>
-      </div>
+  <section class="tp-sec tp-light" id="about" aria-labelledby="aboutTitle">
+    <div class="tp-head">
       <div>
-        <p>本部は Discord の上にあって、決まった部屋はありません。その下に地域ごとの支部、さらに学校ごとの班があります。学校や学年は問いません。</p>
-        <ul class="nb-branches">
-          <li><b>大阪支部</b><a href="teams/hoshinohikari.html">星の光班</a></li>
-          <li><b>兵庫支部</b><span>灘班</span></li>
-          <li><b>滋賀支部</b></li>
-          <li><b>奈良支部</b></li>
-        </ul>
-        <p class="nb-more"><a href="organization.html">組織と運営のルール</a>　<a href="members.html">メンバー</a></p>
+        <p class="tp-en">ABOUT</p>
+        <h2 class="tp-h2" id="aboutTitle">Aoristos について</h2>
+        <p>学校や学年を問わず、誰でも参加できる探究団体です。</p>
       </div>
+      <a class="tp-more" href="about.html">Aoristos とは</a>
     </div>
+    <ol class="tp-points">
+      <li><b>01</b><h3>一人ひとりの問いから</h3><p>全員で同じ課題に取り組むのではなく、メンバーそれぞれが自分の問いを見つけ、自分のペースで探究を進めています。</p></li>
+      <li><b>02</b><h3>学校をまたいで</h3><p>本部は Discord の上にあり、決まった部屋はありません。地域ごとの支部と、学校ごとの班で活動しています。</p></li>
+      <li><b>03</b><h3>名前の意味</h3><p><span lang="grc">ἀόριστος</span>（アオリストス）は古代ギリシア語で「境界のない」「定まっていない」。文法用語のアオリストでもあります。</p></li>
+    </ol>
   </section>
 
-  <section class="band nb-board" aria-label="黒板">
-    <div class="container">
-      <figure>
-        <img src="assets/blackboard-art.webp"
-             srcset="assets/blackboard-art-640.webp 640w, assets/blackboard-art.webp 1280w"
-             sizes="(max-width: 833px) 100vw, 760px"
-             width="1280" height="720" alt="数式や化学式に囲まれて Aoristos と書かれた黒板アート"
-             loading="lazy" decoding="async">
-        <figcaption>黒板アート。数式と化学式のすき間に、Aoristos。</figcaption>
-      </figure>
+  <section class="tp-sec" id="organization" aria-labelledby="orgTitle">
+    <div class="tp-head">
+      <div>
+        <p class="tp-en">ORGANIZATION</p>
+        <h2 class="tp-h2" id="orgTitle">支部と班</h2>
+      </div>
+      <a class="tp-more" href="organization.html">組織と運営のルール</a>
+    </div>
+    <table class="tp-org">
+      <tr><th scope="row">大阪支部</th><td><a href="teams/hoshinohikari.html">星の光班</a></td></tr>
+      <tr><th scope="row">兵庫支部</th><td><span>灘班</span></td></tr>
+      <tr><th scope="row">滋賀支部</th><td><em>—</em></td></tr>
+      <tr><th scope="row">奈良支部</th><td><em>—</em></td></tr>
+    </table>
+  </section>
+
+  <section class="tp-sec tp-light" id="latestSection" aria-labelledby="latestTitle" hidden>
+    <div class="tp-head">
+      <div>
+        <p class="tp-en">NEWS</p>
+        <h2 class="tp-h2" id="latestTitle">お知らせ</h2>
+      </div>
+      <a class="tp-more" href="blog.html">お知らせ一覧</a>
+    </div>
+    <ul class="news-list" id="latestPosts"></ul>
+  </section>
+
+  <section class="tp-cta" aria-labelledby="followTitle">
+    <img src="assets/blackboard-art-640.webp" width="640" height="360" alt="" loading="lazy" decoding="async">
+    <div>
+      <p class="tp-en">FOLLOW</p>
+      <h2 class="tp-h2" id="followTitle">活動の様子は、X と Instagram で。</h2>
+      <p>新しいゲームや解説を公開したときも、こちらでお知らせします。</p>
+      <p class="tp-cta-btns">
+        <a href="https://x.com/Team_Aoristos" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.75 3h3.07l-6.7 7.66L22 21h-6.17l-4.83-6.32L5.47 21H2.4l7.17-8.2L2 3h6.32l4.37 5.78L17.75 3Zm-1.08 16.18h1.7L7.4 4.73H5.58l11.09 14.45Z"/></svg>@Team_Aoristos</a>
+        <a class="is-inverse" href="https://www.instagram.com/team_aoristos/" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 7.2a4.8 4.8 0 1 0 0 9.6 4.8 4.8 0 0 0 0-9.6Zm0 7.9a3.1 3.1 0 1 1 0-6.2 3.1 3.1 0 0 1 0 6.2Zm6.1-8.1a1.1 1.1 0 1 1-2.2 0 1.1 1.1 0 0 1 2.2 0ZM12 3.6c2.7 0 3 0 4.1.1 2.7.1 4 1.4 4.1 4.1.1 1.1.1 1.4.1 4.1s0 3-.1 4.1c-.1 2.7-1.4 4-4.1 4.1-1.1.1-1.4.1-4.1.1s-3 0-4.1-.1c-2.7-.1-4-1.4-4.1-4.1C3.7 15 3.6 14.7 3.6 12s0-3 .1-4.1c.1-2.7 1.4-4 4.1-4.1 1.1-.1 1.4-.2 4.2-.2ZM12 2c-2.7 0-3.1 0-4.2.1C4.2 2.2 2.2 4.2 2.1 7.8 2 8.9 2 9.3 2 12s0 3.1.1 4.2c.1 3.6 2.1 5.6 5.7 5.7 1.1.1 1.5.1 4.2.1s3.1 0 4.2-.1c3.6-.1 5.6-2.1 5.7-5.7.1-1.1.1-1.5.1-4.2s0-3.1-.1-4.2c-.1-3.6-2.1-5.6-5.7-5.7C15.1 2 14.7 2 12 2Z"/></svg>@team_aoristos</a>
+      </p>
     </div>
   </section>
 
