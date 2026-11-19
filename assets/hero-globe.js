@@ -11,7 +11,7 @@
   var ctx = cv.getContext('2d');
   var WORD = 'AORISTOS✦AORISTOS✦'.split('');   // 輪を一周するように 2 回くり返す
   var TILT = 23.4 * Math.PI / 180;      // 地軸の傾き（北極が右へ）。AX と合わせて「右向こう側」に倒れる
-  var AX = .3;                          // 地軸の北極を向こう側へ倒す角（文字の輪も同じ角で傾く＝赤道と平行）
+  var AX = 5 * Math.PI / 180;           // 地軸の北極を向こう側へ倒す角（5°）（文字の輪も同じ角で傾く＝赤道と平行）
   var STEP = 2 * Math.PI / WORD.length;  // 文字の間隔（一周を等分）
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var W = 0, H = 0, DPR = 1, spin = 0, ring = 0, dragging = false, lastX = 0, last = 0;
