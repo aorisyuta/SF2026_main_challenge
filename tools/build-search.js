@@ -40,6 +40,7 @@ function section(u) {
   if (/^(sf|projects|timetable|info|others|others-list)\.html$|^projects\//.test(u)) return 'SF2026（アーカイブ）';
   if (u.startsWith('games/')) return 'ゲーム';
   if (u.startsWith('latex/')) return 'ツール';
+  if (u.startsWith('teams/') || u === 'organization.html') return '組織';
   if (u.startsWith('sodpion/') || u === 'members.html') return 'メンバー';
   if (u.startsWith('blog')) return 'お知らせ';
   if (u.startsWith('archive/')) return 'アーカイブ';
@@ -51,7 +52,7 @@ for (const rel of listHtml()) {
   const html = fs.readFileSync(path.join(ROOT, rel), 'utf8');
   if (/<meta name="robots" content="[^"]*noindex/i.test(html)) continue;
   const title = decode((html.match(/<title>([^<]*)<\/title>/i) || [])[1] || rel)
-    .replace(/｜Aoristos — 探究団体$/, '').replace(/｜(SF2026|ゲーム|ツール|メンバー)?｜?Aoristos$/, '').replace(/｜Aoristos$/, '').trim();
+    .replace(/｜Aoristos — 探究団体$/, '').replace(/｜(SF2026|ゲーム|ツール|メンバー|大阪支部)?｜?Aoristos$/, '').replace(/｜Aoristos$/, '').trim();
   const t2 = rel === 'index.html' ? 'ホーム（Aoristos 公式サイト）' : title.replace(/｜sodpion$/, '');
   const main = (html.match(/<main\b[\s\S]*<\/main>/i) || html.match(/<body\b[\s\S]*<\/body>/i) || [''])[0];
   const heads = [...main.matchAll(/<h[1-4]\b[^>]*>([\s\S]*?)<\/h[1-4]>/gi)].map(m => text(m[1])).filter(Boolean);

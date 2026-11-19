@@ -1,7 +1,7 @@
 /*
   header.js — 共通のナビゲーション・お知らせリボン・フッターを生成する
   各ページで window.pageConfig を定義してから defer で読み込む。
-    currentPage: index / about / members / tools / sf / projects / timetable / others / info / blog / games / archive
+    currentPage: index / about / organization（teams/ も） / members / tools / sf / projects / timetable / others / info / blog / games / archive
                  （sf・projects・timetable・others・info は SF2026 のページ。上部にサブメニューが出る）
     basePath:    サブフォルダのページは '../'
     title:       タブに出るタイトル（省略時は既存の <title>）
@@ -17,6 +17,7 @@
   // サイト全体（Aoristos 公式サイト）のメニュー
   var NAV = [
     { key: 'about', href: 'about.html', label: 'Aoristos とは' },
+    { key: 'organization', href: 'organization.html', label: '組織' },
     { key: 'members', href: 'members.html', label: 'メンバー' },
     { key: 'blog', href: 'blog.html', label: 'お知らせ' },
     { key: 'games', href: 'games/index.html', label: 'ゲーム' },
@@ -40,7 +41,7 @@
   function subNav() {
     return '<nav class="subnav" aria-label="SF2026">' +
       '<div class="subnav-inner">' +
-        '<p class="subnav-title"><a href="' + base + 'sf.html">SF2026<small>「' + esc(CFG.theme || '') + '」</small></a></p>' +
+        '<p class="subnav-title"><a class="subnav-arch" href="' + base + 'teams/hoshinohikari.html">星の光班</a><span class="subnav-sep" aria-hidden="true">/</span><a href="' + base + 'sf.html">SF2026<small>「' + esc(CFG.theme || '') + '」</small></a></p>' +
         '<ul>' + SF_NAV.map(function (n) {
           var cur = page.currentPage === n.key;
           return '<li><a href="' + base + n.href + '"' + (cur ? ' aria-current="page"' : '') + '><span class="sn-l">' + n.label + '</span><span class="sn-s">' + (n.short || n.label) + '</span></a></li>';
@@ -139,7 +140,7 @@
               '<li><a href="' + base + 'index.html">ホーム</a></li>' +
               NAV.map(function (n) { return '<li><a href="' + base + n.href + '">' + n.label + '</a></li>'; }).join('') +
             '</ul></div>' +
-            '<div><h2>SF2026（アーカイブ）</h2><ul>' +
+            '<div><h2>星の光班 SF2026</h2><ul>' +
               SF_NAV.map(function (n) { return '<li><a href="' + base + n.href + '">' + n.label + '</a></li>'; }).join('') +
               (CFG.officialUrl ? '<li><a href="' + esc(CFG.officialUrl) + '" target="_blank" rel="noopener noreferrer">SF 公式サイト</a></li>' : '') +
             '</ul></div>' +

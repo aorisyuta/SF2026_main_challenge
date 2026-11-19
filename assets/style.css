@@ -1264,3 +1264,32 @@ html.srch-open { overflow: hidden; }
 .srch-item mark { background: #fff2b3; color: inherit; border-radius: 2px; }
 .srch-hint { padding: 16px 12px; font-size: 14px; color: var(--ink-2); }
 @media (max-width: 599px) { .srch { padding: 0; } .srch-panel { max-height: 100%; height: 100%; border-radius: 0; } }
+
+/* ---------- 組織と運営（organization.html）・班のページ（teams/） ---------- */
+.org-chart { display: grid; grid-template-columns: minmax(180px, 220px) 1fr; gap: 0 36px; align-items: start; }
+.org-hq, .org-box { border: 2px solid var(--ink); border-radius: 10px; padding: 14px 18px; background: var(--bg); }
+.org-role { font-size: 12px; color: var(--link); font-weight: 600; letter-spacing: .04em; }
+.org-name { font-size: 20px; font-weight: 700; line-height: 1.35; }
+.org-sub { font-size: 12px; color: var(--ink-2); margin-top: 4px; line-height: 1.5; }
+.org-branches { list-style: none; margin: 0; padding: 0 0 0 28px; border-left: 2px solid var(--ink); display: grid; gap: 18px; position: relative; }
+.org-branch { position: relative; display: flex; flex-wrap: wrap; align-items: center; gap: 10px 22px; }
+.org-branch::before { content: ""; position: absolute; left: -28px; top: 30px; width: 28px; border-top: 2px solid var(--ink); }
+.org-branch .org-box { min-width: 160px; }
+.org-more { font-size: 20px; color: var(--ink-2); padding: 4px 0 0 8px; }
+.org-more::before { top: 18px; }
+.org-teams { list-style: none; margin: 0; padding: 0 0 0 18px; border-left: 2px solid var(--line); display: grid; gap: 6px; }
+.org-teams a { display: inline-block; font-weight: 600; padding: 4px 12px; border-radius: 999px; background: var(--bg-alt); color: var(--ink); text-decoration: none; }
+.org-teams a:hover { background: var(--line); }
+.org-votes { margin-top: 24px; border-collapse: collapse; width: 100%; max-width: 520px; font-size: 15px; }
+.org-votes caption { text-align: left; font-size: 13px; color: var(--ink-2); padding-bottom: 8px; }
+.org-votes th, .org-votes td { border-bottom: 1px solid var(--line); padding: 10px 12px; text-align: left; font-weight: 400; }
+.org-votes thead th { font-size: 13px; color: var(--ink-2); font-weight: 600; }
+.org-votes td { text-align: right; font-weight: 700; white-space: nowrap; }
+.team-crumb { font-size: 13px; color: var(--ink-2); margin-bottom: 10px; }
+.team-crumb a { color: inherit; }
+.team-crumb span { margin: 0 6px; }
+@media (max-width: 833px) {
+  .org-chart { grid-template-columns: 1fr; gap: 0; }
+  .org-hq { margin-bottom: 0; }
+  .org-branches { margin-left: 24px; padding-top: 18px; }
+}
