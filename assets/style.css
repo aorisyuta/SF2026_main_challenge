@@ -773,7 +773,6 @@ html.has-promo .site-footer { padding-bottom: calc(64px + env(safe-area-inset-bo
   width: 100%; padding: 12px 14px; border: 0; border-radius: 10px; background: var(--bg-alt); cursor: pointer;
   transition: background-color .2s;
 }
-.bldg-floor:hover { background: #e8e8ed; text-decoration: none; }
 a.bldg-floor, a.tagchart-row { color: var(--ink); }
 a.tagchart-row:hover { text-decoration: none; }
 .bldg-floor.has-aor { box-shadow: inset 0 0 0 2px var(--cat-a); }
@@ -790,8 +789,7 @@ a.tagchart-row:hover { text-decoration: none; }
 
 /* 図3：種類別 */
 .tagchart { display: flex; flex-direction: column; gap: 4px; }
-.tagchart-row { display: grid; grid-template-columns: 7.5em 1fr 2.2em; gap: 10px; align-items: center; width: 100%; padding: 8px 6px; border: 0; border-radius: 8px; background: none; cursor: pointer; text-align: left; font-size: 14px; }
-.tagchart-row:hover { background: var(--bg-alt); }
+.tagchart-row { display: grid; grid-template-columns: 7.5em 1fr 2.2em; gap: 10px; align-items: center; width: 100%; padding: 8px 6px; border: 0; border-radius: 8px; background: none; text-align: left; font-size: 14px; }
 .tagchart-track { height: 14px; border-radius: 7px; background: var(--bg-alt); overflow: hidden; }
 .tagchart-bar { display: block; height: 100%; border-radius: 7px; }
 .tagchart-n { font-weight: 700; text-align: right; font-variant-numeric: tabular-nums; }

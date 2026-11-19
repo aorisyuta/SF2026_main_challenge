@@ -83,14 +83,14 @@ ${floors.map(f => {
     const aor = list.find(b => b.aoristos);
     const places = [...new Set(list.map(b => b.outdoor ? 'グラウンド（屋外ブース）' : b.place.split('・')[0]))];
     const extra = f === 5 ? '講堂・第２体育館' : f === 4 ? '音楽室ステージあり' : '';
-    return `      <a class="bldg-floor${aor ? ' has-aor' : ''}" role="listitem" href="${LIST_PAGE}?floor=${f}#map" aria-label="${FLOOR_LABEL[f]}：${list.length}企画。この階の地図と企画を見る">
+    return `      <div class="bldg-floor${aor ? ' has-aor' : ''}" role="listitem" aria-label="${FLOOR_LABEL[f]}：${list.length}企画">
         <span class="bldg-num">${f}F</span>
         <span class="bldg-body">
           <span class="bldg-bar" style="width:${(list.length / max * 100).toFixed(1)}%">${segs.map(s => `<span class="tag-${s.k}" style="flex:${s.n}"></span>`).join('')}</span>
           <span class="bldg-meta"><strong>${list.length}</strong> 企画${extra ? `<em>${extra}</em>` : ''}${aor ? '<em class="bldg-aor">Aoristos はここ（特別第３教室）</em>' : ''}</span>
           <span class="bldg-places">${esc(places.slice(0, 4).join('・'))}${places.length > 4 ? ' ほか' : ''}</span>
         </span>
-      </a>`;
+      </div>`;
   }).join('\n')}
       <div class="bldg-ground" aria-hidden="true">グラウンド</div>
     </div>`;
@@ -99,11 +99,11 @@ ${floors.map(f => {
 /* ---------- 図3：種類別 ---------- */
 function tagChart() {
   return `<ul class="tagchart">
-${tagCount.map(x => `      <li><a class="tagchart-row" href="${LIST_PAGE}?tag=${encodeURIComponent(x.t)}#list">
+${tagCount.map(x => `      <li><div class="tagchart-row">
         <span class="tagchart-label">${esc(x.t)}</span>
         <span class="tagchart-track"><span class="tagchart-bar tag-${x.k}" style="width:${(x.n / maxTag * 100).toFixed(1)}%"></span></span>
         <span class="tagchart-n">${x.n}</span>
-      </a></li>`).join('\n')}
+      </div></li>`).join('\n')}
     </ul>`;
 }
 
@@ -221,7 +221,7 @@ function head(o) {
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>${o.title}｜SF2026｜Aoristos</title>
   <meta name="description" content="${esc(o.desc)}">
-  <meta name="author" content="Aoristos">
+  <meta name="author" content="Aoristos">${o.robots ? '\n  <meta name="robots" content="' + o.robots + '">' : ''}
   <meta name="theme-color" content="#ffffff">
   <link rel="icon" href="favicon.ico" sizes="any">
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
@@ -245,7 +245,7 @@ const SOURCE_NOTE = `<p class="ob-source">情報は SF 公式サイトの内容�
 const html = `${head({
   scripts: '\n  <script src="assets/others-top.js" defer></script>',
   title: '他の企画のまとめ（ステージ・入場・金券）',
-  desc: `SF2026（スクールフェア 2026「融合」・11月7日〜8日）の企画を Aoristos がまとめたページ。講堂・音楽室のステージ時間割、入場方法・金券・食品の時間、1日の流れ、階ごと・種類ごとの企画数。全 ${booths.length} 企画の一覧と校内マップへも。`
+  desc: `SF2026（スクールフェア 2026「融合」・11月7日〜8日）の企画を Aoristos がまとめたページ。講堂・音楽室のステージ時間割、入場方法・金券・食品の時間、1日の流れ、階ごと・種類ごとの企画数。`
 })}
 <main id="main" class="band-alt">
   <header class="page-hero ob-hero">
@@ -253,7 +253,6 @@ const html = `${head({
       <h1 class="page-title">他の企画</h1>
       <p class="page-lead">SF2026 の企画を、場所・種類・時間でまとめました。</p>
       <nav class="ob-quick" aria-label="このページの内容">
-        <a class="ob-quick-main" href="${LIST_PAGE}"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4.5 4.5"/></svg>企画を探す<small>一覧・校内マップ・${booths.length} 企画</small></a>
         <a href="#h-stage">ステージの時間割</a>
         <a href="#h-basics">入場・お金・食べ物</a>
         <a href="#h-flow">1日の流れ</a>
@@ -302,12 +301,12 @@ const html = `${head({
     <section class="ob-section ob-two" aria-labelledby="h-where">
       <div>
         <h2 class="ob-h2" id="h-where">どの階に何がある？</h2>
-        <p class="ob-note">階を押すと、その階の校内マップと企画を表示します。色は企画の種類です。</p>
+        <p class="ob-note">色は企画の種類です。</p>
         ${building()}
       </div>
       <div>
         <h2 class="ob-h2" id="h-kind">種類別の企画数</h2>
-        <p class="ob-note">押すと、その種類の企画を一覧で表示します（1つの企画が複数の種類を持つことがあります）。</p>
+        <p class="ob-note">1つの企画が複数の種類を持つことがあります。</p>
         ${tagChart()}
       </div>
     </section>
@@ -333,14 +332,6 @@ ${stageList()}
       </details>
     </section>
 
-    <section class="ob-section ob-cta" aria-labelledby="h-cta">
-      <div>
-        <h2 class="ob-h2" id="h-cta">企画一覧と校内マップ</h2>
-        <p class="ob-note">全 ${booths.length} 企画を、校内マップ・検索・階・種類で探せます。</p>
-      </div>
-      <a class="btn" href="${LIST_PAGE}">企画一覧と校内マップを見る</a>
-    </section>
-
     ${SOURCE_NOTE}
   </div>
 </main>
@@ -350,6 +341,7 @@ ${stageList()}
 `;
 
 const listHtml = `${head({
+  robots: 'noindex',
   title: '企画一覧・校内マップ',
   desc: `SF2026（スクールフェア 2026）の全 ${booths.length} 企画を、校内マップ・検索・階・種類で探せる一覧（Aoristos によるまとめ）。焼きそばなどの飲食、ゲーム、展示、お化け屋敷・ジェットコースターなどのアトラクション。`,
   scripts: '\n  <script src="assets/others.js" defer></script>'
