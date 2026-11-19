@@ -36,6 +36,84 @@
     return [x * c - y1 * s, x * s + y1 * c, z1];
   }
 
+  // ---- 地球儀に貼り付ける数式（数学・物理・化学） ----
+  // 書き方：^{…} は上付き、_{…} は下付き。地球儀の経度・緯度の位置に、その場所の表面の向きで貼る
+  var EQS = [
+    'e^{iπ} + 1 = 0', 'a^{2} + b^{2} = c^{2}', '∫_{0}^{∞} e^{−x²} dx = √π ⁄ 2', '∑ 1⁄n^{2} = π^{2}⁄6',
+    'x = (−b ± √(b² − 4ac)) ⁄ 2a', 'lim (1 + 1⁄n)^{n} = e', '∮ f(z) dz = 2πi ∑ Res', 'det(A − λI) = 0',
+    'd⁄dx sin x = cos x', 'sin^{2}θ + cos^{2}θ = 1', '∇^{2}φ = 0', 'f(x) = ∑ f^{(n)}(a)(x−a)^{n}⁄n!',
+    'F = ma', 'E = mc^{2}', '∇·E = ρ⁄ε_{0}', '∇×B = μ_{0}J + μ_{0}ε_{0} ∂E⁄∂t', 'iħ ∂ψ⁄∂t = Ĥψ',
+    'F = G Mm⁄r^{2}', 'λ = h⁄p', 'E = hν', 'v = fλ', 'ΔS ≥ 0', 'U = ½kx^{2}', 'W = Fs cos θ',
+    'PV = nRT', 'p = mv', 'T = 2π√(l⁄g)', 'Δx Δp ≥ ħ⁄2', 'F = qvB', 'V = IR',
+    '2H_{2} + O_{2} → 2H_{2}O', 'CH_{4} + 2O_{2} → CO_{2} + 2H_{2}O', 'pH = −log[H^{+}]',
+    'N_{2} + 3H_{2} ⇌ 2NH_{3}', 'ΔG = ΔH − TΔS', 'k = Ae^{−E_{a}⁄RT}', 'NaCl → Na^{+} + Cl^{−}',
+    'Cu^{2+} + 4NH_{3} → [Cu(NH_{3})_{4}]^{2+}', '6CO_{2} + 6H_{2}O → C_{6}H_{12}O_{6} + 6O_{2}',
+    'Ag^{+} + Cl^{−} → AgCl↓', 'K_{w} = [H^{+}][OH^{−}]', 'C_{6}H_{6}', 'Fe^{3+} + SCN^{−}',
+    'ζ(s) = ∑ n^{−s}', '∂u⁄∂t = κ∇^{2}u', 'e^{x} = ∑ x^{n}⁄n!', 'ℏω', 'Γ(n) = (n−1)!'
+  ];
+  var EQH = 46, EQIMG = null, EQPOS = null;
+  function parseEq(src) {                      // [{t: 文字列, k: 0 普通 / 1 上付き / −1 下付き}]
+    var out = [], i = 0;
+    while (i < src.length) {
+      var c = src[i];
+      if ((c === '^' || c === '_') && src[i + 1] === '{') {
+        var j = src.indexOf('}', i), d = 1, k = i + 2;
+        for (j = i + 2; j < src.length; j++) { if (src[j] === '{') d++; if (src[j] === '}' && --d === 0) break; }
+        out.push({ t: src.slice(i + 2, j).replace(/[{}]/g, '').replace(/_|\^/g, ''), k: c === '^' ? 1 : -1 }); i = j + 1;
+      } else { out.push({ t: c, k: 0 }); i++; }
+    }
+    return out;
+  }
+  function eqImage(src) {
+    var parts = parseEq(src), big = '400 ' + EQH * .62 + 'px "Times New Roman", "STIX Two Math", serif', sm = '400 ' + EQH * .42 + 'px "Times New Roman", serif';
+    var m = document.createElement('canvas').getContext('2d'), w = 8;
+    parts.forEach(function (p) { m.font = p.k ? sm : big; p.w = m.measureText(p.t).width; w += p.w; });
+    var c = document.createElement('canvas'); c.width = Math.ceil(w + 8); c.height = EQH;
+    var g = c.getContext('2d'), x = 8;
+    g.fillStyle = '#ffffff'; g.textBaseline = 'alphabetic';
+    parts.forEach(function (p) {
+      g.font = p.k ? sm : big;
+      g.fillText(p.t, x, EQH * .7 + (p.k === 1 ? -EQH * .26 : p.k === -1 ? EQH * .12 : 0));
+      x += p.w;
+    });
+    return c;
+  }
+  function eqInit() {
+    EQIMG = EQS.map(eqImage);
+    // 球面にまんべんなく散らす（黄金角のらせん）。同じ式を 3 回ずつ、別の場所に
+    var n = EQS.length * 3, golden = Math.PI * (3 - Math.sqrt(5));
+    EQPOS = [];
+    for (var i = 0; i < n; i++) {
+      var yy = 1 - (i + .5) / n * 2;               // −1〜1
+      var la = Math.asin(yy * .9), lo = i * golden;
+      EQPOS.push({ img: EQIMG[(i * 7) % EQIMG.length], la: la, lo: lo, rot: ((i * 37) % 21 - 10) * Math.PI / 180, s: .7 + ((i * 13) % 9) / 14 });
+    }
+  }
+  function drawEqs(cx, cy, r) {
+    if (!EQPOS) eqInit();
+    var dd = .01, k0 = r * .08 / EQH;
+    ctx.save();
+    ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
+    EQPOS.forEach(function (q) {
+      var p = sph(q.la, q.lo, r);
+      if (p[2] <= r * .05) return;                  // 裏側は描かない
+      var pe = sph(q.la, q.lo + dd, r), pn = sph(q.la + dd, q.lo, r);
+      var cl = Math.cos(q.la) || 1e-3;
+      var ex = (pe[0] - p[0]) / (dd * r * cl), ey = (pe[1] - p[1]) / (dd * r * cl);   // 東向き（画面上）
+      var nx = (pn[0] - p[0]) / (dd * r), ny = (pn[1] - p[1]) / (dd * r);             // 北向き（画面上）
+      var c = Math.cos(q.rot), s2 = Math.sin(q.rot);
+      var ax = ex * c + nx * s2, ay = ey * c + ny * s2;     // 文字の横向き（少し回す）
+      var bx = -(nx * c - ex * s2), by = -(ny * c - ey * s2); // 文字の下向き
+      var k = k0 * q.s;
+      ctx.globalAlpha = Math.min(1, p[2] / r * 1.4) * .62;
+      ctx.setTransform(DPR * ax * k, DPR * ay * k, DPR * bx * k, DPR * by * k, DPR * (cx + p[0]), DPR * (cy + p[1]));
+      ctx.drawImage(q.img, -q.img.width / 2, -EQH / 2);
+    });
+    ctx.restore();
+    ctx.globalAlpha = 1;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+  }
+
   function drawGlobe(cx, cy, r) {
     var g = ctx.createRadialGradient(cx - r * .35, cy - r * .4, r * .1, cx, cy, r);
     g.addColorStop(0, '#2f6fa3'); g.addColorStop(.55, '#124a75'); g.addColorStop(1, '#06243b');
@@ -50,7 +128,7 @@
       });
       ctx.stroke();
     }
-    ctx.strokeStyle = 'rgba(255,255,255,.28)';
+    ctx.strokeStyle = 'rgba(255,255,255,.16)';
     for (var lo = 0; lo < 180; lo += 15) {             // 経線
       var a = [], b = [];
       for (var la = -90; la <= 90; la += 4) { a.push(sph(la * Math.PI / 180, lo * Math.PI / 180, r)); b.push(sph(la * Math.PI / 180, (lo + 180) * Math.PI / 180, r)); }
@@ -59,9 +137,10 @@
     for (var lat = -75; lat <= 75; lat += 15) {         // 緯線
       var c = [];
       for (var l2 = 0; l2 <= 360; l2 += 4) c.push(sph(lat * Math.PI / 180, l2 * Math.PI / 180, r));
-      ctx.strokeStyle = lat === 0 ? 'rgba(255,255,255,.5)' : 'rgba(255,255,255,.28)';
+      ctx.strokeStyle = lat === 0 ? 'rgba(255,255,255,.4)' : 'rgba(255,255,255,.16)';
       line(c);
     }
+    drawEqs(cx, cy, r);
     // ふちの光
     ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2);
     ctx.strokeStyle = 'rgba(160,205,240,.55)'; ctx.lineWidth = Math.max(1.5, r * .012); ctx.stroke();
