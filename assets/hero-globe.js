@@ -80,32 +80,42 @@
   }
   function eqInit() {
     EQIMG = EQS.map(eqImage);
-    // 球面にまんべんなく散らす（黄金角のらせん）。同じ式を 3 回ずつ、別の場所に
-    var n = EQS.length * 3, golden = Math.PI * (3 - Math.sqrt(5));
+    // 隙間なく敷き詰める：緯度の帯に分け（帯の高さ＝文字の大きさは帯ごとにばらつかせる）、
+    // 各帯を一周ぶん、式を端から端まで並べて埋める
     EQPOS = [];
-    for (var i = 0; i < n; i++) {
-      var yy = 1 - (i + .5) / n * 2;               // −1〜1
-      var la = Math.asin(yy * .9), lo = i * golden;
-      EQPOS.push({ img: EQIMG[(i * 7) % EQIMG.length], la: la, lo: lo, rot: ((i * 37) % 21 - 10) * Math.PI / 180, s: .7 + ((i * 13) % 9) / 14 });
+    var seed = 11, rnd = function () { seed = (seed * 16807) % 2147483647; return seed / 2147483647; };
+    var la = -1.48, j = 0;
+    while (la < 1.48) {
+      var h = .05 + rnd() * .1;                  // 帯の高さ（ラジアン）。0.05〜0.15
+      var mid = la + h / 2, cl = Math.cos(mid);
+      if (cl > .06) {
+        var sRad = h * .98 / EQH, lo = rnd() * Math.PI * 2, end = lo + Math.PI * 2;
+        while (true) {
+          var img = EQIMG[(j * 7 + 3) % EQIMG.length]; j++;
+          var wAng = img.width * sRad / cl;      // この緯度での、式の幅（経度の角度）
+          if (lo + wAng > end + wAng * .35) break;
+          EQPOS.push({ img: img, la: mid, lo: lo + wAng / 2, s: sRad });
+          lo += wAng * .97;                      // ほんの少し重ねて、すき間を残さない
+        }
+      }
+      la += h;
     }
   }
   function drawEqs(cx, cy, r) {
     if (!EQPOS) eqInit();
-    var dd = .01, k0 = r * .08 / EQH;
+    var dd = .01;
     ctx.save();
     ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.clip();
     EQPOS.forEach(function (q) {
       var p = sph(q.la, q.lo, r);
-      if (p[2] <= r * .05) return;                  // 裏側は描かない
+      if (p[2] <= 0) return;                         // 裏側は描かない
       var pe = sph(q.la, q.lo + dd, r), pn = sph(q.la + dd, q.lo, r);
       var cl = Math.cos(q.la) || 1e-3;
       var ex = (pe[0] - p[0]) / (dd * r * cl), ey = (pe[1] - p[1]) / (dd * r * cl);   // 東向き（画面上）
       var nx = (pn[0] - p[0]) / (dd * r), ny = (pn[1] - p[1]) / (dd * r);             // 北向き（画面上）
-      var c = Math.cos(q.rot), s2 = Math.sin(q.rot);
-      var ax = ex * c + nx * s2, ay = ey * c + ny * s2;     // 文字の横向き（少し回す）
-      var bx = -(nx * c - ex * s2), by = -(ny * c - ey * s2); // 文字の下向き
-      var k = k0 * q.s;
-      ctx.globalAlpha = Math.min(1, p[2] / r * 1.4) * .62;
+      var ax = ex, ay = ey, bx = -nx, by = -ny;   // 文字の横＝東向き、下＝南向き
+      var k = r * q.s;
+      ctx.globalAlpha = Math.min(1, p[2] / r * 1.6) * .6;
       ctx.setTransform(DPR * ax * k, DPR * ay * k, DPR * bx * k, DPR * by * k, DPR * (cx + p[0]), DPR * (cy + p[1]));
       ctx.drawImage(q.img, -q.img.width / 2, -EQH / 2);
     });
