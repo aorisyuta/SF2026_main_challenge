@@ -11,7 +11,7 @@
   var ctx = cv.getContext('2d');
   var WORD = 'AORISTOS✦AORISTOS✦'.split('');   // 輪を一周するように 2 回くり返す
   var TILT = 23.4 * Math.PI / 180;      // 地軸の傾き
-  var RING = -13 * Math.PI / 180;       // 文字の輪の傾き
+  var AX = -.4;                         // 地軸を手前に倒す角（文字の輪も同じ角で傾く＝赤道と平行）
   var STEP = 2 * Math.PI / WORD.length;  // 文字の間隔（一周を等分）
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var W = 0, H = 0, DPR = 1, spin = 0, ring = 0, dragging = false, lastX = 0, last = 0;
@@ -31,7 +31,7 @@
     var y = -r * Math.sin(la);
     var z = r * Math.cos(la) * Math.cos(lo + spin);
     // 地軸を手前に倒す（x 軸まわり）→ 画面上で少し回す（z 軸まわり）
-    var y1 = y * Math.cos(-.4) - z * Math.sin(-.4), z1 = y * Math.sin(-.4) + z * Math.cos(-.4);
+    var y1 = y * Math.cos(AX) - z * Math.sin(AX), z1 = y * Math.sin(AX) + z * Math.cos(AX);
     var c = Math.cos(TILT), s = Math.sin(TILT);
     return [x * c - y1 * s, x * s + y1 * c, z1];
   }
@@ -84,16 +84,18 @@
     return (GLYPH[ch] = { w: w, h: h, face: make('#ffffff'), side: make('#7d93a8'), dark: make('#2c4a64') });
   }
   function rotX(v, t) { var c = Math.cos(t), s = Math.sin(t); return [v[0], v[1] * c - v[2] * s, v[1] * s + v[2] * c]; }
+  // 地球儀と同じ傾け方（地軸を手前に倒す → 画面上で回す）。文字の輪を赤道と平行にするために使う
+  function axis(v) { var w = rotX(v, AX), c = Math.cos(TILT), s = Math.sin(TILT); return [w[0] * c - w[1] * s, w[0] * s + w[1] * c, w[2]]; }
 
   function letters(cx, cy, r) {
     var R = r * 1.34, F = R * 4.5, size = r * .5, depth = size * .2, out = [];
     function proj(p) { var k = F / (F - p[2]); return [cx + p[0] * k, cy + p[1] * k, p[2]]; }
     WORD.forEach(function (ch, i) {
       var a = ring + i * STEP;                                   // a = 0 が正面
-      var P = rotX([R * Math.sin(a), 0, R * Math.cos(a)], RING); // 文字の中心
-      var T = rotX([Math.cos(a), 0, -Math.sin(a)], RING);        // 横向き（輪の接線）
-      var U = rotX([0, 1, 0], RING);                             // 縦向き（画面の下が +）
-      var N = rotX([Math.sin(a), 0, Math.cos(a)], RING);         // 外向きの法線
+      var P = axis([R * Math.sin(a), 0, R * Math.cos(a)]); // 文字の中心
+      var T = axis([Math.cos(a), 0, -Math.sin(a)]);        // 横向き（輪の接線）
+      var U = axis([0, 1, 0]);                             // 縦向き（画面の下が +）
+      var N = axis([Math.sin(a), 0, Math.cos(a)]);         // 外向きの法線
       out.push({ ch: ch, P: P, T: T, U: U, N: N, z: P[2], size: size, depth: depth, proj: proj });
     });
     return out;
