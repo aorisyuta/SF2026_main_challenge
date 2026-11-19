@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
-  generate-pages.js — Aoristos / Osaka Seiko Gakuin SF2026
+  generate-pages.js — Aoristos / SF2026
 
   assets/projects.csv の link 列に書かれた企画ページ（projects/*.html）を生成する。
   本文は assets/projects-details.json から HTML に書き出す（検索エンジン向け）。
@@ -72,7 +72,7 @@ function escapeHtml(s) {
 
 const DETAILS_PATH = path.join(ROOT, 'assets', 'projects-details.json');
 const CATEGORY_CLASS = { 'Aoristos': 'cat-a', '電気工学部': 'cat-b', '物理部': 'cat-c' };  // script.js と同じ
-const EVENT_LABEL = '星光 SF2026（大阪星光学院 スクールフェア 2026「融合」）';
+const EVENT_LABEL = 'SF2026（スクールフェア 2026「融合」）';
 
 function loadDetails() {
   if (!fs.existsSync(DETAILS_PATH)) return {};
@@ -128,15 +128,15 @@ function detailBody(project, d) {
 function pageTemplate(project, d) {
   const title = escapeHtml(project.title);
   const description = escapeHtml(project.description);
-  // 検索結果に出る説明文。企画の説明に、サイト名と「星光 SF2026」を添える
-  const metaDescription = escapeHtml(`${project.description}｜Aoristos の星光 SF2026（大阪星光学院 スクールフェア 2026）出展企画。高校棟3階 特別第3教室。`);
+  // 検索結果に出る説明文。企画の説明に、サイト名と「SF2026」を添える
+  const metaDescription = escapeHtml(`${project.description}｜Aoristos のSF2026（スクールフェア 2026）出展企画。高校棟3階 特別第3教室。`);
 
   return `<!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${title}｜星光 SF2026｜Aoristos</title>
+  <title>${title}｜SF2026｜Aoristos</title>
   <meta name="description" content="${metaDescription}">
   <meta name="author" content="Aoristos">
   <meta name="theme-color" content="#ffffff">

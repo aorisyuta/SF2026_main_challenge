@@ -1,5 +1,5 @@
 {
- "source": "https://seikosf.jp",
+ "source": "",
  "retrieved": "2026-11-01",
  "booths": [
   {
@@ -138,7 +138,7 @@
    ]
   },
   {
-   "title": "星光南部商店　屋外の部",
+   "title": "南部商店　屋外の部",
    "org": "ほしゼミ探究＋",
    "floor": 1,
    "place": "屋外ブースG8",
@@ -404,7 +404,7 @@
    ]
   },
   {
-   "title": "星光南部商店　屋内の部",
+   "title": "南部商店　屋内の部",
    "org": "ほしゼミ探究＋",
    "floor": 2,
    "place": "会議室",
@@ -435,7 +435,7 @@
    "floor": 2,
    "place": "会議室",
    "outdoor": false,
-   "desc": "星光生が学校生活や受験の体験をもとに、受験生の質問に答える相談会。星光グッズの販売も。",
+   "desc": "メンバーが学校生活や受験の体験をもとに、受験生の質問に答える相談会。学校グッズの販売も。",
    "price": "",
    "yen": [],
    "tags": [
@@ -465,12 +465,12 @@
    ]
   },
   {
-   "title": "Seiko Quest",
-   "org": "Seiko Quest",
+   "title": "Quest",
+   "org": "Quest",
    "floor": 2,
    "place": "中１D教室",
    "outdoor": false,
-   "desc": "スマホを使って校内を探検する企画。景品交換所では星光生と話せて、記念品がもらえる。",
+   "desc": "スマホを使って校内を探検する企画。景品交換所では在校生と話せて、記念品がもらえる。",
    "price": "",
    "yen": [],
    "tags": [
@@ -950,7 +950,7 @@
    ]
   },
   {
-   "title": "SEIKO PHOTO STUDIO",
+   "title": "PHOTO STUDIO",
    "org": "写真部",
    "floor": 4,
    "place": "中３A教室",
@@ -1047,7 +1047,7 @@
    ]
   },
   {
-   "title": "星光満天宮",
+   "title": "満天宮",
    "org": "文芸部",
    "floor": 4,
    "place": "高３B教室",
@@ -1174,7 +1174,7 @@
     "org": "有志",
     "desc": "漫才。"
    },
-   "SEIKO MC BATTLE": {
+   "MC BATTLE": {
     "org": "有志",
     "desc": "ラップのライブと、4人によるトーナメント。"
    },
@@ -1338,7 +1338,7 @@
     "venue": "講堂",
     "start": "12:00",
     "end": "12:30",
-    "title": "SEIKO MC BATTLE"
+    "title": "MC BATTLE"
    },
    {
     "day": 2,
@@ -1399,7 +1399,7 @@
   ]
  },
  "map": {
-  "source": "https://seikosf.jp/map.html",
+  "source": "",
   "floors": {
    "1": {
     "image": "assets/sfmap/maps-01.svg",

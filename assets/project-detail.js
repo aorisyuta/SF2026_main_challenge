@@ -29,7 +29,7 @@
   }
 
   function render(p, root) {
-    document.title = p.title + '｜星光 SF2026｜Aoristos';
+    document.title = p.title + '｜SF2026｜Aoristos';
     var cat = window.SFProjects ? window.SFProjects.categoryClass(p.category) : '';
 
     var hero = el('header', 'page-hero page-hero-left');
@@ -67,7 +67,7 @@
     if (p.schedule) dl.appendChild(specRow('時間', p.schedule));
     if (p.duration) dl.appendChild(specRow('所要時間', p.duration));
     (p.details || []).forEach(function (d) { dl.appendChild(specRow(d.label, d.content, d.url, d.linkLabel)); });
-    dl.appendChild(specRow('イベント', '星光 SF2026（大阪星光学院 スクールフェア 2026「融合」）'));
+    dl.appendChild(specRow('イベント', 'SF2026（スクールフェア 2026「融合」）'));
     specs.appendChild(dl);
     body.appendChild(specs);
 

@@ -263,7 +263,7 @@
       `${S.solved} 問クリア${S.practice ? '' : '（90 秒）'}${isBest ? '・ベスト更新' : ''}`,
       '',
       'あなたは何点とれる？',
-      '#星光SF2026 #Aoristos'
+      '#SF2026 #Aoristos'
     ];
     return 'https://x.com/intent/post?text=' + encodeURIComponent(lines.join('\n')) + '&url=' + encodeURIComponent(SHARE_URL);
   }

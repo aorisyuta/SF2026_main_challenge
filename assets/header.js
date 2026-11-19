@@ -78,7 +78,7 @@
         '<div class="gnav-inner">' +
           '<a class="gnav-brand" href="' + base + 'index.html" aria-label="Aoristos ホーム">' +
             '<img class="gnav-logo" src="' + base + 'assets/aoristos-mark.svg" alt="" width="39" height="20">' +
-            '<span class="gnav-brand-text">Aoristos<span class="gnav-year">大阪星光学院</span></span>' +
+            '<span class="gnav-brand-text">Aoristos</span>' +
           '</a>' +
           '<nav class="gnav-nav" id="gnavNav" aria-label="メイン">' +
             '<ul>' + links + '</ul>' +
@@ -135,7 +135,7 @@
           '<div class="footer-brand">' +
             '<img class="footer-logo" src="' + base + 'assets/aoristos-mark.svg" alt="" width="54" height="28">' +
             '<div><p class="footer-theme">Aoristos</p>' +
-            '<p class="footer-event">大阪星光学院の生徒による探究団体</p></div>' +
+            '<p class="footer-event">中高生による探究団体</p></div>' +
           '</div>' +
           '<div class="footer-cols">' +
             '<div><h2>サイト</h2><ul>' +
@@ -151,7 +151,7 @@
         '</div>' +
         '<div class="footer-bottom">' +
           '<p>Copyright © 2026 ' + esc(CFG.producer) + '.</p>' +
-          '<p>Aoristos 公式サイト。大阪星光学院の生徒による探究団体 Aoristos の活動をお知らせしています（大阪星光学院および SF 全体の公式サイトではありません）。' +
+          '<p>Aoristos 公式サイト。中高生による探究団体 Aoristos の活動をお知らせしています（SF 全体の公式サイトではありません）。' +
             (CFG.officialUrl ? 'SF 全体の情報は <a href="' + esc(CFG.officialUrl) + '" target="_blank" rel="noopener noreferrer">SF 公式サイト</a> をご覧ください。' : '') + '</p>' +
         '</div>' +
       '</div>';

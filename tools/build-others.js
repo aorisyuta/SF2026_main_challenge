@@ -2,7 +2,7 @@
 /*
   tools/build-others.js — 「他の企画」の2ページを作る
 
-  データ: assets/others-data.json（SF 公式サイト https://seikosf.jp の企画・ステージ・校内マップの情報をまとめ直したもの）
+  データ: assets/others-data.json（SF 公式サイトの企画・ステージ・校内マップの情報をまとめ直したもの）
   出力  : others.html       概要（基本情報・1日の流れ・階ごと/種類別の図・ステージの時間割）
           others-list.html  企画一覧（校内マップ・検索・絞り込み。動きは assets/others.js）
 
@@ -219,7 +219,7 @@ function head(o) {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>${o.title}｜星光 SF2026｜Aoristos</title>
+  <title>${o.title}｜SF2026｜Aoristos</title>
   <meta name="description" content="${esc(o.desc)}">
   <meta name="author" content="Aoristos">
   <meta name="theme-color" content="#ffffff">
@@ -240,19 +240,18 @@ function head(o) {
 `;
 }
 
-const SOURCE_NOTE = `<p class="ob-source">情報は <a href="${esc(data.source)}" target="_blank" rel="noopener noreferrer">SF 公式サイト</a> の内容（${esc(data.retrieved.replace(/-/g, '/'))} 時点）をもとに、Aoristos が見やすくまとめ直したものです。
-      時間や内容は変わることがあります。最新の情報は SF 公式サイトでご確認ください。</p>`;
+const SOURCE_NOTE = `<p class="ob-source">情報は SF 公式サイトの内容（${esc(data.retrieved.replace(/-/g, '/'))} 時点）をもとに、Aoristos が見やすくまとめ直したものです。</p>`;
 
 const html = `${head({
   scripts: '\n  <script src="assets/others-top.js" defer></script>',
   title: '他の企画のまとめ（ステージ・入場・金券）',
-  desc: `大阪星光学院 SF2026（スクールフェア 2026「融合」・11月7日〜8日）の企画を Aoristos がまとめたページ。講堂・音楽室のステージ時間割、入場方法・金券・食品の時間、1日の流れ、階ごと・種類ごとの企画数。全 ${booths.length} 企画の一覧と校内マップへも。`
+  desc: `SF2026（スクールフェア 2026「融合」・11月7日〜8日）の企画を Aoristos がまとめたページ。講堂・音楽室のステージ時間割、入場方法・金券・食品の時間、1日の流れ、階ごと・種類ごとの企画数。全 ${booths.length} 企画の一覧と校内マップへも。`
 })}
 <main id="main" class="band-alt">
   <header class="page-hero ob-hero">
     <div class="container">
       <h1 class="page-title">他の企画</h1>
-      <p class="page-lead">大阪星光学院 SF2026 の企画を、場所・種類・時間でまとめました。</p>
+      <p class="page-lead">SF2026 の企画を、場所・種類・時間でまとめました。</p>
       <nav class="ob-quick" aria-label="このページの内容">
         <a class="ob-quick-main" href="${LIST_PAGE}"><svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="8.5" cy="8.5" r="5.5"/><path d="m13 13 4.5 4.5"/></svg>企画を探す<small>一覧・校内マップ・${booths.length} 企画</small></a>
         <a href="#h-stage">ステージの時間割</a>
@@ -352,7 +351,7 @@ ${stageList()}
 
 const listHtml = `${head({
   title: '企画一覧・校内マップ',
-  desc: `大阪星光学院 SF2026（スクールフェア 2026）の全 ${booths.length} 企画を、校内マップ・検索・階・種類で探せる一覧（Aoristos によるまとめ）。焼きそばなどの飲食、ゲーム、展示、お化け屋敷・ジェットコースターなどのアトラクション。`,
+  desc: `SF2026（スクールフェア 2026）の全 ${booths.length} 企画を、校内マップ・検索・階・種類で探せる一覧（Aoristos によるまとめ）。焼きそばなどの飲食、ゲーム、展示、お化け屋敷・ジェットコースターなどのアトラクション。`,
   scripts: '\n  <script src="assets/others.js" defer></script>'
 })}
 <main id="main" class="band-alt">
@@ -360,7 +359,7 @@ const listHtml = `${head({
     <div class="container">
       <p class="eyebrow"><a href="others.html">他の企画</a></p>
       <h1 class="page-title">企画一覧</h1>
-      <p class="page-lead">大阪星光学院 SF2026 の全 ${booths.length} 企画を、校内マップと一覧で探せます。</p>
+      <p class="page-lead">SF2026 の全 ${booths.length} 企画を、校内マップと一覧で探せます。</p>
     </div>
   </header>
 
@@ -420,7 +419,7 @@ ${campusMap()}
           <li><span class="lg lg-stage"></span>ステージ（講堂・音楽室）</li>
           <li><span class="lg-yen" aria-hidden="true">¥</span>金券売り場</li>
         </ul>
-        <p class="ob-map-note">図面：<a href="${esc(data.map.source)}" target="_blank" rel="noopener noreferrer">SF 公式サイトの校内マップ</a>（トイレ・AED の記号つき）</p>
+        <p class="ob-map-note">図面：SF 公式サイトの校内マップをもとに作成</p>
       </details>
 
 ${boothList()}

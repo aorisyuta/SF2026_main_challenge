@@ -1,22 +1,16 @@
 /*
-  config.js — Aoristos｜大阪星光学院 SF2026 出展企画ページ
+  config.js — Aoristos 公式サイトの設定
   サイト全体の設定はこのファイルだけを直せば全ページに反映されます。
 */
 window.SF_CONFIG = {
   // 基本情報
   siteName: 'Aoristos',
   theme: '融合',
-  eventName: '大阪星光学院 スクールフェア 2026',
+  eventName: 'スクールフェア 2026',
   shortName: 'SF2026',
   producer: 'Aoristos',
-  venue: '大阪星光学院 中学校・高等学校',
-  venueArea: '大阪市天王寺区',
-  venueStreet: '伶人町1-6',
-  venuePostalCode: '543-0061',
   room: '高校棟3階 特別第3教室',
 
-  // SF 公式サイト（フッターなどからリンク）
-  officialUrl: 'https://seikosf.jp',
 
   /*
     本番の公開 URL（末尾の / なし）。例: 'https://example.com'
@@ -41,30 +35,7 @@ window.SF_CONFIG = {
     art: 'pdf' / 'tshirt' で内蔵のイラストを表示。
     name / note は、ページの右側（広い画面）・下部に出る「グッズ」枠での短い名前と一言。
   */
-  defaultNews: [
-    {
-      name: '部誌',
-      note: 'PDF 版 発売中',
-      title: 'Aoristos 部誌、PDF 版 発売中。',
-      text: 'オンラインで PDF 版をお求めいただけます。',
-      url: 'projects/aoristos-bushi.html',
-      linkLabel: '詳しく見る',
-      art: 'pdf',
-      style: 'light',
-      pin: true
-    },
-    {
-      name: 'Tシャツ',
-      note: '発売中',
-      title: 'Aoristos Tシャツ、発売中。',
-      text: '購入方法はこのページでお知らせします。',
-      url: '',
-      linkLabel: '',
-      art: 'tshirt',
-      style: 'dark',
-      pin: false
-    }
-  ],
+  defaultNews: [],
 
   /*
     SNS リンク。フッターやトップに表示し、構造化データ（検索エンジン向け）にも使います。

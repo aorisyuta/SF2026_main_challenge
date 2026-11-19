@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /*
-  build-site.js — Aoristos / Osaka Seiko Gakuin SF2026
+  build-site.js — Aoristos SF2026
 
   公開前の仕上げを行う（外部パッケージ不要）。
     1. 各 HTML の <head> に canonical・OGP・Twitter カードを書き込み、
@@ -126,17 +126,15 @@ function metaBlock(rel, html, cfg) {
 
 /**
  * 検索エンジン向けの構造化データ（JSON-LD、トップページのみ）。
- * サイト名「Aoristos」と、星光 SF2026 での出展（イベント）を Google に伝える。
+ * サイト名「Aoristos」と団体の情報を Google に伝える。
  * type="application/ld+json" は実行されないので CSP の対象外。
  */
 function structuredData(cfg, site) {
-  const days = cfg.days || [];
-  const first = days[0], last = days[days.length - 1];
   const org = {
     '@type': 'Organization',
     '@id': site + '/#organization',
     name: cfg.siteName || 'Aoristos',
-    description: '大阪星光学院の生徒による探究団体。メンバーそれぞれが自分の探究課題を見つけて活動している。',
+    description: '中高生による探究団体。メンバーそれぞれが自分の探究課題を見つけて活動している。',
     url: site + '/',
     logo: site + '/assets/apple-touch-icon.png',
     image: site + '/' + OG_IMAGE
@@ -149,48 +147,13 @@ function structuredData(cfg, site) {
       '@type': 'WebSite',
       '@id': site + '/#website',
       name: cfg.siteName || 'Aoristos',
-      alternateName: ['Aoristos 公式サイト', 'Aoristos 大阪星光学院', 'Aoristos 星光 SF2026', 'Aoristos SF2026'],
+      alternateName: ['Aoristos 公式サイト', 'Aoristos SF2026'],
       url: site + '/',
       inLanguage: 'ja',
       publisher: { '@id': org['@id'] }
     },
     org
   ];
-  if (first && last) {
-    graph.push({
-      '@type': 'Event',
-      name: `Aoristos 出展企画（星光 ${cfg.shortName || 'SF2026'}「${cfg.theme || ''}」）`,
-      description: 'AorXC、部誌の販売、「科学の甲子園」展示、実績展示、制作体験など。',
-      url: site + '/',
-      image: site + '/' + OG_IMAGE,
-      startDate: `${first.date}T${first.open}:00+09:00`,
-      endDate: `${last.date}T${last.close}:00+09:00`,
-      eventStatus: 'https://schema.org/EventScheduled',
-      eventAttendanceMode: 'https://schema.org/OfflineEventAttendanceMode',
-      location: {
-        '@type': 'Place',
-        name: `${cfg.venue || ''} ${cfg.room || ''}`.trim(),
-        address: {
-          '@type': 'PostalAddress',
-          addressCountry: 'JP',
-          addressRegion: '大阪府',
-          addressLocality: cfg.venueArea ? '大阪市' + cfg.venueArea.replace(/^大阪市/, '') : '大阪市',
-          streetAddress: cfg.venueStreet || '',
-          postalCode: cfg.venuePostalCode || ''
-        }
-      },
-      organizer: { '@id': org['@id'] },
-      superEvent: {
-        '@type': 'Event',
-        name: cfg.eventName || '',
-        alternateName: '星光 ' + (cfg.shortName || 'SF2026'),
-        url: cfg.officialUrl || undefined,
-        startDate: `${first.date}T${first.open}:00+09:00`,
-        endDate: `${last.date}T${last.close}:00+09:00`,
-        location: { '@type': 'Place', name: cfg.venue || '' }
-      }
-    });
-  }
   const json = JSON.stringify({ '@context': 'https://schema.org', '@graph': graph }).replace(/</g, '\\u003c');
   return `<script type="application/ld+json">${json}</script>`;
 }
