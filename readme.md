@@ -168,7 +168,6 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 ├── goods.html              グッズ（部誌・Tシャツなど。config.js の defaultNews）
 ├── latex/                  ツール「LaTeXライター」（index.html＝プロジェクト一覧、editor.html?id=…＝エディタ。assets/latex/ に JS・CSS。保存はブラウザの localStorage）
 ├── sodpion/                メンバー sodpion のページ（introduce.html＝プロフィール。自作の小説・問題などもこの中に置く）
-│   └── hyoko500/           小説「標高五百米」（章ごとのページ。tools/build-novel.js が tools/novel/hyoko500.txt から生成）
 ├── sf.html                 SF2026 トップ（出展案内・企画カード・開催概要）
 ├── projects.html           Aoristos の企画（SF2026）
 ├── timetable.html          タイムテーブル（AorXC・制作体験の実施時間）
@@ -185,7 +184,6 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 ├── tools/rebase_sf25.py    アーカイブ取り込み時のパス書き換え
 ├── tools/build-others.js   others.html の生成
 ├── tools/build-search.js   サイト内検索の索引 assets/search-index.json の生成（検索画面は assets/header.js。ヘッダーの虫めがね、または / キー）
-├── tools/build-novel.js    小説の章ページの生成（原稿は tools/novel/。原稿を直して npm run build）
 ├── _headers / robots.txt / sitemap.xml   build-site.js が生成
 ├── apple-touch-icon*.png   iPhone などがルートに取りに来るアイコン（assets/ のコピー）
 └── assets/

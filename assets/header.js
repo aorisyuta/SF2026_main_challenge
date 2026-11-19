@@ -145,8 +145,7 @@
         '</div>' +
         '<div class="footer-bottom">' +
           '<p>Copyright © 2026 ' + esc(CFG.producer) + '.</p>' +
-          '<p>Aoristos 公式サイト。中高生による探究団体 Aoristos の活動をお知らせしています（SF 全体の公式サイトではありません）。' +
-            (CFG.officialUrl ? 'SF 全体の情報は <a href="' + esc(CFG.officialUrl) + '" target="_blank" rel="noopener noreferrer">SF 公式サイト</a> をご覧ください。' : '') + '</p>' +
+          '<p>Aoristos 公式サイト。中高生による探究団体 Aoristos の活動をお知らせしています。' + '</p>' +
         '</div>' +
       '</div>';
     document.body.appendChild(footer);
