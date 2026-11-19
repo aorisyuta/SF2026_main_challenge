@@ -33,7 +33,7 @@
   <link rel="icon" href="favicon.ico?v=23e911113c" sizes="any">
   <link rel="icon" href="assets/favicon.svg?v=18f7d0c58a" type="image/svg+xml">
   <link rel="apple-touch-icon" href="assets/apple-touch-icon.png?v=ff38aa79bb">
-  <link rel="stylesheet" href="assets/style.css?v=593be19254">
+  <link rel="stylesheet" href="assets/style.css?v=91cab24c9c">
   <script>
     window.pageConfig = { currentPage: 'index', basePath: '', hideRibbon: true };
   </script>
@@ -42,6 +42,7 @@
   <script src="assets/header.js?v=33367938d3" defer></script>
   <script src="assets/script.js?v=1761404d4f" defer></script>
   <script src="assets/home.js?v=aa19ab117c" defer></script>
+  <script src="assets/hero-globe.js?v=c0ec109540" defer></script>
 </head>
 <body>
 
@@ -49,13 +50,8 @@
 
   <section class="tp-hero" aria-labelledby="heroTitle">
     <img src="assets/blackboard-art.webp" srcset="assets/blackboard-art-640.webp 640w, assets/blackboard-art.webp 1280w" sizes="100vw" width="1280" height="720" alt="" decoding="async" fetchpriority="high">
-    <div class="tp-hero-text">
-      <p class="tp-hero-kicker">中学生・高校生の探究団体 Aoristos</p>
-      <h1 class="tp-hero-title" id="heroTitle">問いに、<br>境界はない。</h1>
-      <p class="tp-hero-lead">積分のゲーム、無機化学のパズル、LaTeX のエディタ、物理チャレンジの背景解説。<br>メンバーが自分の問いから作ったものを公開しています。</p>
-      <a class="tp-hero-btn" href="#works">つくったものを見る</a>
-    </div>
-    <p class="tp-hero-side" aria-hidden="true">MATHEMATICS<br>×<br>PHYSICS<br>×<br>CHEMISTRY</p>
+    <h1 class="sr-only" id="heroTitle">Aoristos — 中学生・高校生の探究団体</h1>
+    <canvas class="tp-shape" id="heroGlobe" role="img" aria-label="地球儀のまわりを AORISTOS の文字が回るアニメーション"></canvas>
   </section>
 
   <section class="tp-sec" id="works" aria-labelledby="worksTitle">

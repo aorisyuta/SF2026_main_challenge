@@ -1430,3 +1430,11 @@ main { counter-reset: sec; }
   .tp-org td { padding: 14px 12px; }
 }
 .member-list { margin-top: 40px; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+/* トップの変身立体（assets/hero-shape.js が描く） */
+.tp-hero { justify-content: center; }
+.tp-hero > img { opacity: .4; }
+.tp-hero::after { background: radial-gradient(ellipse at 50% 55%, rgba(10, 30, 48, .35) 0%, rgba(10, 30, 48, .82) 75%); }
+.tp-shape { position: relative; z-index: 1; display: block; width: 100%; height: min(78vh, 640px); cursor: grab; touch-action: pan-y; }
+.tp-shape:active { cursor: grabbing; }
+@media (max-width: 833px) { .tp-shape { height: 380px; } }
