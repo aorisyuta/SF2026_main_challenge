@@ -167,7 +167,7 @@ npm run preview    # npm run build のあと dist/ を配信（本番と同じ�
 ├── members.html            メンバー一覧（カードを足すとメンバーが増える）
 ├── goods.html              グッズ（部誌・Tシャツなど。config.js の defaultNews）
 ├── latex/                  ツール「LaTeXライター」（index.html＝プロジェクト一覧、editor.html?id=…＝エディタ。assets/latex/ に JS・CSS。保存はブラウザの localStorage）
-├── sodpion/                メンバー sodpion のページ（introduce.html＝プロフィール。自作の小説・問題などもこの中に置く）
+├── kumoyori/               メンバー kumoyori のページ（introduce.html＝プロフィール。自作の小説・問題などもこの中に置く）
 ├── sf.html                 SF2026 トップ（出展案内・企画カード・開催概要）
 ├── projects.html           Aoristos の企画（SF2026）
 ├── timetable.html          タイムテーブル（AorXC・制作体験の実施時間）
