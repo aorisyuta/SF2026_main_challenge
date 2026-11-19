@@ -11,7 +11,7 @@
   var ctx = cv.getContext('2d');
   var WORD = 'AORISTOS✦AORISTOS✦'.split('');   // 輪を一周するように 2 回くり返す
   var TILT = 23.4 * Math.PI / 180;      // 地軸の傾き
-  var RING = -11 * Math.PI / 180;       // 文字の輪の傾き
+  var RING = -13 * Math.PI / 180;       // 文字の輪の傾き
   var STEP = 2 * Math.PI / WORD.length;  // 文字の間隔（一周を等分）
   var reduce = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
   var W = 0, H = 0, DPR = 1, spin = 0, ring = 0, dragging = false, lastX = 0, last = 0;
@@ -67,31 +67,67 @@
     ctx.strokeStyle = 'rgba(160,205,240,.55)'; ctx.lineWidth = Math.max(1.5, r * .012); ctx.stroke();
   }
 
+  // ---- 文字：輪の接平面に置いた厚みのある板として 3D で描く ----
+  // 文字ごとに、白い面・側面の色の画像をあらかじめ作っておき、投影した向きに合わせて変形して重ねる
+  var GLYPH = {}, GS = 220;
+  function glyph(ch) {
+    if (GLYPH[ch]) return GLYPH[ch];
+    var font = FONT.replace('{s}', GS);
+    var m = document.createElement('canvas').getContext('2d'); m.font = font;
+    var w = Math.ceil(m.measureText(ch).width) + 8, h = Math.ceil(GS * 1.05);
+    function make(color) {
+      var c = document.createElement('canvas'); c.width = w; c.height = h;
+      var g = c.getContext('2d'); g.font = font; g.textAlign = 'center'; g.textBaseline = 'middle';
+      g.fillStyle = color; g.fillText(ch, w / 2, h / 2 + GS * .04);
+      return c;
+    }
+    return (GLYPH[ch] = { w: w, h: h, face: make('#ffffff'), side: make('#7d93a8'), dark: make('#2c4a64') });
+  }
+  function rotX(v, t) { var c = Math.cos(t), s = Math.sin(t); return [v[0], v[1] * c - v[2] * s, v[1] * s + v[2] * c]; }
+
   function letters(cx, cy, r) {
-    var R = r * 1.32, f = R * 4.2, size = r * .46, out = [];
-    var start = ring;
+    var R = r * 1.34, F = R * 4.5, size = r * .5, depth = size * .2, out = [];
+    function proj(p) { var k = F / (F - p[2]); return [cx + p[0] * k, cy + p[1] * k, p[2]]; }
     WORD.forEach(function (ch, i) {
-      var a = start + i * STEP;                 // a = 0 が正面
-      var x = R * Math.sin(a), z = R * Math.cos(a), y = 0;
-      var y1 = y * Math.cos(RING) - z * Math.sin(RING), z1 = y * Math.sin(RING) + z * Math.cos(RING);
-      var k = f / (f - z1);
-      out.push({ ch: ch, u: cx + x * k, v: cy + y1 * k, z: z1, k: k, face: Math.cos(a), size: size });
+      var a = ring + i * STEP;                                   // a = 0 が正面
+      var P = rotX([R * Math.sin(a), 0, R * Math.cos(a)], RING); // 文字の中心
+      var T = rotX([Math.cos(a), 0, -Math.sin(a)], RING);        // 横向き（輪の接線）
+      var U = rotX([0, 1, 0], RING);                             // 縦向き（画面の下が +）
+      var N = rotX([Math.sin(a), 0, Math.cos(a)], RING);         // 外向きの法線
+      out.push({ ch: ch, P: P, T: T, U: U, N: N, z: P[2], size: size, depth: depth, proj: proj });
     });
     return out;
   }
   function drawLetter(L) {
-    ctx.save();
-    ctx.translate(L.u, L.v);
-    ctx.scale(L.face * L.k, L.k);              // 輪に沿って横に縮む。裏側では裏返しになる
-    ctx.font = FONT.replace('{s}', Math.round(L.size));
-    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-    var front = L.face > 0, depth = Math.max(2, L.size * .07);
-    // 厚み（立体の文字に見せる）
-    ctx.fillStyle = front ? '#0a2a44' : 'rgba(10,42,68,.25)';
-    for (var d = depth; d > 0; d -= 1) ctx.fillText(L.ch, 0, d);
-    ctx.fillStyle = front ? '#ffffff' : 'rgba(200,220,235,.2)';
-    ctx.fillText(L.ch, 0, 0);
-    ctx.restore();
+    var g = glyph(L.ch), sc = L.size / GS;
+    // 1 層ぶんを描く：中心を法線方向に d だけずらした板を、アフィン変換で画面に貼る
+    function layer(d, img, alpha) {
+      var C = [L.P[0] - L.N[0] * d, L.P[1] - L.N[1] * d, L.P[2] - L.N[2] * d];
+      var p0 = L.proj(C);
+      var px = L.proj([C[0] + L.T[0], C[1] + L.T[1], C[2] + L.T[2]]);
+      var py = L.proj([C[0] + L.U[0], C[1] + L.U[1], C[2] + L.U[2]]);
+      ctx.setTransform(DPR * (px[0] - p0[0]) * sc, DPR * (px[1] - p0[1]) * sc, DPR * (py[0] - p0[0]) * sc, DPR * (py[1] - p0[1]) * sc, DPR * p0[0], DPR * p0[1]);
+      ctx.globalAlpha = alpha;
+      ctx.drawImage(img, -g.w / 2, -g.h / 2);
+    }
+    var facing = L.N[2];                       // 正：外側の面がこちらを向いている
+    // 厚みを画面上で何 px 動くかに合わせて層を重ねる（真横を向いた文字でも側面がつながって見えるように）
+    var q0 = L.proj(L.P), q1 = L.proj([L.P[0] - L.N[0] * L.depth, L.P[1] - L.N[1] * L.depth, L.P[2] - L.N[2] * L.depth]);
+    var K = Math.min(40, Math.max(6, Math.ceil(Math.hypot(q1[0] - q0[0], q1[1] - q0[1]))));
+    var a0 = 1;
+    // 奥の層から順に（外側の面が手前なら内側から、そうでなければ外側から）
+    for (var k = 0; k <= K; k++) {
+      var t = facing >= 0 ? 1 - k / K : k / K;  // 0 = 外側の面、1 = 内側の面
+      var d = t * L.depth;
+      var isFace = k === K;
+      if (isFace) {
+        layer(d, facing >= 0 ? g.face : g.side, a0);
+      } else {
+        layer(d, t > .5 ? g.dark : g.side, a0);
+      }
+    }
+    ctx.globalAlpha = 1;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
   }
 
   function draw() {
