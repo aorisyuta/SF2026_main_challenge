@@ -74,7 +74,7 @@
     window.SFSheet.load().then(function (data) {
       var E = window.SFSheet.esc;
       renderTiles(data.news, E);
-      renderPosts(data.posts, E);
+      renderPosts(data.posts.filter(function (x) { return !x.unlisted; }), E);
       renderSocial(data.links, E);
     }).catch(function (err) {
       console.warn(err);

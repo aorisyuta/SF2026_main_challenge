@@ -113,7 +113,7 @@
     // 前後の記事
     var more = document.getElementById('postMore');
     if (more) {
-      var others = posts.filter(function (x) { return x.id !== p.id; });
+      var others = posts.filter(function (x) { return x.id !== p.id && !x.unlisted; });
       var related = others.filter(function (x) { return x.tags.some(function (t) { return p.tags.indexOf(t) !== -1; }); });
       var pick = related.concat(others.filter(function (x) { return related.indexOf(x) === -1; })).slice(0, 3);
       if (pick.length) {
@@ -131,7 +131,7 @@
     if (!target) return;
     window.SFSheet.load().then(function (data) {
       if (data.error) throw data.error;
-      renderList(data.posts);
+      renderList(data.posts.filter(function (x) { return !x.unlisted; }));
       renderPost(data.posts);
     }).catch(function (err) {
       console.error(err);

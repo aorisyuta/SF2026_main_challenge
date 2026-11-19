@@ -37,6 +37,7 @@ const meta = (h, n) => { const m = h.match(new RegExp('<meta name="' + n + '" co
 
 // 区分（検索結果に小さく出す）
 function section(u) {
+  if (u === 'projects/aoristos-bushi-pre.html') return 'Aoristos';
   if (/^(sf|projects|timetable|info|others|others-list)\.html$|^projects\//.test(u)) return 'SF2026（アーカイブ）';
   if (u.startsWith('games/')) return 'ゲーム';
   if (u.startsWith('latex/')) return 'ツール';
@@ -67,6 +68,7 @@ try {
   const sandbox = { window: {}, document: { documentElement: { classList: { add() {} } } } };
   vm.runInNewContext(fs.readFileSync(path.join(ROOT, 'assets', 'config.js'), 'utf8'), sandbox);
   for (const p of (sandbox.window.SF_CONFIG.sitePosts || [])) {
+    if (p.unlisted) continue;
     const body = String(p.body || '').replace(/[#>*\-]|!\[[^\]]*\]\([^)]*\)|\[([^\]]*)\]\([^)]*\)/g, '$1').replace(/\s+/g, ' ');
     items.push({ u: 'blog/post.html?id=' + encodeURIComponent(p.id), t: p.title, s: 'お知らせ', d: p.text || '', h: (String(p.body || '').match(/^#+\s.*$/gm) || []).map(s => s.replace(/^#+\s/, '')).join(' / '), b: body.slice(0, BODY_MAX) });
   }

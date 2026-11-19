@@ -182,7 +182,7 @@
     // config.js の sitePosts（お知らせ記事）を記事の行として扱う
     var rows = (CFG.sitePosts || []).map(function (p) {
       return { type: 'post', id: p.id, title: p.title, text: p.text, body: p.body, date: p.date,
-        tags: (p.tags || []).join(','), author: p.author, image: p.image, pin: p.pin ? 'TRUE' : '' };
+        tags: (p.tags || []).join(','), author: p.author, image: p.image, pin: p.pin ? 'TRUE' : '', unlisted: !!p.unlisted };
     });
 
     rows.forEach(function (r, i) {
@@ -207,6 +207,7 @@
         author: r.author || '',
         style: String(r.style || '').trim().toLowerCase(),
         pin: truthy(r.pin, false),
+        unlisted: !!r.unlisted,                                   // true：一覧・トップには出さない（記事の URL では読める）
         date: date,
         dateLabel: formatDate(date),
         order: i

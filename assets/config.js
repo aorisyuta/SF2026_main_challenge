@@ -39,11 +39,13 @@ window.SF_CONFIG = {
 
   /*
     お知らせ記事（「お知らせ」ページとトップの「最新情報」に、日付の新しい順で並ぶ）。
+    unlisted: true にすると、一覧・トップ・検索には出さない（記事の URL を直接開けば読める）。
     id（URL に使う英数字）・title・date（2026/11/11 の形）・tags・author・body（本文。## 見出し、空行で段落など）。
   */
   sitePosts: [
     {
       id: 'sf2026-view',
+      unlisted: true,
       title: 'SF2026 の運営に対する Aoristos 運営の見解について',
       date: '2026/11/11',
       tags: ['お知らせ', 'SF2026'],

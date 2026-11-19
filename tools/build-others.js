@@ -243,6 +243,7 @@ function head(o) {
 const SOURCE_NOTE = `<p class="ob-source">情報は SF 公式サイトの内容（${esc(data.retrieved.replace(/-/g, '/'))} 時点）をもとに、Aoristos が見やすくまとめ直したものです。</p>`;
 
 const html = `${head({
+  robots: 'noindex',
   scripts: '\n  <script src="assets/others-top.js" defer></script>',
   title: '他の企画のまとめ（ステージ・入場・金券）',
   desc: `SF2026（スクールフェア 2026「融合」・11月7日〜8日）の企画を Aoristos がまとめたページ。講堂・音楽室のステージ時間割、入場方法・金券・食品の時間、1日の流れ、階ごと・種類ごとの企画数。`
