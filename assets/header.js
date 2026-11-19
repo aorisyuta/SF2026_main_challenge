@@ -1,11 +1,10 @@
 /*
   header.js — 共通のナビゲーション・お知らせリボン・フッターを生成する
   各ページで window.pageConfig を定義してから defer で読み込む。
-    currentPage: index / about / members / goods / tools / sf / projects / timetable / others / info / blog / games / archive
-                 （sf・projects・timetable・others・info は SF2026 のページ。アーカイブの中として扱い、上部にサブメニューが出る）
+    currentPage: index / about / members / tools / sf / projects / timetable / others / info / blog / games / archive
+                 （sf・projects・timetable・others・info は SF2026 のページ。上部にサブメニューが出る）
     basePath:    サブフォルダのページは '../'
     title:       タブに出るタイトル（省略時は既存の <title>）
-    hideRibbon:  true でお知らせ（販売中など）を出さない
     noFooter:    true でフッターを出さない（アーカイブの閲覧ページなど）
 */
 (function () {
@@ -21,9 +20,7 @@
     { key: 'members', href: 'members.html', label: 'メンバー' },
     { key: 'blog', href: 'blog.html', label: 'お知らせ' },
     { key: 'games', href: 'games/index.html', label: 'ゲーム' },
-    { key: 'tools', href: 'latex/index.html', label: 'ツール' },
-    { key: 'goods', href: 'goods.html', label: 'グッズ' },
-    { key: 'archive', href: 'archive/index.html', label: 'アーカイブ' }
+    { key: 'tools', href: 'latex/index.html', label: 'ツール' }
   ];
   // SF2026 のページ（開催後は「アーカイブ」の中のページとして扱う）
   var SF_NAV = [
@@ -43,7 +40,7 @@
   function subNav() {
     return '<nav class="subnav" aria-label="SF2026">' +
       '<div class="subnav-inner">' +
-        '<p class="subnav-title"><a class="subnav-arch" href="' + base + 'archive/index.html">アーカイブ</a><span class="subnav-sep" aria-hidden="true">/</span><a href="' + base + 'sf.html">SF2026<small>「' + esc(CFG.theme || '') + '」</small></a></p>' +
+        '<p class="subnav-title"><a href="' + base + 'sf.html">SF2026<small>「' + esc(CFG.theme || '') + '」</small></a></p>' +
         '<ul>' + SF_NAV.map(function (n) {
           var cur = page.currentPage === n.key;
           return '<li><a href="' + base + n.href + '"' + (cur ? ' aria-current="page"' : '') + '><span class="sn-l">' + n.label + '</span><span class="sn-s">' + (n.short || n.label) + '</span></a></li>';
@@ -61,14 +58,14 @@
   }
   function endedNote() {
     if (!sfEnded()) return '';
-    return '<p class="sf-ended"><span>SF2026「' + esc(CFG.theme || '') + '」（' + esc(dateLine()) + '）のアーカイブです。ご来場いただいた皆さま、ありがとうございました。</span></p>';
+    return '<p class="sf-ended"><span>SF2026「' + esc(CFG.theme || '') + '」（' + esc(dateLine()) + '）の記録です。ご来場いただいた皆さま、ありがとうございました。</span></p>';
   }
 
   function buildHeader() {
     if (page.title) document.title = page.title;
 
     var links = NAV.map(function (n) {
-      var cur = page.currentPage === n.key || (n.key === 'archive' && inSF);
+      var cur = page.currentPage === n.key;
       return '<li><a href="' + base + n.href + '"' + (cur ? ' aria-current="page"' : '') + '>' + n.label + '</a></li>';
     }).join('');
 
@@ -158,70 +155,15 @@
     document.body.appendChild(footer);
   }
 
-  /* シート連動：グッズの枠（type = news）とフッターの SNS */
+  /* シート連動：フッターの SNS */
   function fillFromSheet() {
     if (!window.SFSheet) return;
     window.SFSheet.load().then(function (data) {
       var E = window.SFSheet.esc;
 
-      if (data.news.length && !page.hideRibbon) showPromo(data.news, E);
-
       var social = document.getElementById('footerSocial');
       if (social && data.links.length) social.innerHTML = socialItems(data.links);
     }).catch(function (err) { console.warn(err); });
-  }
-
-  /* グッズ（部誌・Tシャツなど。シートの type = news をまとめて「グッズ」として出す）
-     広い画面（1480px 以上）：本文の右の余白に、広告のような縦長のカードで固定
-     それより狭い画面：少しスクロールしたら画面の下に細いバーで固定（本文に重ならない）
-     × で閉じると、同じ内容は次から出さない（グッズが変われば再び出る） */
-  var ART_NAME = { pdf: '部誌', tshirt: 'Tシャツ' };
-  function showPromo(list, E) {
-    var KEY = 'aoristos-promo-closed';
-    var id = list.map(function (n) { return n.title; }).join('|');
-    try { if (localStorage.getItem(KEY) === id) return; } catch (e) {}
-    var goods = base + 'goods.html';
-    function href(u) { return u || goods; }   // n.url は sheet.js の safeUrl で basePath 付きになっている
-    var items = list.map(function (n) {
-      var url = href(n.url);
-      var ext = /^https?:/.test(url) ? ' target="_blank" rel="noopener noreferrer"' : '';
-      var art = /^(pdf|tshirt)$/.test(n.art || '') ? '<img class="promo-art promo-art-' + n.art + '" src="' + base + 'assets/art/' + n.art + '.svg" alt="" width="48" height="36">' : '';
-      return '<li><a href="' + E(url) + '"' + ext + '>' + art +
-        '<span class="promo-name">' + E(n.name || ART_NAME[n.art] || n.title) + '</span>' +
-        (n.note ? '<span class="promo-note">' + E(n.note) + '</span>' : '') + '</a></li>';
-    }).join('');
-    var box = document.createElement('aside');
-    box.className = 'promo';
-    box.setAttribute('aria-label', 'グッズ');
-    box.innerHTML =
-      '<div class="promo-body">' +
-        '<a class="promo-head" href="' + E(goods) + '"><span class="promo-eyebrow">グッズ</span><strong>Aoristos グッズ</strong></a>' +
-        '<ul class="promo-items">' + items + '</ul>' +
-        '<a class="promo-more" href="' + E(goods) + '">グッズを見る</a>' +
-      '</div>' +
-      '<button class="promo-close" type="button" aria-label="グッズの案内を閉じる">×</button>';
-    document.body.appendChild(box);
-    document.documentElement.classList.add('has-promo');
-
-    var mobile = window.matchMedia('(max-width: 1479px)');
-    function update() {
-      var on = !mobile.matches || window.scrollY > 160;
-      box.classList.toggle('is-shown', on);
-    }
-    var ticking = false;
-    window.addEventListener('scroll', function () {
-      if (ticking) return;
-      ticking = true;
-      requestAnimationFrame(function () { ticking = false; update(); });
-    }, { passive: true });
-    mobile.addEventListener('change', update);
-    update();
-
-    box.querySelector('.promo-close').addEventListener('click', function () {
-      box.remove();
-      document.documentElement.classList.remove('has-promo');
-      try { localStorage.setItem(KEY, id); } catch (e) {}
-    });
   }
 
   /* ---------- サイト内検索（索引は assets/search-index.json。tools/build-search.js が作る） ---------- */
