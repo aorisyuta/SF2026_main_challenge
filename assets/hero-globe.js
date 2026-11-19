@@ -96,7 +96,7 @@
       var T = axis([Math.cos(a), 0, -Math.sin(a)]);        // 横向き（輪の接線）
       var U = axis([0, 1, 0]);                             // 縦向き（画面の下が +）
       var N = axis([Math.sin(a), 0, Math.cos(a)]);         // 外向きの法線
-      out.push({ ch: ch, P: P, T: T, U: U, N: N, z: P[2], size: size, depth: depth, proj: proj });
+      out.push({ ch: ch, P: P, T: T, U: U, N: N, z: P[2], size: size, depth: depth, proj: proj, F: F });
     });
     return out;
   }
@@ -112,10 +112,12 @@
       ctx.globalAlpha = alpha;
       ctx.drawImage(img, -g.w / 2, -g.h / 2);
     }
-    var facing = L.N[2];                       // 正：外側の面がこちらを向いている
+    // 正：外側の面がこちらを向いている。遠近があるので、視点（0, 0, F）から文字への向きで判定する
+    // （法線の z 成分だけで判定すると、画面の端で表と裏の切り替わりがずれ、文字が逆回転して見える）
+    var facing = -L.N[0] * L.P[0] - L.N[1] * L.P[1] + L.N[2] * (L.F - L.P[2]);
     // 厚みを画面上で何 px 動くかに合わせて層を重ねる（真横を向いた文字でも側面がつながって見えるように）
     var q0 = L.proj(L.P), q1 = L.proj([L.P[0] - L.N[0] * L.depth, L.P[1] - L.N[1] * L.depth, L.P[2] - L.N[2] * L.depth]);
-    var K = Math.min(40, Math.max(6, Math.ceil(Math.hypot(q1[0] - q0[0], q1[1] - q0[1]))));
+    var K = Math.min(64, Math.max(6, Math.ceil(Math.hypot(q1[0] - q0[0], q1[1] - q0[1]) * 1.4)));
     var a0 = 1;
     // 奥の層から順に（外側の面が手前なら内側から、そうでなければ外側から）
     for (var k = 0; k <= K; k++) {
